@@ -2,7 +2,6 @@
 from evdev import InputDevice, categorize, ecodes, list_devices
 import signal, sys
 
-#scanner_name = "SM SM-2D PRODUCT HID KBW" #name of the QR code scanner
 dev_path = "/dev/input/event0"
 scancodes = {
 # Scancode: ASCIICode
@@ -13,7 +12,7 @@ scancodes = {
     40: u'"', 41: u'`', 42: u'LSHFT', 43: u'\\', 44: u'Z', 45: u'X', 46: u'C', 47: u'V', 48: u'B', 49: u'N',
     50: u'M', 51: u',', 52: u'.', 53: u'/', 54: u'RSHFT', 56: u'LALT', 57: u' ', 74: u'-', 100: u'RALT'
 }
-dev = ''
+
 def signal_handler(signal, frame):
     print('Stopping')
     dev.ungrab()
@@ -27,23 +26,17 @@ def process_events():
                     key_lookup = scancodes.get(data.scancode) or u"UNKNOWN{}".format(data.scancode)
                     if data.scancode == 28:
                         print(barcode)
-                        #with open("file.txt","a") as f:
-                        #    f.write(barcode)
                         barcode = ""
                     else:
                         barcode += key_lookup
 
 
 if __name__ == "__main__":
-    #devices = [InputDevice(path) for path in list_devices()]
-    #for device in devices:
-#        print(device.path, device.name, device.phys)
     dev = InputDevice(dev_path)
     signal.signal(signal.SIGINT, signal_handler)
     dev.grab()
 
     barcode = ""
-#    print(barcode)
     try:
         for event in dev.read_loop():
             if event.type == ecodes.EV_KEY:
@@ -52,8 +45,6 @@ if __name__ == "__main__":
                     key_lookup = scancodes.get(data.scancode) or u"UNKNOWN{}".format(data.scancode)
                     if data.scancode == 28:
                         print(barcode)
-                        #with open("file.txt","a") as f:
-                        #    f.write(barcode)
                         barcode = ""
                     else:
                         barcode += key_lookup
