@@ -1,11 +1,11 @@
 from time import sleep
 import requests
 import OPi.GPIO as GPIO
-from Config import Url
+#from Config import Url
 GPIO.setmode(GPIO.BOARD)
 GPIO.setwarnings(False)
 
-url = Url
+#url = Url
 #define LED pins
 redLED, blueLED, greenLED =  3, 19, 5
 
