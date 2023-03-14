@@ -24,14 +24,6 @@ scancodes = {
     50: u'M', 51: u',', 52: u'.', 53: u'/', 54: u'RSHFT', 56: u'LALT', 57: u' ', 74: u'-', 100: u'RALT'
 }
 
-capscodes = {
-    0: None, 1: u'ESC', 2: u'!', 3: u'@', 4: u'#', 5: u'$', 6: u'%', 7: u'^', 8: u'&', 9: u'*',
-    10: u'(', 11: u')', 12: u'_', 13: u'+', 14: u'BKSP', 15: u'TAB', 16: u'Q', 17: u'W', 18: u'E', 19: u'R',
-    20: u'T', 21: u'Y', 22: u'U', 23: u'I', 24: u'O', 25: u'P', 26: u'{', 27: u'}', 28: u'CRLF', 29: u'LCTRL',
-    30: u'A', 31: u'S', 32: u'D', 33: u'F', 34: u'G', 35: u'H', 36: u'J', 37: u'K', 38: u'L', 39: u':',
-    40: u'\'', 41: u'~', 42: u'LSHFT', 43: u'|', 44: u'Z', 45: u'X', 46: u'C', 47: u'V', 48: u'B', 49: u'N',
-    50: u'M', 51: u'<', 52: u'>', 53: u'?', 54: u'RSHFT', 56: u'LALT',  57: u' ', 100: u'RALT'
-}
 #define LED pins
 redLED = 3
 greenLED = 5
@@ -89,34 +81,26 @@ barcode = ""
 
 if __name__ == "__main__":
     setup()
-    state = 1
-    while True:
+    while True: 
         redLED_on()
         print("Scan barcode")
         try:
             dev = InputDevice(dev_path)
-
-        except FileNotFoundError:
-            print("No devices found, please connect the barcode scanner")
-        except OSError:
-            print("Device disconnected")
-
-        else:
-            signal.signal(signal.SIGINT, signal_handler)
+	    signal.signal(signal.SIGINT, signal_handler)
             dev.grab()
             for event in dev.read_loop():
                 if event.type == ecodes.EV_KEY:
                     data = categorize(event)
-                    if data.keystate == 1: #Down events only
+		    if data.keystate == 1 and data.scancode != 42: #Down events only and ignore shift presses
                         key_lookup = scancodes.get(data.scancode) or u"UNKNOWN"
-                        if data.scancode == 42:
+                        if data.scancode == 28:#processing state
                             blueLED_on()
                             print(barcode)
                             my_data = {"ID" : barcode}
                             response = requests.post(url, data = my_data["ID"])
                             barcode = ""
                             print("Barcode has been posted")
-                            if response.text == "ok":
+                            if response.text == "ok":#feedback state
                                 greenLED_on()
                                 sleep(1)
                                 print("completed scan")
@@ -125,4 +109,12 @@ if __name__ == "__main__":
                                 print("There is a problem")
                         else:
                             barcode += key_lookup
+
+        except FileNotFoundError:
+            print("No devices found, please connect the barcode scanner")
+        except OSError:
+            print("Device disconnected")
+
+            
+                    
 
