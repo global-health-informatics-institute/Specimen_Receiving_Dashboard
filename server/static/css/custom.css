@@ -1,0 +1,45 @@
+.back-color-1{
+background-color: #B2D6CA;
+}
+
+.back-color-2{
+background-color: #FE5858;
+}
+
+.back-color-3{
+background-color: #024B40;
+}
+
+.back-color-4{
+background-color: #5D353E;
+}
+
+.text-color-1{
+color: #B2D6CA;
+font-weight: bold;
+font-size: 16px;
+}
+
+.text-color-2{
+color: #FE5858;
+font-weight: bold;
+font-size: 16px;
+}
+
+.text-color-3{
+color: #024B40;
+font-weight: bold;
+font-size: 16px;
+}
+
+.text-color-4{
+color: #5D353E;
+font-weight: bold;
+font-size: 16px;
+}
+
+.text-color-5{
+color: primary;
+font-weight: bold;
+font-size: 16px;
+}
