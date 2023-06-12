@@ -31,32 +31,32 @@
                     <div class="card shadow">
                         <h5 class="card-header text-white back-color-3">Registered</h5>
                         <div class="card-body">
-                            <h2 class="card-title">200</h2>
+                            <h2 class="card-title">{{ test_counts.get('Registered',0)}}</h2>
                         </div>
                     </div>
                     <div class="card shadow mt-1">
                         <h5 class="card-header text-white back-color-4">Received</h5>
                         <div class="card-body">
-                            <h2 class="card-title">140</h2>
+                            <h2 class="card-title">{{ test_counts.get('Received',0)}}</h2>
                         </div>
                     </div>
                     <hr>
                     <div class="card shadow mt-1">
                         <h5 class="card-header text-white back-color-2">In Progress</h5>
                         <div class="card-body">
-                            <h2 class="card-title">200</h2>
+                            <h2 class="card-title">{{ test_counts.get('In Progress',0)}}</h2>
                         </div>
                     </div>
                     <div class="card shadow mt-1">
                         <h5 class="card-header text-white back-color-1">Pending Authorization</h5>
                         <div class="card-body">
-                            <h2 class="card-title">103</h2>
+                            <h2 class="card-title">{{ test_counts.get('Pending Authorization',0)}}</h2>
                         </div>
                     </div>
                     <div class="card shadow mt-1">
                         <h5 class="card-header text-white back-color-3">Completed</h5>
                         <div class="card-body">
-                            <h2 class="card-title">30</h2>
+                            <h2 class="card-title">{{ test_counts.get('Analysis Complete',0)}}</h2>
                         </div>
                     </div>
                 </div>
