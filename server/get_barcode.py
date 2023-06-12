@@ -27,11 +27,13 @@ def GetBarcode():
 @app.route("/hema_dashboard")
 def HeamatologyDashboard():
     conn = get_db_connection()
-    registered = conn.execute('SELECT count(*) FROM specimens where department ="Haematology"').fetchall()
     received = conn.execute('SELECT status, count(*) FROM specimens where department ="Haematology" group by status').fetchall()
+    counts = {}
+    for i in received:
+        counts[i[0]] = i[1]
     print(received[0])
     conn.close()
-    return render_template("HeamatologyDashboard.html")
+    return render_template("HeamatologyDashboard.html", test_counts=counts)
 
 
 def get_db_connection():
