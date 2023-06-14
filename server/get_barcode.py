@@ -3,6 +3,7 @@ import os.path
 from flask import Flask, request, render_template
 from datetime import datetime
 import sqlite3
+import random
 import json
 # define app
 app = Flask(__name__)
@@ -14,26 +15,73 @@ def GetBarcode():
    data = request.json
    conn = get_db_connection()
    cur = conn.cursor()
-
-   cur.execute("INSERT INTO specimens (accession_number,status, department,time_received,time_registered)"
-               " VALUES (?, ?,?, ?, ?)", (data.get("accession_id"), 'Received in Department',
-                                         data.get("department"), datetime.now(), datetime.now())
-               )
-   conn.commit()
-   conn.close()
+   options = ["FBC", "ESR", "SC", "PBF"]
+   type = random.choice(options)
+   print(data)
+   if len(data.get("ID")) == 10:
+       cur.execute("INSERT INTO specimens (accession_number,status,type,department,time_received,time_registered)"
+                   " VALUES (?,?,?,?,?,?)", (data.get("ID"), 'Received in Department', type,
+                                             data.get("Department"), datetime.now(), datetime.now())
+                   )
+       conn.commit()
+       conn.close()
    return "ok"
 
 
 @app.route("/hema_dashboard")
 def HeamatologyDashboard():
     conn = get_db_connection()
-    received = conn.execute('SELECT status, count(*) FROM specimens where department ="Haematology" group by status').fetchall()
+    # Summary Tab
+    received = conn.execute('SELECT status, count(*) FROM specimens where department ="hematology" group by status').fetchall()
     counts = {}
-    for i in received:
-        counts[i[0]] = i[1]
-    print(received[0])
+    if received:
+        for i in received:
+            counts[i[0]] = i[1]
+        registered = sum([i[1] for i in received])
+    else:
+        registered = 0
+    # End of Summary Tab
+
+    #FBC tab
+    received_fbc = conn.execute(
+        'SELECT status, count(*) FROM specimens where department ="hematology" and type = "FBC" group by status').fetchall()
+    counts_fbc = {}
+    if received_fbc:
+        for i in received_fbc:
+            counts_fbc[i[0]] = i[1]
+    # End of FBC tab
+
+    #ESR Tab
+    received_esr = conn.execute(
+        'SELECT status, count(*) FROM specimens where department ="hematology" and type = "ESR" group by status').fetchall()
+    counts_esr = {}
+    if received_esr:
+        for i in received_esr:
+            counts_esr[i[0]] = i[1]
+    # End of ESR tab
+
+    # Sickle Cell Tab
+    received_sc = conn.execute(
+        'SELECT status, count(*) FROM specimens where department ="hematology" and type = "SC" group by status').fetchall()
+    counts_sc = {}
+    if received_sc:
+        for i in received_sc:
+            counts_sc[i[0]] = i[1]
+    # End of Sickle Cell tab
+
+    # PBF Tab
+    received_pbf = conn.execute(
+        'SELECT status, count(*) FROM specimens where department ="hematology" and type = "PBF" group by status').fetchall()
+    counts_pbf = {}
+    if received_pbf:
+        for i in received_pbf:
+            counts_pbf[i[0]] = i[1]
+    # End of PBF tab
+
+
+
     conn.close()
-    return render_template("HeamatologyDashboard.html", test_counts=counts)
+    return render_template("HeamatologyDashboard.html", test_counts=counts, registered=registered, counts_fbc=counts_fbc, counts_esr=counts_esr, counts_sc=counts_sc, counts_pbf=counts_pbf)
 
 
 def get_db_connection():
@@ -57,7 +105,7 @@ def simulate_progress():
         next_state = status[status.index(specimen["status"]) + 1]
         conn.execute('UPDATE specimens SET status= ? where specimen_id = ?', (next_state, id,))
         conn.commit()
-    specimens = conn.execute('SELECT * FROM specimens where department ="Haematology" and'
+    specimens = conn.execute('SELECT * FROM specimens where department ="hematology" and'
                                  ' status not in ("Analysis Complete","Rejected") ').fetchall()
     return render_template("specimens.html", specimens=specimens)
 
