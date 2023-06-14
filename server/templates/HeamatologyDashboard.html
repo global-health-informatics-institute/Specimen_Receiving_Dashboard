@@ -20,7 +20,7 @@
 
 <!-- Responsive navbar-->
         <nav class="navbar navbar-expand-lg navbar-dark back-color-4">
-             <h1 class="text-white px-2">Heamatology Dashboard</h1>
+             <h1 class="text-white px-2">Hematology Dashboard</h1>
         </nav>
         <!-- Page content-->
         <div class="container-fluid p-0 ">
@@ -31,32 +31,32 @@
                     <div class="card shadow">
                         <h5 class="card-header text-white back-color-3">Registered</h5>
                         <div class="card-body">
-                            <h2 class="card-title">{{ test_counts.get('Registered',0)}}</h2>
+                            <h2 class="card-title">{{registered}}</h2>
                         </div>
                     </div>
                     <div class="card shadow mt-1">
                         <h5 class="card-header text-white back-color-4">Received</h5>
                         <div class="card-body">
-                            <h2 class="card-title">{{ test_counts.get('Received',0)}}</h2>
+                            <h2 class="card-title">{{test_counts.get('Received in Department',0)}}</h2>
                         </div>
                     </div>
                     <hr>
                     <div class="card shadow mt-1">
                         <h5 class="card-header text-white back-color-2">In Progress</h5>
                         <div class="card-body">
-                            <h2 class="card-title">{{ test_counts.get('In Progress',0)}}</h2>
+                            <h2 class="card-title">{{test_counts.get('In Progress',0)}}</h2>
                         </div>
                     </div>
                     <div class="card shadow mt-1">
                         <h5 class="card-header text-white back-color-1">Pending Authorization</h5>
                         <div class="card-body">
-                            <h2 class="card-title">{{ test_counts.get('Pending Authorization',0)}}</h2>
+                            <h2 class="card-title">{{test_counts.get('Pending Authorization',0)}}</h2>
                         </div>
                     </div>
                     <div class="card shadow mt-1">
                         <h5 class="card-header text-white back-color-3">Completed</h5>
                         <div class="card-body">
-                            <h2 class="card-title">{{ test_counts.get('Analysis Complete',0)}}</h2>
+                            <h2 class="card-title">{{test_counts.get('Analysis Complete',0)}}</h2>
                         </div>
                     </div>
                 </div>
@@ -74,25 +74,25 @@
                                         <div class="col col-sm p-1">
                                             <div class="card text-center">
                                                 <p class="card-header text-color-3"><br>Received</p>
-                                                <h2 class="card-title">50</h2>
+                                                <h2 class="card-title">{{counts_fbc.get('Received in Department',0)}}</h2>
                                             </div>
                                         </div>
                                         <div class="col col-sm p-1">
                                             <div class="card text-center">
                                                 <p class="card-header  text-color-2"><br>In progress</p>
-                                                <h2 class="card-title">13</h2>
+                                                <h2 class="card-title">{{counts_fbc.get('In Progress',0)}}</h2>
                                             </div>
                                         </div>
                                         <div class="col col-sm p-1">
                                             <div class="card text-center">
                                                 <p class="card-header text-color-2">Pending Authorization</p>
-                                                <h2 class="card-title">5</h2>
+                                                <h2 class="card-title">{{counts_fbc.get('Pending Authorization',0)}}</h2>
                                             </div>
                                         </div>
                                         <div class="col col-sm p-1">
                                             <div class="card text-center">
                                                 <p class="card-header text-color-3"><br>Completed</p>
-                                                <h2 class="card-title">11</h2>
+                                                <h2 class="card-title">{{counts_fbc.get('Analysis Complete',0)}}</h2>
                                             </div>
                                         </div>
                                     </div>
@@ -128,25 +128,25 @@
                                         <div class="col col-sm p-1">
                                             <div class="card text-center">
                                                 <p class="card-header text-color-3"><br>Received</p>
-                                                <h2 class="card-title">50</h2>
+                                                <h2 class="card-title">{{counts_esr.get('Received in Department',0)}}</h2>
                                             </div>
                                         </div>
                                         <div class="col col-sm p-1">
                                             <div class="card text-center">
                                                 <p class="card-header  text-color-2"><br>In progress</p>
-                                                <h2 class="card-title">13</h2>
+                                                <h2 class="card-title">{{counts_esr.get('In Progress',0)}}</h2>
                                             </div>
                                         </div>
                                         <div class="col col-sm p-1">
                                             <div class="card text-center">
                                                 <p class="card-header text-color-2">Pending Authorization</p>
-                                                <h2 class="card-title">5</h2>
+                                                <h2 class="card-title">{{counts_esr.get('Pending Authorization',0)}}</h2>
                                             </div>
                                         </div>
                                         <div class="col col-sm p-1">
                                             <div class="card text-center">
                                                 <p class="card-header text-color-3"><br>Completed</p>
-                                                <h2 class="card-title">11</h2>
+                                                <h2 class="card-title">{{counts_esr.get('Analysis Complete',0)}}</h2>
                                             </div>
                                         </div>
                                     </div>
@@ -186,25 +186,25 @@
                                         <div class="col col-sm p-1">
                                             <div class="card text-center">
                                                 <p class="card-header text-color-3"><br>Received</p>
-                                                <h2 class="card-title">50</h2>
+                                                <h2 class="card-title">{{counts_sc.get('Received in Department',0)}}</h2>
                                             </div>
                                         </div>
                                         <div class="col col-sm p-1">
                                             <div class="card text-center">
                                                 <p class="card-header  text-color-2"><br>In progress</p>
-                                                <h2 class="card-title">13</h2>
+                                                <h2 class="card-title">{{counts_sc.get('In Progress',0)}}</h2>
                                             </div>
                                         </div>
                                         <div class="col col-sm p-1">
                                             <div class="card text-center">
                                                 <p class="card-header text-color-2">Pending Authorization</p>
-                                                <h2 class="card-title">5</h2>
+                                                <h2 class="card-title">{{counts_sc.get('Pending Authorization',0)}}</h2>
                                             </div>
                                         </div>
                                         <div class="col col-sm p-1">
                                             <div class="card text-center">
                                                 <p class="card-header text-color-3"><br>Completed</p>
-                                                <h2 class="card-title">11</h2>
+                                                <h2 class="card-title">{{counts_sc.get('Analysis Complete',0)}}</h2>
                                             </div>
                                         </div>
                                     </div>
@@ -240,25 +240,25 @@
                                         <div class="col col-sm p-1">
                                             <div class="card text-center">
                                                 <p class="card-header text-color-3"><br>Received</p>
-                                                <h2 class="card-title">50</h2>
+                                                <h2 class="card-title">{{counts_pbf.get('Received in Department',0)}}</h2>
                                             </div>
                                         </div>
                                         <div class="col col-sm p-1">
                                             <div class="card text-center">
                                                 <p class="card-header  text-color-2"><br>In progress</p>
-                                                <h2 class="card-title">13</h2>
+                                                <h2 class="card-title">{{counts_pbf.get('In Progress',0)}}</h2>
                                             </div>
                                         </div>
                                         <div class="col col-sm p-1">
                                             <div class="card text-center">
                                                 <p class="card-header text-color-2">Pending Authorization</p>
-                                                <h2 class="card-title">5</h2>
+                                                <h2 class="card-title">{{counts_pbf.get('Pending Authorization',0)}}</h2>
                                             </div>
                                         </div>
                                         <div class="col col-sm p-1">
                                             <div class="card text-center">
                                                 <p class="card-header text-color-3"><br>Completed</p>
-                                                <h2 class="card-title">11</h2>
+                                                <h2 class="card-title">{{counts_sc.get('Analysis Complete',0)}}</h2>
                                             </div>
                                         </div>
                                     </div>
