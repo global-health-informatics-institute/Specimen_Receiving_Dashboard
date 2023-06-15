@@ -32,7 +32,7 @@ def GetBarcode():
 def HeamatologyDashboard():
     conn = get_db_connection()
     # Summary Tab
-    received = conn.execute('SELECT status, count(*) FROM specimens where department ="hematology" group by status').fetchall()
+    received = conn.execute('SELECT status, count(*) FROM specimens where department ="hematology" and date(time_registered) = date("now") group by status').fetchall()
     counts = {}
     if received:
         for i in received:
@@ -44,7 +44,7 @@ def HeamatologyDashboard():
 
     #FBC tab
     received_fbc = conn.execute(
-        'SELECT status, count(*) FROM specimens where department ="hematology" and type = "FBC" group by status').fetchall()
+        'SELECT status, count(*) FROM specimens where department ="hematology" and type = "FBC" and date(time_registered) = date("now") group by status').fetchall()
     counts_fbc = {}
     if received_fbc:
         for i in received_fbc:
@@ -53,7 +53,7 @@ def HeamatologyDashboard():
 
     #ESR Tab
     received_esr = conn.execute(
-        'SELECT status, count(*) FROM specimens where department ="hematology" and type = "ESR" group by status').fetchall()
+        'SELECT status, count(*) FROM specimens where department ="hematology" and type = "ESR" and date(time_registered) = date("now") group by status').fetchall()
     counts_esr = {}
     if received_esr:
         for i in received_esr:
@@ -62,7 +62,7 @@ def HeamatologyDashboard():
 
     # Sickle Cell Tab
     received_sc = conn.execute(
-        'SELECT status, count(*) FROM specimens where department ="hematology" and type = "SC" group by status').fetchall()
+        'SELECT status, count(*) FROM specimens where department ="hematology" and type = "SC" and date(time_registered) = date("now") group by status').fetchall()
     counts_sc = {}
     if received_sc:
         for i in received_sc:
@@ -71,7 +71,7 @@ def HeamatologyDashboard():
 
     # PBF Tab
     received_pbf = conn.execute(
-        'SELECT status, count(*) FROM specimens where department ="hematology" and type = "PBF" group by status').fetchall()
+        'SELECT status, count(*) FROM specimens where department ="hematology" and type = "PBF" and date(time_registered) = date("now") group by status').fetchall()
     counts_pbf = {}
     if received_pbf:
         for i in received_pbf:
