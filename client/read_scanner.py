@@ -1,15 +1,15 @@
-from time import sleep 
-import requests 
-from config import url 
-import OPi.GPIO as GPIO 
-from evdev import InputDevice, categorize, ecodes, list_devices 
-import signal, sys
+from time import sleep
+import requests
+from config.config import url
+import OPi.GPIO as GPIO
+from evdev import InputDevice, categorize, ecodes
+import sys
 
 GPIO.setmode(GPIO.BOARD)
 GPIO.setwarnings(False)
 
-#define device path
-dev_path ="/dev/input/event0"
+# define device path
+dev_path = "/dev/input/event0"
 
 # Scancode: ASCIICode
 scancodes = {
@@ -21,77 +21,85 @@ scancodes = {
     50: u'M', 51: u',', 52: u'.', 53: u'/', 54: u'RSHFT', 56: u'LALT', 57: u' ', 74: u'-', 100: u'RALT'
 }
 
-#define LED pins
+# define LED pins
 redLED = 3
 greenLED = 5
 blueLED = 19
 
-#set LED pins as output pins
+# set LED pins as output pins
 GPIO.setup(redLED, GPIO.OUT)
 GPIO.setup(greenLED, GPIO.OUT)
 GPIO.setup(blueLED, GPIO.OUT)
 
-#turn on LED on
+
+# turn on LED on
 def LED_on(LED_pin):
-	GPIO.output(LED_pin, GPIO.HIGH)
+    GPIO.output(LED_pin, GPIO.HIGH)
 
-#turn LED off
+
+# turn LED off
 def LED_off(LED_pin):
-        GPIO.output(LED_pin, GPIO.LOW)
+    GPIO.output(LED_pin, GPIO.LOW)
 
-#turn on red LED  when waiting for input
+
+# turn on red LED  when waiting for input
 def redLED_on():
-	LED_on(redLED)
-	LED_off(greenLED)
-	LED_off(blueLED)
+    LED_on(redLED)
+    LED_off(greenLED)
+    LED_off(blueLED)
 
-#turn on blue LED after receiving input
+
+# turn on blue LED after receiving input
 def blueLED_on():
-	LED_off(redLED)
-	LED_off(greenLED)
-	LED_on(blueLED)
+    LED_off(redLED)
+    LED_off(greenLED)
+    LED_on(blueLED)
 
-#turn on green LED after processing
+
+# turn on green LED after processing
 def greenLED_on():
-	LED_off(redLED)
-	LED_on(greenLED)
-	LED_off(blueLED)
+    LED_off(redLED)
+    LED_on(greenLED)
+    LED_off(blueLED)
+
 
 def setup():
-	LED_on(redLED)
-	LED_on(greenLED)
-	LED_on(blueLED)
-	sleep(1)
-	LED_off(redLED)
-	LED_off(greenLED)
-	LED_off(blueLED)
+    LED_on(redLED)
+    LED_on(greenLED)
+    LED_on(blueLED)
+    sleep(1)
+    LED_off(redLED)
+    LED_off(greenLED)
+    LED_off(blueLED)
 
-def read_barcode(): #this functions reads the barcode
-    read_barcode.dev = InputDevice(dev_path) 
+
+def read_barcode():  # this functions reads the barcode
+    read_barcode.dev = InputDevice(dev_path)
     read_barcode.dev.grab()
     barcode = ""
     for event in read_barcode.dev.read_loop():
         if event.type == ecodes.EV_KEY:
             data = categorize(event)
-            if data.keystate == 1 and data.scancode != 42: #Down events only and ignore shift presses
+            if data.keystate == 1 and data.scancode != 42:  # Down events only and ignore shift presses
                 key_lookup = scancodes.get(data.scancode) or u"UNKNOWN"
-                if data.scancode != 28: # data.scancode 28 is the Enter character
+                if data.scancode != 28:  # data.scancode 28 is the Enter character
                     barcode += key_lookup
                 else:
                     return barcode
 
-def send_barcode(barcode): #post barcode to url
-     my_data = {"ID" : barcode}
-     response = requests.post(url, data = my_data["ID"])
-     if response.text  == "ok": #waiting for feedback from server
-         greenLED_on()
-         sleep(1)
-     else:
-         print("Problem occured while sending barcode")
+
+def send_barcode(barcode):  # post barcode to url
+    my_data = {"ID": barcode}
+    response = requests.post(url, data=my_data["ID"])
+    if response.text == "ok":  # waiting for feedback from server
+        greenLED_on()
+        sleep(1)
+    else:
+        print("Problem occured while sending barcode")
 
 
 if __name__ == "__main__":
-    setup() 
+    setup()
     while True:
         redLED_on()
         print("Scan Barcode")

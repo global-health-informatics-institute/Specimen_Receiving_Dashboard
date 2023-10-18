@@ -5,6 +5,8 @@ from datetime import datetime
 import sqlite3
 import random
 import json
+from config.config_watcher import department_data
+
 # define app
 app = Flask(__name__)
 
@@ -12,27 +14,28 @@ app = Flask(__name__)
 @app.route("/", methods=["POST"])
 # handle Post request
 def GetBarcode():
-   data = request.json
-   conn = get_db_connection()
-   cur = conn.cursor()
-   options = ["FBC", "ESR", "SC", "PBF"]
-   type = random.choice(options)
-   print(data)
-   if len(data.get("ID")) == 10:
-       cur.execute("INSERT INTO specimens (accession_number,status,type,department,time_received,time_registered)"
-                   " VALUES (?,?,?,?,?,?)", (data.get("ID"), 'Received in Department', type,
-                                             data.get("Department"), datetime.now(), datetime.now())
-                   )
-       conn.commit()
-       conn.close()
-   return "ok"
+    data = request.json
+    conn = get_db_connection()
+    cur = conn.cursor()
+    options = ["FBC", "ESR", "SC", "PBF"]
+    type = random.choice(options)
+    print(data)
+    if len(data.get("ID")) == 10:
+        cur.execute("INSERT INTO specimens (accession_number,status,type,department,time_received,time_registered)"
+                    " VALUES (?,?,?,?,?,?)", (data.get("ID"), 'Received in Department', type,
+                                              data.get("Department"), datetime.now(), datetime.now())
+                    )
+        conn.commit()
+        conn.close()
+    return "ok"
 
 
 @app.route("/hema_dashboard")
 def HeamatologyDashboard():
     conn = get_db_connection()
     # Summary Tab
-    received = conn.execute('SELECT status, count(*) FROM specimens where department ="hematology" and date(time_registered) = date("now") group by status').fetchall()
+    received = conn.execute(
+        'SELECT status, count(*) FROM specimens where department ="hematology" and date(time_registered) = date("now") group by status').fetchall()
     counts = {}
     if received:
         for i in received:
@@ -42,7 +45,7 @@ def HeamatologyDashboard():
         registered = 0
     # End of Summary Tab
 
-    #FBC tab
+    # FBC tab
     received_fbc = conn.execute(
         'SELECT status, count(*) FROM specimens where department ="hematology" and type = "FBC" and date(time_registered) = date("now") group by status').fetchall()
     counts_fbc = {}
@@ -51,7 +54,7 @@ def HeamatologyDashboard():
             counts_fbc[i[0]] = i[1]
     # End of FBC tab
 
-    #ESR Tab
+    # ESR Tab
     received_esr = conn.execute(
         'SELECT status, count(*) FROM specimens where department ="hematology" and type = "ESR" and date(time_registered) = date("now") group by status').fetchall()
     counts_esr = {}
@@ -78,10 +81,10 @@ def HeamatologyDashboard():
             counts_pbf[i[0]] = i[1]
     # End of PBF tab
 
-
-
     conn.close()
-    return render_template("HeamatologyDashboard.html", test_counts=counts, registered=registered, counts_fbc=counts_fbc, counts_esr=counts_esr, counts_sc=counts_sc, counts_pbf=counts_pbf)
+    return render_template("HeamatologyDashboard.html", test_counts=counts, registered=registered,
+                           counts_fbc=counts_fbc, counts_esr=counts_esr, counts_sc=counts_sc, counts_pbf=counts_pbf,
+                           department_data=department_data)
 
 
 def get_db_connection():
@@ -106,7 +109,7 @@ def simulate_progress():
         conn.execute('UPDATE specimens SET status= ? where specimen_id = ?', (next_state, id,))
         conn.commit()
     specimens = conn.execute('SELECT * FROM specimens where department ="hematology" and'
-                                 ' status not in ("Analysis Complete","Rejected") ').fetchall()
+                             ' status not in ("Analysis Complete","Rejected") ').fetchall()
     return render_template("specimens.html", specimens=specimens)
 
 
