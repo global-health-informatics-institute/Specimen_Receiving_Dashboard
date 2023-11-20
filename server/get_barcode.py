@@ -5,7 +5,7 @@ from datetime import datetime
 import sqlite3
 import random
 import json
-from config.config_watcher import department_data
+from Config.config_watcher import department_data
 
 # define app
 app = Flask(__name__)
