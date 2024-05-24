@@ -33,7 +33,7 @@ end
 # Unset irrelevant variables.
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV "/home/kumbu/Desktop/8/manda.branch/manda.SRS/venv"
+set -gx VIRTUAL_ENV "/home/kumbu/Desktop/8/manda.branch/manda.srs/Specimen_Receive_Station-/venv"
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/bin" $PATH
