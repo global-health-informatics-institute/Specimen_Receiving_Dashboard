@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='css/dashBoard.css')}}">
+
+</head>
+<body>
+    <div class="nav">
+        HEMATOLOGY
+    </div>
+    <div class="sideNav">
+        <!-- <span>
+            SUMMERY
+        </span> -->
+        <div class="card">
+            <span class="title green">
+                REGISTERED
+            </span>
+            <span class="value">
+                100
+            </span>
+        </div>
+        <div class="card">
+            <span class="title maroon">
+                RECIEVED
+            </span>
+            <span class="value">
+                200
+            </span>
+        </div>
+        <div class="card">
+            <span class="title red">
+                IN PROGRESS
+            </span>
+            <span class="value">
+                300
+            </span>
+        </div>
+        <div class="card">
+            <span class="title lightBlue">
+                PENDING AUTHORIZATION
+            </span>
+            <span class="value">
+                400
+            </span>
+        </div>
+        <div class="card">
+            <span class="title green">
+                COMPLETED
+            </span>
+            <span class="value">
+                500
+            </span>
+        </div>
+    </div>
+
+
+    <!-- ############################################## -->
+    
+    
+    <div class="main">
+        <div class="test">
+            <span class ="header .green">
+                FCB
+            </span>
+            <div class="statusCards">
+                <div class="cardWrapper">
+                    <div class="cardTitle green">
+                        Received
+                    </div>
+                    <div class="cardValue">
+                        200
+                    </div>
+                </div>
+                <div class="cardWrapper">
+                    <div class="cardTitle red">
+                        In Progress
+                    </div>
+                    <div class="cardValue">
+                        200
+                    </div>
+                </div>
+                <div class="cardWrapper">
+                    <div class="cardTitle red">
+                        Pending Authorization
+                    </div>
+                    <div class="cardValue">
+                        200
+                    </div>
+                </div>
+                <div class="cardWrapper">
+                    <div class="cardTitle green">
+                        Completed
+                    </div>
+                    <div class="cardValue">
+                        470
+                    </div>
+                </div>       
+            </div>
+            <div class="tat">
+                <span class="tatHeader">
+                    TAT
+                </span>
+                <div class="statusCards">
+                    <div class="cardWrapper">
+                        <div class="cardTitle">
+                            TARGET
+                        </div>
+                        <div class="cardValue">
+                            50
+                        </div>
+                    </div>
+                    <div class="cardWrapper">
+                        <div class="cardTitle">
+                            CURRENT
+                        </div>
+                        <div class="cardValue">
+                            7
+                        </div>
+                    </div>
+                    <div class="cardWrapper">
+                        <div class="cardTitle">
+                            AVERAGE
+                        </div>
+                        <div class="cardValue">
+                            0
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="test">
+            <span class ="header .green">
+                SICKLE CELL
+            </span>
+            <div class="statusCards">
+                <div class="cardWrapper">
+                    <div class="cardTitle green">
+                        Received
+                    </div>
+                    <div class="cardValue">
+                        200
+                    </div>
+                </div>
+                <div class="cardWrapper">
+                    <div class="cardTitle red">
+                        In Progress
+                    </div>
+                    <div class="cardValue">
+                        200
+                    </div>
+                </div>
+                <div class="cardWrapper">
+                    <div class="cardTitle red">
+                        Pending Authorization
+                    </div>
+                    <div class="cardValue">
+                        200
+                    </div>
+                </div>
+                <div class="cardWrapper">
+                    <div class="cardTitle green">
+                        Completed
+                    </div>
+                    <div class="cardValue">
+                        470
+                    </div>
+                </div>
+                
+            </div>
+            <div class="tat">
+                <span class="tatHeader">
+                    TAT
+                </span>
+                <div class="statusCards">
+                    <div class="cardWrapper">
+                        <div class="cardTitle">
+                            TARGET
+                        </div>
+                        <div class="cardValue">
+                            50
+                        </div>
+                    </div>
+                    <div class="cardWrapper">
+                        <div class="cardTitle">
+                            CURRENT
+                        </div>
+                        <div class="cardValue">
+                            7
+                        </div>
+                    </div>
+                    <div class="cardWrapper">
+                        <div class="cardTitle">
+                            AVERAGE
+                        </div>
+                        <div class="cardValue">
+                            0
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="test">
+            <span class ="header .green">
+                FCB
+            </span>
+            <div class="statusCards">
+                <div class="cardWrapper">
+                    <div class="cardTitle green">
+                        Received
+                    </div>
+                    <div class="cardValue">
+                        200
+                    </div>
+                </div>
+                <div class="cardWrapper">
+                    <div class="cardTitle red">
+                        In Progress
+                    </div>
+                    <div class="cardValue">
+                        200
+                    </div>
+                </div>
+                <div class="cardWrapper">
+                    <div class="cardTitle red">
+                        Pending Authorization
+                    </div>
+                    <div class="cardValue">
+                        200
+                    </div>
+                </div>
+                <div class="cardWrapper">
+                    <div class="cardTitle green">
+                        Completed
+                    </div>
+                    <div class="cardValue">
+                        470
+                    </div>
+                </div>
+                
+            </div>
+            <div class="tat">
+                <span class="tatHeader">
+                    TAT
+                </span>
+                <div class="statusCards">
+                    <div class="cardWrapper">
+                        <div class="cardTitle">
+                            TARGET
+                        </div>
+                        <div class="cardValue">
+                            50
+                        </div>
+                    </div>
+                    <div class="cardWrapper">
+                        <div class="cardTitle">
+                            CURRENT
+                        </div>
+                        <div class="cardValue">
+                            7
+                        </div>
+                    </div>
+                    <div class="cardWrapper">
+                        <div class="cardTitle">
+                            AVERAGE
+                        </div>
+                        <div class="cardValue">
+                            0
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="test">
+            <span class ="header .green">
+                FCB
+            </span>
+            <div class="statusCards">
+                <div class="cardWrapper">
+                    <div class="cardTitle green">
+                        Received
+                    </div>
+                    <div class="cardValue">
+                        200
+                    </div>
+                </div>
+                <div class="cardWrapper">
+                    <div class="cardTitle red">
+                        In Progress
+                    </div>
+                    <div class="cardValue">
+                        200
+                    </div>
+                </div>
+                <div class="cardWrapper">
+                    <div class="cardTitle red">
+                        Pending Authorization
+                    </div>
+                    <div class="cardValue">
+                        200
+                    </div>
+                </div>
+                <div class="cardWrapper">
+                    <div class="cardTitle green">
+                        Completed
+                    </div>
+                    <div class="cardValue">
+                        470
+                    </div>
+                </div>
+                
+            </div>
+            <div class="tat">
+                <span class="tatHeader">
+                    TAT
+                </span>
+                <div class="statusCards">
+                    <div class="cardWrapper">
+                        <div class="cardTitle">
+                            TARGET
+                        </div>
+                        <div class="cardValue">
+                            50
+                        </div>
+                    </div>
+                    <div class="cardWrapper">
+                        <div class="cardTitle">
+                            CURRENT
+                        </div>
+                        <div class="cardValue">
+                            7
+                        </div>
+                    </div>
+                    <div class="cardWrapper">
+                        <div class="cardTitle">
+                            AVERAGE
+                        </div>
+                        <div class="cardValue">
+                            0
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bottomBanner">
+        <div class="title">
+            <span class="category">
+                WEEKLY & MONTHLY SUMMARY
+            </span>
+        </div>
+    </div>
+
+#1
+    <div class="slideShowContainer" id="slide1">
+       
+       
+        <div class="slideShow">
+            <div class="category">
+                Monthly
+            </div>
+
+            <div class="categoryContainer">
+                <div class="categoryResults">
+                    <div class="title">
+                        Registered
+                    </div>
+                    <div class="value">
+                        89
+                    </div>
+                </div>
+                
+                <div class="categoryResults">
+                    <div class="title">
+                    Received
+                    </div>
+                    <div class="value">
+                        89
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+
+       
+
+        <div class="slideShow">
+            <div class="category">
+                WEEKLY
+            </div>
+
+            <div class="categoryContainer">
+                <div class="categoryResults">
+                    <div class="title">
+                        Registered
+                    </div>
+                    <div class="value">
+                        89
+                    </div>
+                </div>
+                
+                <div class="categoryResults">
+                    <div class="title">
+                        Received
+                    </div>
+                    <div class="value">
+                        89
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+
+       
+
+
+    </div> 
+    
+
+
+#2
+    <div class="slideShowContainer" id="slide2">
+       
+       
+        <div class="slideShow">
+            <div class="category">
+                Monthly
+            </div>
+
+            <div class="categoryContainer">
+                <div class="categoryResults">
+                    <div class="title">
+                        In Progress
+                    </div>
+                    <div class="value">
+                        89
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+       
+
+        <div class="slideShow">
+            <div class="category">
+                WEEKLY
+            </div>
+
+            <div class="categoryContainer">
+                
+                <div class="categoryResults">
+                    <div class="title">
+                    In Progress
+                    </div>
+                    <div class="value">
+                        89
+                    </div>
+                </div>  
+            </div>
+        </div>
+    </div>
+
+
+#3
+    <div class="slideShowContainer" id="slide4">
+       
+       
+        <div class="slideShow">
+            <div class="category">
+                Monthly
+            </div>
+
+            <div class="categoryContainer">
+                <div class="categoryResults">
+                    <div class="title">
+                        Completed
+                    </div>
+                    <div class="value">
+                        89
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+       
+
+        <div class="slideShow">
+            <div class="category">
+                WEEKLY
+            </div>
+
+            <div class="categoryContainer">
+                
+                <div class="categoryResults">
+                    <div class="title">
+                        Completed
+                    </div>
+                    <div class="value">
+                        89
+                    </div>
+                </div>  
+            </div>
+        </div>
+    </div>
+
+
+
+#3
+    <div class="slideShowContainer" id="slide3">
+       
+       
+        <div class="slideShow">
+            <div class="category">
+                Monthly
+            </div>
+
+            <div class="categoryContainer">
+                <div class="categoryResults">
+                    <div class="title">
+                        Pending Authorization
+                    </div>
+                    <div class="value">
+                        89
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+       
+
+        <div class="slideShow">
+            <div class="category">
+                WEEKLY
+            </div>
+
+            <div class="categoryContainer">
+                
+                <div class="categoryResults">
+                    <div class="title">
+                    Pending Authorization
+                    </div>
+                    <div class="value">
+                        89
+                    </div>
+                </div>  
+            </div>
+        </div>
+    </div>
+    <script src="{{url_for('static',filename='js/dashBoard.js')}}"></script>
+</body>
+</html>
