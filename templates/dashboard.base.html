@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>{{departmentName}}</title>
     <link rel="stylesheet" href="{{url_for('static',filename='css/dashBoard.css')}}">
     <link rel="stylesheet" href="../static/css/dashBoard.css">
 </head>
 <body>
     <div class="nav">
-        HEMATOLOGY
+        {{departmentName}}
     </div>
     <div class="sideNav">
         <!-- <span>
@@ -20,7 +20,7 @@
                 REGISTERED
             </span>
             <span class="value">
-                100
+                {{summaryRegisteredTotal}}
             </span>
         </div>
         <div class="card">
@@ -28,7 +28,7 @@
                 RECIEVED
             </span>
             <span class="value">
-                200
+                {{summaryReceivedTotal}}
             </span>
         </div>
         <div class="card">
@@ -36,7 +36,7 @@
                 IN PROGRESS
             </span>
             <span class="value">
-                300
+                {{summaryInProgressTotal}}
             </span>
         </div>
         <div class="card">
@@ -44,7 +44,7 @@
                 PENDING AUTHORIZATION
             </span>
             <span class="value">
-                400
+                {{summaryPendingAuthTotal}}
             </span>
         </div>
         <div class="card">
@@ -52,7 +52,7 @@
                 COMPLETED
             </span>
             <span class="value">
-                500
+                {{summaryCompleteTotal}}
             </span>
         </div>
     </div>
@@ -64,7 +64,7 @@
     <div class="main">
         <div class="test">
             <span class ="header .green">
-                FCB
+                {{testType1}}
             </span>
             <div class="statusCards">
                 <div class="cardWrapper">
@@ -72,7 +72,7 @@
                         Received
                     </div>
                     <div class="cardValue">
-                        200
+                        {{summaryRegisteredTotal}}
                     </div>
                 </div>
                 <div class="cardWrapper">
@@ -136,7 +136,7 @@
 
         <div class="test">
             <span class ="header .green">
-                SICKLE CELL
+                {{testType2}}
             </span>
             <div class="statusCards">
                 <div class="cardWrapper">
@@ -209,7 +209,7 @@
 
         <div class="test">
             <span class ="header .green">
-                FCB
+                {{testType3}}
             </span>
             <div class="statusCards">
                 <div class="cardWrapper">
@@ -281,7 +281,7 @@
 
         <div class="test">
             <span class ="header .green">
-                FCB
+                {{testType4}}
             </span>
             <div class="statusCards">
                 <div class="cardWrapper">

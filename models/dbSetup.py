@@ -1,10 +1,10 @@
 import sqlite3
 
-department = "Hamatology"
+department = "Hematology"
 testType1 = "FCB"
 testType2 = "Sickle"
 testType3 = "BloodSick"
-testType4 = "Bluebloods"
+testType4 = "Blue bloods"
 def dbSetup():
     try:
         # DB connection

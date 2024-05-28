@@ -2,4 +2,5 @@
 server/.idea/*
 database.db
 __pycache__/
+models/__pycache__
 trash/
