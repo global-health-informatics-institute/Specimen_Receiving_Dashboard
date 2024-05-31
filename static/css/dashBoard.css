@@ -109,7 +109,8 @@ body{
     padding: 3px 10px;
 }
 .main .test{
-    flex: 1 1 600px;
+    /* flex: 1 1 600px; */
+    flex: 1 0 600px;
     display: flex;
     /* gap: 5px; */
     padding: 5px;
@@ -140,6 +141,7 @@ body{
 }
 .cardWrapper{
     flex: 1 1 110px;
+    /* flex: 0 1 110px; */
     display: flex;
     flex-flow: column;
     margin: 0 5px 2px 5px  ;
