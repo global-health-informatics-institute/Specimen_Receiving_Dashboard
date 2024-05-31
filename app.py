@@ -2,11 +2,11 @@ from flask import Flask, render_template
 from models.dbSetup import dbSetup, department, testType1, testType2, testType3, testType4
 from models.summaryData import SummaryData
 from models.tests import TestsData
+from models.tat import TATData
 
 app = Flask(__name__)
 
 @app.route("/dashboard/")
-@app.route("/")
 def index():
     
     content = {
@@ -67,17 +67,18 @@ def index():
     }
     testDataObj4.closeConn()
 
+    # -------------------------------
+    tatContent = {
+        "tat1": TATData(testType1).targetTAT(),
+        "tat2": TATData(testType2).targetTAT(),
+        "tat3": TATData(testType3).targetTAT(),
+        "tat4": TATData(testType4).targetTAT()
+    }
 
 
-    return render_template("dashboard.template.html", **content, **summaryContent, **testContent1, **testContent2, **testContent3, **testContent4)
+
+    return render_template("dashboard.template.html", **content, **summaryContent, **testContent1, **testContent2, **testContent3, **testContent4, **tatContent)
 
 if __name__ == "__main__":
-    dbSetup()
     app.run(debug=True)
 
-    # registered = Summary('tests', 'testType', 'registered')
-    # totalRegistered = registered.getSummaryTotal()
-    # summaryDataObj = SummaryData()
-    # totalRegistered = summaryDataObj.getSummaryRegistered()
-    # summaryDataObj.closeConn()
-    # print(f"Total registered: {totalRegistered}")

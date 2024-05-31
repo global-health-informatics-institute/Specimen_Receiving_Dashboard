@@ -4,6 +4,24 @@
 # ToDo: update weekly_summary()
 # ToDo: update monthly_summary()
 
+import mysql.connector
+
+
+# Configure MySQL connection
+mydb = mysql.connector.connect(
+    host="127.0.0.1",
+    port = "3306",
+    user="root",
+    password="@clk11CK",
+    database="test"
+)
+
+if mydb:
+    print("connection ok")
+else:
+    print("connection Failed")
+
+
 def migrateData():
     return ""
     # connect to iBlis database
