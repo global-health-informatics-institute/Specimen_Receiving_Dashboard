@@ -1,5 +1,5 @@
 from flask import Flask, render_template
-from models.dbSetup import dbSetup, department, testType1, testType2, testType3, testType4
+from models.config import  department, testType1, testType2, testType3, testType4
 from models.summaryData import SummaryData
 from models.tests import TestsData
 from models.tat import TATData
@@ -7,6 +7,7 @@ from models.tat import TATData
 app = Flask(__name__)
 
 @app.route("/dashboard/")
+@app.route("/")
 def index():
     
     content = {
@@ -16,6 +17,7 @@ def index():
         "testType3": testType3,
         "testType4": testType4,
     }
+    
     summaryDataObj = SummaryData()
     summaryContent = {
         "summaryRegisteredTotal": summaryDataObj.getSummaryRegistered(),
@@ -69,15 +71,24 @@ def index():
 
     # -------------------------------
     tatContent = {
-        "tat1": TATData(testType1).targetTAT(),
-        "tat2": TATData(testType2).targetTAT(),
-        "tat3": TATData(testType3).targetTAT(),
-        "tat4": TATData(testType4).targetTAT()
+        "target1": TATData(testType1).targetTAT(),
+        "target2": TATData(testType2).targetTAT(),
+        "target3": TATData(testType3).targetTAT(),
+        "target4": TATData(testType4).targetTAT()
     }
 
 
 
-    return render_template("dashboard.template.html", **content, **summaryContent, **testContent1, **testContent2, **testContent3, **testContent4, **tatContent)
+    return render_template(
+        "dashboard.template.html",
+        **content,
+        **summaryContent,
+        **testContent1,
+        **testContent2,
+        **testContent3,
+        **testContent4,
+        **tatContent
+    )
 
 if __name__ == "__main__":
     app.run(debug=True)
