@@ -4,39 +4,48 @@
 # ToDo: update weekly_summary()
 # ToDo: update monthly_summary()
 
-import mysql.connector
+from config import *
+import sqlite3
 
+def migrateAllUnique(screenName):
+    try:
+        # Connect to MySQL database
+        mycursor = mydb.cursor()
+        mycursor.execute(f"SELECT * FROM {screenName}")
+        result = mycursor.fetchall()
 
-# Configure MySQL connection
-mydb = mysql.connector.connect(
-    host="127.0.0.1",
-    port = "3306",
-    user="root",
-    password="@clk11CK",
-    database="test"
-)
+        if result:
+            # Connect to SQLite database
+            conn = sqlite3.connect('models/intermediateDB.db')
+            cursor = conn.cursor()
 
-if mydb:
-    print("connection ok")
-else:
-    print("connection Failed")
+            for row in result:
+                # Assume the structure of the row and columns
+                accession_id, test_type, test_status = row
 
+                # Check if the record already exists in SQLite
+                cursor.execute('''
+                    SELECT COUNT(*) FROM tests WHERE accession_id = ?
+                ''', (accession_id,))
+                exists = cursor.fetchone()[0]
 
-def migrateData():
-    return ""
-    # connect to iBlis database
-    # fetch all data from virtual db test (virtual coss we joining couple of tables and selective columns)
-    # filter in only entries within 3 days from date.now
-    # return assosiative array from every record
-    # update sqlite table "tests" in intermediate.db
+                if exists == 0:
+                    # If record does not exist, insert it
+                    cursor.execute('''
+                        INSERT INTO tests ( accession_id, test_type, test_status) 
+                        VALUES (?, ?, ?)
+                    ''', ( accession_id, test_type, test_status))
 
-
-    
-# ll run every 5 mins triggered by a cron job and update the fields the intermediate
-def updateSummaryFields(self):
-    return ""
-    # get number of rows wit status.register from table test and update to summary
-    # get number of rows wit status.register from table test and update to summary
-    # get number of rows wit status.register from table test and update to summary
-    # get number of rows wit status.register from table test and update to summary
-    # get number of rows wit status.register from table test and update to summary
+            conn.commit()
+    except mysql.connector.Error as err:
+        print(f"MySQL Error: {err}")
+    except sqlite3.Error as err:
+        print(f"SQLite Error: {err}")
+    finally:
+        # Close the connections
+        if mycursor:
+            mycursor.close()
+        if conn:
+            conn.close()
+# Call the function with your screenName
+migrateAllUnique(screenName)
