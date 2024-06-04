@@ -168,7 +168,7 @@ def dbSetup():
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS allReceived (
                 id INTEGER NOT NULL,
-                accession_id VARCHAR(100) NOT NULL
+                accession_id VARCHAR(100) NOT NULL,
                 test_type VARCHAR(100) NOT NULL,
                 write_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 PRIMARY KEY (id AUTOINCREMENT)
@@ -180,7 +180,7 @@ def dbSetup():
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS allInProgress (
                 id INTEGER NOT NULL,
-                accession_id VARCHAR(100) NOT NULL
+                accession_id VARCHAR(100) NOT NULL,
                 test_type VARCHAR(100) NOT NULL,
                 write_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 PRIMARY KEY (id AUTOINCREMENT)
@@ -192,7 +192,7 @@ def dbSetup():
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS allPendingAuth (
                 id INTEGER NOT NULL,
-                accession_id VARCHAR(100) NOT NULL
+                accession_id VARCHAR(100) NOT NULL,
                 test_type VARCHAR(100) NOT NULL,
                 write_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 PRIMARY KEY (id AUTOINCREMENT)
@@ -204,7 +204,7 @@ def dbSetup():
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS allCompleted (
                 id INTEGER NOT NULL,
-                accession_id VARCHAR(100) NOT NULL
+                accession_id VARCHAR(100) NOT NULL,
                 test_type VARCHAR(100) NOT NULL,
                 write_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 PRIMARY KEY (id AUTOINCREMENT)
