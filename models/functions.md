@@ -8,6 +8,6 @@
 
 **view.py**:
 --creates a Join view for all values we need
-
+<!-- 
 **Intermediate**:
---only executed on first run + new values(Implemented for testing)
+--only executed on first run + new values(Implemented for testing) -->

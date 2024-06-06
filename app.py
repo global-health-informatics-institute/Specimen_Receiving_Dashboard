@@ -1,8 +1,10 @@
 from flask import Flask, render_template
 from models.config import  department, testType1, testType2, testType3, testType4
+from models.monthlyData import MonthlyCounter
 from models.summaryData import SummaryData
 from models.tests import TestsData
 from models.tat import TATData
+from models.weeklyData import WeeklyCounter
 
 app = Flask(__name__)
 
@@ -77,6 +79,30 @@ def index():
         "target4": TATData(testType4).targetTAT()
     }
 
+    # -----------------------Weekly
+    counter = WeeklyCounter()
+    weeklyContent = {
+        "weeklyRegistered": counter.getSummaryRegistered(),
+        "weeklyRecieved": counter.getSummaryReceived(),
+        "weeklyProgress": counter.getSummaryInprogress(),
+        "weeklyPending": counter.getSummaryPendingAuth(),
+        "weeklyComplete": counter.getSummaryComplete(),
+    }
+    counter.closeConn()
+
+    # -----------------------Monthly
+    counterMonthly = MonthlyCounter()
+    monthlyContent = {
+        "monthlyRegistered": counterMonthly.getSummaryRegistered(),
+        "monthlyRecieved": counterMonthly.getSummaryReceived(),
+        "monthlyProgress": counterMonthly.getSummaryInprogress(),
+        "monthlyPending": counterMonthly.getSummaryPendingAuth(),
+        "monthlyComplete": counterMonthly.getSummaryComplete(),
+    }
+    counterMonthly.closeConn()
+
+    
+
 
 
     return render_template(
@@ -87,7 +113,9 @@ def index():
         **testContent2,
         **testContent3,
         **testContent4,
-        **tatContent
+        **tatContent,
+        **weeklyContent,
+        **monthlyContent
     )
 
 if __name__ == "__main__":
