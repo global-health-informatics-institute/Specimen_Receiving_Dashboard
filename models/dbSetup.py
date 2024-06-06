@@ -142,75 +142,45 @@ def dbSetup():
 
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS weekly_summary (
-                id INTEGER NOT NULL UNIQUE,
+                id INTEGER NOT NULL UNIQUE DEFAULT 1 CHECK(id = 1),
                 weekly_registered INTEGER,
                 weekly_received INTEGER,
                 weekly_progress INTEGER,
                 weekly_pending INTEGER,
                 weekly_complete INTEGER,
-                PRIMARY KEY(id AUTOINCREMENT)
+                PRIMARY KEY(id)
             )
         ''')
 
+        # Create indexes for the columns
+        cursor.execute('CREATE INDEX IF NOT EXISTS idx_weekly_registered ON weekly_summary (weekly_registered)')
+        cursor.execute('CREATE INDEX IF NOT EXISTS idx_weekly_received ON weekly_summary (weekly_received)')
+        cursor.execute('CREATE INDEX IF NOT EXISTS idx_weekly_progress ON weekly_summary (weekly_progress)')
+        cursor.execute('CREATE INDEX IF NOT EXISTS idx_weekly_pending ON weekly_summary (weekly_pending)')
+        cursor.execute('CREATE INDEX IF NOT EXISTS idx_weekly_complete ON weekly_summary (weekly_complete)')
+
+
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS monthly_summary (
-                id INTEGER NOT NULL UNIQUE,
+                id INTEGER NOT NULL UNIQUE DEFAULT 1 CHECK(id = 1),
                 monthly_registered INTEGER,
                 monthly_received INTEGER,
                 monthly_progress INTEGER,
                 monthly_pending INTEGER,
                 monthly_complete INTEGER,
-                PRIMARY KEY(id AUTOINCREMENT)
+                PRIMARY KEY(id)
             )
         ''')
 
-        # to track every received
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS allReceived (
-                id INTEGER NOT NULL,
-                accession_id VARCHAR(100) NOT NULL,
-                test_type VARCHAR(100) NOT NULL,
-                write_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                PRIMARY KEY (id AUTOINCREMENT)
-            )
-        ''')
+        # Create indexes for the columns
+        cursor.execute('CREATE INDEX IF NOT EXISTS idx_monthly_registered ON monthly_summary (monthly_registered)')
+        cursor.execute('CREATE INDEX IF NOT EXISTS idx_monthly_received ON monthly_summary (monthly_received)')
+        cursor.execute('CREATE INDEX IF NOT EXISTS idx_monthly_progress ON monthly_summary (monthly_progress)')
+        cursor.execute('CREATE INDEX IF NOT EXISTS idx_monthly_pending ON monthly_summary (monthly_pending)')
+        cursor.execute('CREATE INDEX IF NOT EXISTS idx_monthly_complete ON monthly_summary (monthly_complete)')
 
 
-        # to track every inProgress
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS allInProgress (
-                id INTEGER NOT NULL,
-                accession_id VARCHAR(100) NOT NULL,
-                test_type VARCHAR(100) NOT NULL,
-                write_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                PRIMARY KEY (id AUTOINCREMENT)
-            )
-        ''')
-
-
-        # to track every pendingAuth
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS allPendingAuth (
-                id INTEGER NOT NULL,
-                accession_id VARCHAR(100) NOT NULL,
-                test_type VARCHAR(100) NOT NULL,
-                write_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                PRIMARY KEY (id AUTOINCREMENT)
-            )
-        ''')
-
-
-        # to track every completed
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS allCompleted (
-                id INTEGER NOT NULL,
-                accession_id VARCHAR(100) NOT NULL,
-                test_type VARCHAR(100) NOT NULL,
-                write_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                PRIMARY KEY (id AUTOINCREMENT)
-            )
-        ''')
-
+       
         conn.commit()
     except sqlite3.Error as e:
         print(f"An error occurred: {e}")
@@ -268,7 +238,7 @@ def createView():
                     tests ON specimens.id = tests.specimen_id
                 WHERE 
                     specimens.specimen_type_id = {getDepartmentId()}
-                    AND tests.test_status_id NOT IN (1, 5, 6, 7, 8)
+                    AND tests.test_status_id NOT IN (1, 6, 7, 8)
                     AND tests.time_created >= NOW() - INTERVAL {interval} DAY
                     AND tests.test_type_id IN ({getTestTypeId(testType1)}, {getTestTypeId(testType2)}, {getTestTypeId(testType3)}, {getTestTypeId(testType4)});
             '''
@@ -303,8 +273,8 @@ def dropView():
         return False
     
 
-# dropView() run this at the start of the day
 dbSetup() #run this at the installation
+dropView() #run this at the start of the day
 createView() #
 
 # for tracking
