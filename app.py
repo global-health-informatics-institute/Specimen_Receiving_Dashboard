@@ -1,5 +1,5 @@
-from flask import Flask, render_template
-from models.config import  department, testType1, testType2, testType3, testType4
+from flask import Flask, jsonify, render_template
+from models.config import department, testType1, testType2, testType3, testType4
 from models.monthlyData import MonthlyCounter
 from models.summaryData import SummaryData
 from models.tests import TestsData
@@ -8,10 +8,21 @@ from models.weeklyData import WeeklyCounter
 
 app = Flask(__name__)
 
+def get_test_content(test_type, prefix):
+    test_data_obj = TestsData(test_type)
+    test_content = {
+        f"registered{prefix}": test_data_obj.getRegistered(),
+        f"received{prefix}": test_data_obj.getReceived(),
+        f"inProgress{prefix}": test_data_obj.getInProgress(),
+        f"pendingAuth{prefix}": test_data_obj.getPendingAuth(),
+        f"complete{prefix}": test_data_obj.getComplete()
+    }
+    test_data_obj.closeConn()
+    return test_content
+
 @app.route("/dashboard/")
 @app.route("/")
 def index():
-    
     content = {
         "departmentName": department,
         "testType1": testType1,
@@ -20,104 +31,130 @@ def index():
         "testType4": testType4,
     }
     
-    summaryDataObj = SummaryData()
-    summaryContent = {
-        "summaryRegisteredTotal": summaryDataObj.getSummaryRegistered(),
-        "summaryReceivedTotal": summaryDataObj.getSummaryReceived(),
-        "summaryInProgressTotal": summaryDataObj.getSummaryInprogress(),
-        "summaryPendingAuthTotal": summaryDataObj.getSummaryPendingAuth(),
-        "summaryCompleteTotal": summaryDataObj.getSummaryComplete()
+    summary_data_obj = SummaryData()
+    summary_content = {
+        "summaryRegisteredTotal": summary_data_obj.getSummaryRegistered(),
+        "summaryReceivedTotal": summary_data_obj.getSummaryReceived(),
+        "summaryInProgressTotal": summary_data_obj.getSummaryInprogress(),
+        "summaryPendingAuthTotal": summary_data_obj.getSummaryPendingAuth(),
+        "summaryCompleteTotal": summary_data_obj.getSummaryComplete()
     }
-    summaryDataObj.closeConn()
-    # -----------------------
-    testDataObj1 = TestsData(testType1)
-    testContent1 = {
-        "registered1": testDataObj1.getRegistered(),
-        "received1": testDataObj1.getReceived(),
-        "inProgress1": testDataObj1.getInProgress(),
-        "pendingAuth1": testDataObj1.getPendingAuth(),
-        "complete1": testDataObj1.getComplete()
-    }
-    testDataObj1.closeConn()
-    # -----------------------
-    testDataObj2 = TestsData(testType2)
-    testContent2 = {
-        "registered2": testDataObj2.getRegistered(),
-        "received2": testDataObj2.getReceived(),
-        "inProgress2": testDataObj2.getInProgress(),
-        "pendingAuth2": testDataObj2.getPendingAuth(),
-        "complete2": testDataObj2.getComplete()
-    }
-    testDataObj2.closeConn()
-    # -----------------------
-    testDataObj3 = TestsData(testType3)
-    testContent3 = {
-        "registered3": testDataObj3.getRegistered(),
-        "received3": testDataObj3.getReceived(),
-        "inProgress3": testDataObj3.getInProgress(),
-        "pendingAuth3": testDataObj3.getPendingAuth(),
-        "complete3": testDataObj3.getComplete()
-    }
-    testDataObj3.closeConn()
+    summary_data_obj.closeConn()
 
-    # -----------------------
-    testDataObj4 = TestsData(testType4)
-    testContent4 = {
-        "registered4": testDataObj4.getRegistered(),
-        "received4": testDataObj4.getReceived(),
-        "inProgress4": testDataObj4.getInProgress(),
-        "pendingAuth4": testDataObj4.getPendingAuth(),
-        "complete4": testDataObj4.getComplete()
-    }
-    testDataObj4.closeConn()
+    test_content1 = get_test_content(testType1, '1')
+    test_content2 = get_test_content(testType2, '2')
+    test_content3 = get_test_content(testType3, '3')
+    test_content4 = get_test_content(testType4, '4')
 
-    # -------------------------------
-    tatContent = {
+    tat_content = {
         "target1": TATData(testType1).targetTAT(),
         "target2": TATData(testType2).targetTAT(),
         "target3": TATData(testType3).targetTAT(),
         "target4": TATData(testType4).targetTAT()
     }
 
-    # -----------------------Weekly
     counter = WeeklyCounter()
-    weeklyContent = {
+    weekly_content = {
         "weeklyRegistered": counter.getSummaryRegistered(),
         "weeklyRecieved": counter.getSummaryReceived(),
         "weeklyProgress": counter.getSummaryInprogress(),
         "weeklyPending": counter.getSummaryPendingAuth(),
-        "weeklyComplete": counter.getSummaryComplete(),
+        "weeklyComplete": counter.getSummaryComplete()
     }
     counter.closeConn()
 
-    # -----------------------Monthly
-    counterMonthly = MonthlyCounter()
-    monthlyContent = {
-        "monthlyRegistered": counterMonthly.getSummaryRegistered(),
-        "monthlyRecieved": counterMonthly.getSummaryReceived(),
-        "monthlyProgress": counterMonthly.getSummaryInprogress(),
-        "monthlyPending": counterMonthly.getSummaryPendingAuth(),
-        "monthlyComplete": counterMonthly.getSummaryComplete(),
+    counter_monthly = MonthlyCounter()
+    monthly_content = {
+        "monthlyRegistered": counter_monthly.getSummaryRegistered(),
+        "monthlyRecieved": counter_monthly.getSummaryReceived(),
+        "monthlyProgress": counter_monthly.getSummaryInprogress(),
+        "monthlyPending": counter_monthly.getSummaryPendingAuth(),
+        "monthlyComplete": counter_monthly.getSummaryComplete()
     }
-    counterMonthly.closeConn()
-
-    
-
-
+    counter_monthly.closeConn()
 
     return render_template(
         "dashboard.template.html",
         **content,
-        **summaryContent,
-        **testContent1,
-        **testContent2,
-        **testContent3,
-        **testContent4,
-        **tatContent,
-        **weeklyContent,
-        **monthlyContent
+        **summary_content,
+        **test_content1,
+        **test_content2,
+        **test_content3,
+        **test_content4,
+        **tat_content,
+        **weekly_content,
+        **monthly_content
     )
+
+@app.route("/summary_content")
+def summary_data():
+    summary_data_obj = SummaryData()
+    summary_content = {
+        "summaryRegisteredTotal": summary_data_obj.getSummaryRegistered(),
+        "summaryReceivedTotal": summary_data_obj.getSummaryReceived(),
+        "summaryInProgressTotal": summary_data_obj.getSummaryInprogress(),
+        "summaryPendingAuthTotal": summary_data_obj.getSummaryPendingAuth(),
+        "summaryCompleteTotal": summary_data_obj.getSummaryComplete()
+    }
+    summary_data_obj.closeConn()
+    return jsonify(summary_content)
+
+@app.route("/test_content1")
+def test_content1():
+    test_content1 = get_test_content(testType1, '1')
+    return jsonify(test_content1)
+
+@app.route("/test_content2")
+def test_content2():
+    test_content2 = get_test_content(testType2, '2')
+    return jsonify(test_content2)
+
+@app.route("/test_content3")
+def test_content3():
+    test_content3 = get_test_content(testType3, '3')
+    return jsonify(test_content3)
+
+@app.route("/test_content4")
+def test_content4():
+    test_content4 = get_test_content(testType4, '4')
+    return jsonify(test_content4)
+
+@app.route("/tat_content")
+def tat_content():
+    tat_content = {
+        "target1": TATData(testType1).targetTAT(),
+        "target2": TATData(testType2).targetTAT(),
+        "target3": TATData(testType3).targetTAT(),
+        "target4": TATData(testType4).targetTAT()
+    }
+    return jsonify(tat_content)
+
+@app.route("/weekly_content")
+def weekly_content():
+    counter = WeeklyCounter()
+    weekly_content = {
+        "weeklyRegistered": counter.getSummaryRegistered(),
+        "weeklyRecieved": counter.getSummaryReceived(),
+        "weeklyProgress": counter.getSummaryInprogress(),
+        "weeklyPending": counter.getSummaryPendingAuth(),
+        "weeklyComplete": counter.getSummaryComplete()
+    }
+    counter.closeConn()
+    return jsonify(weekly_content)
+
+@app.route("/monthly_content")
+def monthly_content():
+    counter_monthly = MonthlyCounter()
+    monthly_content = {
+        "monthlyRegistered": counter_monthly.getSummaryRegistered(),
+        "monthlyRecieved": counter_monthly.getSummaryReceived(),
+        "monthlyProgress": counter_monthly.getSummaryInprogress(),
+        "monthlyPending": counter_monthly.getSummaryPendingAuth(),
+        "monthlyComplete": counter_monthly.getSummaryComplete()
+    }
+    counter_monthly.closeConn()
+    return jsonify(monthly_content)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
-

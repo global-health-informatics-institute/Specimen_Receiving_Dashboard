@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HAEMA</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='css/dashBoard.css')}}">
+    <link rel="stylesheet" href="../static/css/dashBoard.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            function fetchSummaryData() {
+                $.ajax({
+                    url: "/summary_data",
+                    method: "GET",
+                    success: function(data) {
+                        $("#summaryRegisteredTotal").text(data.summaryRegisteredTotal);
+                        $("#summaryReceivedTotal").text(data.summaryReceivedTotal);
+                        $("#summaryInProgressTotal").text(data.summaryInProgressTotal);
+                        $("#summaryPendingAuthTotal").text(data.summaryPendingAuthTotal);
+                        $("#summaryCompleteTotal").text(data.summaryCompleteTotal);
+                    }
+                });
+            }
+
+            fetchSummaryData();
+            setInterval(fetchSummaryData, 30000); // 30000ms = 30 seconds
+        });
+    </script>
+</head>
+<body>
+    <div class="nav">
+        HAEMA
+    </div>
+    <div class="sideNav">
+        <div class="card">
+            <span class="title green">
+                REGISTERED
+            </span>
+            <span class="value" id="summaryRegisteredTotal">
+                {{summaryRegisteredTotal}}
+            </span>
+        </div>
+        <div class="card">
+            <span class="title maroon">
+                RECIEVED
+            </span>
+            <span class="value" id="summaryReceivedTotal">
+                {{summaryReceivedTotal}}
+            </span>
+        </div>
+        <div class="card">
+            <span class="title red">
+                IN PROGRESS
+            </span>
+            <span class="value" id="summaryInProgressTotal">
+                {{summaryInProgressTotal}}
+            </span>
+        </div>
+        <div class="card">
+            <span class="title lightBlue">
+                PENDING AUTHORIZATION
+            </span>
+            <span class="value" id="summaryPendingAuthTotal">
+                {{summaryPendingAuthTotal}}
+            </span>
+        </div>
+        <div class="card">
+            <span class="title green">
+                COMPLETED
+            </span>
+            <span class="value" id="summaryCompleteTotal">
+                {{summaryCompleteTotal}}
+            </span>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,3 +1,99 @@
+from flask import Flask, render_template
+from models.config import department, testType1, testType2, testType3, testType4
+from models.monthlyData import MonthlyCounter
+from models.summaryData import SummaryData
+from models.tests import TestsData
+from models.tat import TATData
+from models.weeklyData import WeeklyCounter
+
+app = Flask(__name__)
+
+def get_test_content(test_type, prefix):
+    test_data_obj = TestsData(test_type)
+    test_content = {
+        f"registered{prefix}": test_data_obj.getRegistered(),
+        f"received{prefix}": test_data_obj.getReceived(),
+        f"inProgress{prefix}": test_data_obj.getInProgress(),
+        f"pendingAuth{prefix}": test_data_obj.getPendingAuth(),
+        f"complete{prefix}": test_data_obj.getComplete()
+    }
+    test_data_obj.closeConn()
+    return test_content
+
+@app.route("/dashboard/")
+@app.route("/")
+def index():
+    content = {
+        "departmentName": department,
+        "testType1": testType1,
+        "testType2": testType2,
+        "testType3": testType3,
+        "testType4": testType4,
+    }
+    
+    summary_data_obj = SummaryData()
+    summary_content = {
+        "summaryRegisteredTotal": summary_data_obj.getSummaryRegistered(),
+        "summaryReceivedTotal": summary_data_obj.getSummaryReceived(),
+        "summaryInProgressTotal": summary_data_obj.getSummaryInprogress(),
+        "summaryPendingAuthTotal": summary_data_obj.getSummaryPendingAuth(),
+        "summaryCompleteTotal": summary_data_obj.getSummaryComplete()
+    }
+    summary_data_obj.closeConn()
+
+    test_content1 = get_test_content(testType1, '1')
+    test_content2 = get_test_content(testType2, '2')
+    test_content3 = get_test_content(testType3, '3')
+    test_content4 = get_test_content(testType4, '4')
+
+    tat_content = {
+        "target1": TATData(testType1).targetTAT(),
+        "target2": TATData(testType2).targetTAT(),
+        "target3": TATData(testType3).targetTAT(),
+        "target4": TATData(testType4).targetTAT()
+    }
+
+    counter = WeeklyCounter()
+    weekly_content = {
+        "weeklyRegistered": counter.getSummaryRegistered(),
+        "weeklyRecieved": counter.getSummaryReceived(),
+        "weeklyProgress": counter.getSummaryInprogress(),
+        "weeklyPending": counter.getSummaryPendingAuth(),
+        "weeklyComplete": counter.getSummaryComplete()
+    }
+    counter.closeConn()
+
+    counter_monthly = MonthlyCounter()
+    monthly_content = {
+        "monthlyRegistered": counter_monthly.getSummaryRegistered(),
+        "monthlyRecieved": counter_monthly.getSummaryReceived(),
+        "monthlyProgress": counter_monthly.getSummaryInprogress(),
+        "monthlyPending": counter_monthly.getSummaryPendingAuth(),
+        "monthlyComplete": counter_monthly.getSummaryComplete()
+    }
+    counter_monthly.closeConn()
+
+    return render_template(
+        "dashboard.template.html",
+        **content,
+        **summary_content,
+        **test_content1,
+        **test_content2,
+        **test_content3,
+        **test_content4,
+        **tat_content,
+        **weekly_content,
+        **monthly_content
+    )
+
+if __name__ == "__main__":
+    app.run(debug=True)
+
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,7 +102,6 @@
     <title>{{departmentName}}</title>
     <link rel="stylesheet" href="{{url_for('static',filename='css/dashBoard.css')}}">
     <link rel="stylesheet" href="../static/css/dashBoard.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
     <div class="nav">
@@ -20,7 +115,7 @@
             <span class="title green">
                 REGISTERED
             </span>
-            <span class="value" id="summaryRegisteredTotal">
+            <span class="value">
                 {{summaryRegisteredTotal}}
             </span>
         </div>
@@ -28,7 +123,7 @@
             <span class="title maroon">
                 RECIEVED
             </span>
-            <span class="value" id="summaryReceivedTotal">
+            <span class="value">
                 {{summaryReceivedTotal}}
             </span>
         </div>
@@ -36,7 +131,7 @@
             <span class="title red">
                 IN PROGRESS
             </span>
-            <span class="value" id="summaryInProgressTotal">
+            <span class="value">
                 {{summaryInProgressTotal}}
             </span>
         </div>
@@ -44,7 +139,7 @@
             <span class="title lightBlue">
                 PENDING AUTHORIZATION
             </span>
-            <span class="value" id="summaryPendingAuthTotal">
+            <span class="value">
                 {{summaryPendingAuthTotal}}
             </span>
         </div>
@@ -52,7 +147,7 @@
             <span class="title green">
                 COMPLETED
             </span>
-            <span class="value" id="summaryCompleteTotal">
+            <span class="value">
                 {{summaryCompleteTotal}}
             </span>
         </div>
@@ -72,7 +167,7 @@
                     <div class="cardTitle green">
                         Received
                     </div>
-                    <div class="cardValue" id="received1">
+                    <div class="cardValue">
                         {{received1}}
                     </div>
                 </div>
@@ -80,7 +175,7 @@
                     <div class="cardTitle red">
                         In Progress
                     </div>
-                    <div class="cardValue" id="inProgress1">
+                    <div class="cardValue">
                         {{inProgress1}}
                     </div>
                 </div>
@@ -88,7 +183,7 @@
                     <div class="cardTitle red">
                         Pending Authorization
                     </div>
-                    <div class="cardValue" id="pendingAuth1">
+                    <div class="cardValue">
                         {{pendingAuth1}}
                     </div>
                 </div>
@@ -96,7 +191,7 @@
                     <div class="cardTitle green">
                         Completed
                     </div>
-                    <div class="cardValue" id="complete1">
+                    <div class="cardValue">
                         {{complete1}}
                     </div>
                 </div>       
@@ -144,7 +239,7 @@
                     <div class="cardTitle green">
                         Received
                     </div>
-                    <div class="cardValue" id="received2">
+                    <div class="cardValue">
                         {{received2}}
                     </div>
                 </div>
@@ -152,7 +247,7 @@
                     <div class="cardTitle red">
                         In Progress
                     </div>
-                    <div class="cardValue" id="inProgress2">
+                    <div class="cardValue">
                         {{inProgress2}}
                     </div>
                 </div>
@@ -160,7 +255,7 @@
                     <div class="cardTitle red">
                         Pending Authorization
                     </div>
-                    <div class="cardValue" id="pendingAuth2">
+                    <div class="cardValue">
                         {{pendingAuth2}}
                     </div>
                 </div>
@@ -168,7 +263,7 @@
                     <div class="cardTitle green">
                         Completed
                     </div>
-                    <div class="cardValue" id="complete2">
+                    <div class="cardValue">
                         {{complete2}}
                     </div>
                 </div>
@@ -217,7 +312,7 @@
                     <div class="cardTitle green">
                         Received
                     </div>
-                    <div class="cardValue" id="received3">
+                    <div class="cardValue">
                         {{received3}}
                     </div>
                 </div>
@@ -225,7 +320,7 @@
                     <div class="cardTitle red">
                         In Progress
                     </div>
-                    <div class="cardValue" id="inProgress3">
+                    <div class="cardValue">
                         {{inProgress3}}
                     </div>
                 </div>
@@ -233,7 +328,7 @@
                     <div class="cardTitle red">
                         Pending Authorization
                     </div>
-                    <div class="cardValue" ="pendingAuth3">
+                    <div class="cardValue">
                         {{pendingAuth3}}
                     </div>
                 </div>
@@ -241,7 +336,7 @@
                     <div class="cardTitle green">
                         Completed
                     </div>
-                    <div class="cardValue" id="complete3">
+                    <div class="cardValue">
                         {{complete3}}
                     </div>
                 </div>
@@ -289,7 +384,7 @@
                     <div class="cardTitle green">
                         Received
                     </div>
-                    <div class="cardValue" id="received4">
+                    <div class="cardValue">
                         {{received4}}
                     </div>
                 </div>
@@ -297,7 +392,7 @@
                     <div class="cardTitle red">
                         In Progress
                     </div>
-                    <div class="cardValue" id="inProgress4">
+                    <div class="cardValue">
                         {{inProgress4}}
                     </div>
                 </div>
@@ -305,7 +400,7 @@
                     <div class="cardTitle red">
                         Pending Authorization
                     </div>
-                    <div class="cardValue" id="pendingAuth4">
+                    <div class="cardValue">
                         {{pendingAuth4}}
                     </div>
                 </div>
@@ -313,7 +408,7 @@
                     <div class="cardTitle green">
                         Completed
                     </div>
-                    <div class="cardValue" id="complete4">
+                    <div class="cardValue">
                         {{complete4}}
                     </div>
                 </div>
@@ -375,7 +470,7 @@
                     <div class="title">
                         Registered
                     </div>
-                    <div class="value" id = "monthlyRegistered">
+                    <div class="value">
                         {{monthlyRegistered}}
                     </div>
                 </div>
@@ -384,7 +479,7 @@
                     <div class="title">
                     Received
                     </div>
-                    <div class="value" id="monthlyRecieved">
+                    <div class="value">
                         {{monthlyRecieved}}
                     </div>
                 </div>
@@ -404,7 +499,7 @@
                     <div class="title">
                         Registered
                     </div>
-                    <div class="value" id="weeklyRegistered">
+                    <div class="value">
                         {{weeklyRegistered}}
                     </div>
                 </div>
@@ -413,7 +508,7 @@
                     <div class="title">
                         Received
                     </div>
-                    <div class="value" id="weeklyRecieved">
+                    <div class="value">
                         {{weeklyRecieved}}
                     </div>
                 </div>
@@ -442,7 +537,7 @@
                     <div class="title">
                         In Progress
                     </div>
-                    <div class="value" id="monthlyProgress">
+                    <div class="value">
                         {{monthlyProgress}}
                     </div>
                 </div>
@@ -462,7 +557,7 @@
                     <div class="title">
                     In Progress
                     </div>
-                    <div class="value" id="weeklyProgress">
+                    <div class="value">
                         {{weeklyProgress}}
                     </div>
                 </div>  
@@ -485,7 +580,7 @@
                     <div class="title">
                         Completed
                     </div>
-                    <div class="value" id="monthlyComplete">
+                    <div class="value">
                         {{monthlyComplete}}
                     </div>
                 </div>
@@ -505,7 +600,7 @@
                     <div class="title">
                         Completed
                     </div>
-                    <div class="value" id="weeklyComplete">
+                    <div class="value">
                         {{weeklyComplete}}
                     </div>
                 </div>  
@@ -529,7 +624,7 @@
                     <div class="title">
                         Pending Authorization
                     </div>
-                    <div class="value" id="monthlyPending">
+                    <div class="value">
                         {{monthlyPending}}
                     </div>
                 </div>
@@ -549,7 +644,7 @@
                     <div class="title">
                     Pending Authorization
                     </div>
-                    <div class="value" id ="weeklyPending">
+                    <div class="value">
                         {{weeklyPending}}
                     </div>
                 </div>  
@@ -557,8 +652,171 @@
         </div>
     </div>
     <script src="{{url_for('static',filename='js/dashBoard.js')}}"></script>
-
-    <script src="{{url_for('static',filename='js/content.js')}}"></script>
     <script src="../static/js/dashBoard.js"></script>
 </body>
 </html>
+
+
+
+
+
+
+{% extends "dashboard.base.html" %}
+
+<!--content-->
+{% block departmentName %}
+    {{departmentName}}
+{% endblock %}
+{% block testType1 %}
+    {{testType1}}
+{% endblock %}
+{% block testType2 %}
+    {{testType2}}
+{% endblock %}
+{% block testType3 %}
+    {{testType3}}
+{% endblock %}
+{% block testType4 %}
+    {{testType4}}
+{% endblock %}
+
+<!--Summary-->
+{% block summaryRegisteredTotal %}
+    {{summaryRegisteredTotal}}
+{% endblock %}
+{% block summaryReceivedTotal %}
+    {{summaryReceivedTotal}}
+{% endblock %}
+{% block summaryInProgressTotal %}
+    {{summaryInProgressTotal}}
+{% endblock %}
+{% block summaryPendingAuthTotal %}
+    {{summaryPendingAuthTotal}}
+{% endblock %}
+{% block summaryCompleteTotal %}
+    {{summaryCompleteTotal}}
+{% endblock %}
+
+
+<!--Test1-->
+{% block registered1 %}
+    {{registered1}}
+{% endblock %}
+{% block received1 %}
+    {{received1}}
+{% endblock %}
+{% block inProgress1 %}
+    {{inProgress1}}
+{% endblock %}
+{% block pendingAuth1 %}
+    {{pendingAuth1}}
+{% endblock %}
+{% block complete1 %}
+    {{complete1}}
+{% endblock %}
+
+
+
+<!--Test2-->
+{% block registered2 %}
+    {{registered2}}
+{% endblock %}
+{% block received2 %}
+    {{received2}}
+{% endblock %}
+{% block inProgress2 %}
+    {{inProgress2}}
+{% endblock %}
+{% block pendAuth2 %}
+    {{pendAuth2}}
+{% endblock %}
+{% block complete2 %}
+    {{complete2}}
+{% endblock %}
+
+
+<!--Test3-->
+{% block registered3 %}
+    {{registered3}}
+{% endblock %}
+{% block received3 %}
+    {{received3}}
+{% endblock %}
+{% block inProgress3 %}
+    {{inProgress3}}
+{% endblock %}
+{% block pendAuth3 %}
+    {{pendAuth3}}
+{% endblock %}
+{% block complete3 %}
+    {{complete3}}
+{% endblock %}
+
+
+<!--Test4-->
+{% block registered4 %}
+    {{registered4}}
+{% endblock %}
+{% block received4 %}
+    {{received4}}
+{% endblock %}
+{% block inProgress4 %}
+    {{inProgress4}}
+{% endblock %}
+{% block pendAuth4 %}
+    {{pendAuth4}}
+{% endblock %}
+{% block complete4 %}
+    {{complete4}}
+{% endblock %}
+
+
+
+<!--TAT-->
+{% block target1 %}
+    {{target1}}
+{% endblock %}
+{% block target2 %}
+    {{target2}}
+{% endblock %}
+{% block target3 %}
+    {{target3}}
+{% endblock %}
+{% block target4 %}
+    {{target4}}
+{% endblock %}
+
+
+<!--Weekly Summary-->
+{% block weeklyRegistered %}
+    {{weeklyRegistered}}
+{% endblock %}
+{% block weeklyRecieved %}
+    {{weeklyRecieved}}
+{% endblock %}
+{% block weeklyProgress %}
+    {{weeklyProgress}}
+{% endblock %}
+{% block weeklyPending %}
+    {{weeklyPending}}
+{% endblock %}
+{% block weeklyComplete %}
+    {{weeklyComplete}}
+{% endblock %}
+
+<!--Monthly Summary-->
+{% block monthlyRegistered %}
+    {{monthlyRegistered}}
+{% endblock %}
+{% block monthlyRecieved %}
+    {{monthlyRecieved}}
+{% endblock %}
+{% block monthlyProgress %}
+    {{monthlyProgress}}
+{% endblock %}
+{% block monthlyPending %}
+    {{monthlyPending}}
+{% endblock %}
+{% block monthlyComplete %}
+    {{monthlyComplete}}
+{% endblock %}

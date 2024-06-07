@@ -10,7 +10,7 @@ testType3 = "APTT"
 testType4 = "INR"
 
 # how many days do you need the test to be alive
-interval = 14
+interval = 1
 
 # Screen name equal to view name (departmentName+screenNumber)
 screenName = "Haematology1"
