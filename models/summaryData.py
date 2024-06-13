@@ -14,16 +14,21 @@ class SummaryData:
         return total_status
 
     def getSummaryReceived(self):
-        # when scanned, save in received
-        # for now just calculate
-        totalStatus = (SummaryData.getSummaryInprogress(self) + SummaryData.getSummaryPendingAuth(self) + SummaryData.getSummaryComplete(self))
-        return totalStatus
-        """Get the total count of tests with status 'received'."""
-        # query = 'SELECT COUNT(id) AS totalStatus FROM tests WHERE LOWER(test_status) = "received";'
-        # self.cursor.execute(query)
-        # result = self.cursor.fetchone()
-        # total_status = result[0] if result else 0
-        # return total_status
+        query = 'SELECT COUNT(id) AS totalStatus FROM tests WHERE test_status = 0;'
+        self.cursor.execute(query)
+        result = self.cursor.fetchone()
+        total_status = result[0] if result else 0
+        return total_status
+        # # when scanned, save in received
+        # # for now just calculate
+        # totalStatus = (SummaryData.getSummaryInprogress(self) + SummaryData.getSummaryPendingAuth(self) + SummaryData.getSummaryComplete(self))
+        # return totalStatus
+        # """Get the total count of tests with status 'received'."""
+        # # query = 'SELECT COUNT(id) AS totalStatus FROM tests WHERE LOWER(test_status) = "received";'
+        # # self.cursor.execute(query)
+        # # result = self.cursor.fetchone()
+        # # total_status = result[0] if result else 0
+        # # return total_status
 
     def getSummaryInprogress(self):
         """Get the total count of tests with status 'in_progress'."""

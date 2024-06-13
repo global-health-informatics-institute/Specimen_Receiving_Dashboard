@@ -1,10 +1,14 @@
 from flask import Flask, jsonify, render_template
 from models.config import department, testType1, testType2, testType3, testType4
+from models.dbSetup import createView, dbSetup, dropView
+from models.intermediate import migrateAllUnique, updateExisting
 from models.monthlyData import MonthlyCounter
 from models.summaryData import SummaryData
 from models.tests import TestsData
 from models.tat import TATData
 from models.weeklyData import WeeklyCounter
+from modules.client import receiveBarcode
+from scripts.erasers import clearTable
 
 app = Flask(__name__)
 
@@ -20,8 +24,67 @@ def get_test_content(test_type, prefix):
     test_data_obj.closeConn()
     return test_content
 
+
+@app.route("/", methods=["POST"])
+def client():
+    return receiveBarcode()
+
+# drop view at 07:00
+# create view at 07:02
+# migrateData every morning 07:05
+# weeklyEraser first day of the week
+# monthlyEraser first day of the month
+# update periodically
+
+# drop view at 07:00
+@app.route("/dropView/..blackEvil")
+def runDropView():
+    return dropView()
+# red
+@app.route("/dbSetup/..blackEvil")
+def runDBSetup():
+    if dbSetup():
+        return dbSetup()
+    else:
+        return "dbSetUp is Up and running"
+    
+
+
+# create view at 07:02
+@app.route("/createView/")
+def runCreateView():
+    return createView()
+
+# migrateData every morning 07:05
+@app.route("/migrateData/")
+def runMigrateData():
+    if migrateAllUnique():
+        return migrateAllUnique()
+    else:
+        return "This returned none"
+
+# weeklyEraser first day of the week
+@app.route("/weeklyEraser/")
+def runWeeklyEraser():
+    if clearTable("weekly_summary"):
+        return clearTable("weekly_summary")
+    else:
+        return "This returned a none"
+
+# monthlyEraser first day of the month
+@app.route("/monthlyEraser/")
+def runMonthlyEraser():
+    if clearTable("monthly_summary"):
+        return clearTable("monthly_summary")
+    else:
+        return "This returned a none"
+
+# update periodically
+@app.route("/updatePeriodically/")
+def runUpdatePeriodically():
+    return updateExisting()
+
 @app.route("/dashboard/")
-@app.route("/")
 def index():
     content = {
         "departmentName": department,
@@ -157,4 +220,4 @@ def monthly_content():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)

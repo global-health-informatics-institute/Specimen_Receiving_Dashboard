@@ -1,4 +1,4 @@
-from config import mydb, screenName
+from models.config import mydb, screenName
 import mysql.connector
 import sqlite3
 import logging

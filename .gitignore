@@ -3,4 +3,8 @@ server/.idea/*
 database.db
 __pycache__/
 models/__pycache__
+modules/__pycache__
+stashs/
 trash/
+.vscode
+

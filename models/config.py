@@ -1,5 +1,9 @@
+import os
 import mysql.connector
 import sqlite3
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+db_path = os.path.join(BASE_DIR,'intermediateDB.db')
 # name of department the system is set up in
 department = "Haematology"
 
@@ -27,7 +31,7 @@ mydb = mysql.connector.connect(
 def getTestTypeId(testType):
     try:
         # Connect to your SQLite database
-        conn = sqlite3.connect('models/intermediateDB.db')
+        conn = sqlite3.connect(db_path)
         cursor = conn.cursor()
         query = 'SELECT test_id FROM test_definitions WHERE lower(test_short_name) = ?;'
         cursor.execute(query, (testType.lower(),))  # Make sure this is a tuple
@@ -38,6 +42,5 @@ def getTestTypeId(testType):
         print(f"Error connecting to database: {e}")
         return None
     finally:
-        if conn:
+        if 'conn' in locals() and conn:
             conn.close()
-
