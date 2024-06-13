@@ -1,5 +1,7 @@
 import sqlite3
-from config import *
+from models.config import *
+
+# Define the path to the SQLite database
 
 def fetchDepartmentDefinitions(department):
     try:
@@ -9,7 +11,7 @@ def fetchDepartmentDefinitions(department):
         
         if result:
             department_id = result[0]
-            conn = sqlite3.connect('models/intermediateDB.db')
+            conn = sqlite3.connect(db_path)
             cursor = conn.cursor()
             cursor.execute('''
                 INSERT INTO department_definitions(department_id, department_name) 
@@ -21,10 +23,11 @@ def fetchDepartmentDefinitions(department):
     except mysql.connector.Error as err:
         print(f"Error: {err}")
     finally:
-        if conn:
+        if 'conn' in locals() and conn:
             conn.close()
-        if mycursor:
+        if 'mycursor' in locals() and mycursor:
             mycursor.close()
+
 
 def fetchTestDefinitions(testType):
     try:
@@ -34,7 +37,11 @@ def fetchTestDefinitions(testType):
         
         if result:
             test_id, name, short_name, targetTAT = result
-            conn = sqlite3.connect('models/intermediateDB.db')
+
+            if not os.path.exists(db_path):
+                raise FileNotFoundError(f"Database file not found: {db_path}")
+
+            conn = sqlite3.connect(db_path)
             cursor = conn.cursor()
             cursor.execute('''
                 INSERT INTO test_definitions(test_id, test_name, test_short_name, targetTAT) 
@@ -46,14 +53,17 @@ def fetchTestDefinitions(testType):
     except mysql.connector.Error as err:
         print(f"Error: {err}")
     finally:
-        if conn:
+        if 'conn' in locals() and conn:
             conn.close()
-        if mycursor:
+        if 'mycursor' in locals() and mycursor:
             mycursor.close()
 
 def populateStatusDefinitions(statusId, statusName, testStatusId, testStatusName, specimenStatusId, specimenStatusName):
     try:
-        conn = sqlite3.connect('models/intermediateDB.db')
+        if not os.path.exists(db_path):
+            raise FileNotFoundError(f"Database file not found: {db_path}")
+        
+        conn = sqlite3.connect(db_path)
         cursor = conn.cursor()
         cursor.execute('''
             INSERT INTO status_definitions(
@@ -64,12 +74,15 @@ def populateStatusDefinitions(statusId, statusName, testStatusId, testStatusName
     except sqlite3.Error as err:
         print(f"Error: {err}")
     finally:
-        if conn:
+        if 'conn' in locals() and conn:
             conn.close()
 
 def dbSetup():
     try:
-        conn = sqlite3.connect('models/intermediateDB.db')
+
+        db_path = "models/intermediateDB.db"
+            
+        conn = sqlite3.connect(db_path)
         cursor = conn.cursor()
 
         cursor.execute('''
@@ -154,7 +167,7 @@ def dbSetup():
 
         # Create indexes for the columns
         cursor.execute('CREATE INDEX IF NOT EXISTS idx_weekly_registered ON weekly_summary (weekly_registered)')
-        cursor.execute('CREATE INDEX IF NOT EXISTS idx_weekly_received ON weekly_summary (weekly_received)')
+        cursor.execute('CREATE INDEX IF NOT EXI STS idx_weekly_received ON weekly_summary (weekly_received)')
         cursor.execute('CREATE INDEX IF NOT EXISTS idx_weekly_progress ON weekly_summary (weekly_progress)')
         cursor.execute('CREATE INDEX IF NOT EXISTS idx_weekly_pending ON weekly_summary (weekly_pending)')
         cursor.execute('CREATE INDEX IF NOT EXISTS idx_weekly_complete ON weekly_summary (weekly_complete)')
@@ -185,14 +198,17 @@ def dbSetup():
     except sqlite3.Error as e:
         print(f"An error occurred: {e}")
     finally:
-        if conn:
+        if 'conn' in locals() and conn:
             conn.close()
 
 
 # return department id
 def getDepartmentId():
     try:
-        conn = sqlite3.connect('models/intermediateDB.db')
+        if not os.path.exists(db_path):
+            raise FileNotFoundError(f"Database file not found: {db_path}")
+        
+        conn = sqlite3.connect(db_path)
         cursor = conn.cursor()
         query = 'SELECT department_id FROM department_definitions WHERE id = 1;'
         cursor.execute(query)
@@ -203,7 +219,7 @@ def getDepartmentId():
         print(f"Error connecting to database: {e}")
         return None
     finally:
-        if conn:
+        if 'conn' in locals() and conn:
             conn.close()
 
 # get the id to filter out the views
@@ -273,13 +289,4 @@ def dropView():
         return False
     
 
-dbSetup() #run this at the installation
-dropView() #run this at the start of the day
-createView() #
 
-# for tracking
-"""
-for sideBar summary:Recieved, test_type
-for weekly Summary: Recieved (int)
-
-"""

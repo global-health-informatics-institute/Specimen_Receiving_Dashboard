@@ -27,8 +27,16 @@ class TestsData:
         # result = self.cursor.fetchone()
         # total_status = result[0] if result else 0
         # return total_status
-        totalStatus = TestsData.getInProgress(self) + TestsData.getPendingAuth(self) + TestsData.getComplete(self)
-        return totalStatus
+        # totalStatus = TestsData.getInProgress(self) + TestsData.getPendingAuth(self) + TestsData.getComplete(self)
+        # return totalStatus
+        testTypeId = getTestTypeId(self.testType)
+        if testTypeId is None:
+            return 0
+        query = 'SELECT COUNT(id) AS totalStatus FROM tests WHERE test_type = ? AND test_status = 0;'
+        self.cursor.execute(query, (testTypeId,))
+        result = self.cursor.fetchone()
+        total_status = result[0] if result else 0
+        return total_status
 
     def getInProgress(self):
         """Get the total count of tests with status 'in_progress'."""
