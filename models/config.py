@@ -1,13 +1,10 @@
-import os
 import mysql.connector
 import sqlite3
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-db_path = os.path.join(BASE_DIR,'intermediateDB.db')
-# name of department the system is set up in
+# name of department the system is set up in, Represent the join & view
 department = "Haematology"
 
-# short name for the tests that needs to be displayed (4)
+# short name for the tests that needs to be displayed (4). Unlike having seperate view, data ll be fetched using test IDs
 testType1 = "FBC"
 testType2 = "PT"
 testType3 = "APTT"
@@ -16,11 +13,8 @@ testType4 = "INR"
 # how many days do you need the test to be alive
 interval = 1
 
-# Screen name equal to view name (departmentName+screenNumber)
-screenName = "Haematology1"
-
-# MySQL config depending on server properties
-mydb = mysql.connector.connect(
+# MySQL Iblis config depending on server properties
+iBlissDB = mysql.connector.connect(
     host="127.0.0.1",
     port="3306",
     user="root",
@@ -28,6 +22,16 @@ mydb = mysql.connector.connect(
     database="tests"
 )
 
+# MySQL config as for SRS
+srsDB = mysql.connector.connect(
+    host="127.0.0.1",
+    port="3306",
+    user="root",
+    password="root",
+    database="intermediate"
+)
+
+# 
 def getTestTypeId(testType):
     try:
         # Connect to your SQLite database
