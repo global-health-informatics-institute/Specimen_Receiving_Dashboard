@@ -46,7 +46,6 @@ def getDepartmentIdHelper():
         else:
             print(f"No department found with the name '{department}'.")
             return None
-
     except Error as e:
         print(f"Error: {e}")
         return None
@@ -56,7 +55,7 @@ def getDepartmentIdHelper():
         if srsConnection and srsConnection.is_connected():
             srsConnection.close()
 # used when creating the join
-
+# print(getDepartmentIdHelper())
 
 def getTestTypeID(testType):
     try:
@@ -88,11 +87,7 @@ def getTestTypeID(testType):
         if srsConnection and srsConnection.is_connected():
             srsConnection.close()
 # used when create the join
-# print(getTestTypeID('FBC'))
 
-
-import mysql.connector
-from mysql.connector import Error
 
 def fetchFromJoin():
     try:
@@ -154,6 +149,8 @@ def fetchFromJoin():
             iblisCursor.close()
         if iblisConnection and iblisConnection.is_connected():
             iblisConnection.close()
+
+
 # creating a view will be used to fetch the only needed data
 # Example usage
 # results = fetchFromJoin()

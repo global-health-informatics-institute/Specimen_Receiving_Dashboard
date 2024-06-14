@@ -49,7 +49,7 @@ def populateDepartmentDefinitions():
             iBlisCursor.close()
         if iBlissConn:
             iBlissConn.close()
-# populateDepartmentDefinitions()
+populateDepartmentDefinitions()
 
 
 def populateTestDefinitions():
@@ -110,7 +110,7 @@ def populateTestDefinitions():
             srsCursor.close()
         if srsConnection and srsConnection.is_connected():
             srsConnection.close()
-# populateTestDefinitions()
+populateTestDefinitions()
 
 
 def populateStatusDefinitions():
@@ -149,22 +149,5 @@ def populateStatusDefinitions():
             srsCursor.close()
         if srsConnection and srsConnection.is_connected():
             srsConnection.close()
-# populateStatusDefinitions()
+populateStatusDefinitions()
 
-def populateReplicate(department):
-    ""
-    # iblis DB conn obj iBlissDB
-    # join these tables as {department}
-    # SELECT 
-    #     specimens.accession_number AS accession_id,
-    #     tests.test_type_id AS test_type,
-    #     tests.test_status_id AS test_status
-    # FROM
-    # specimens
-    # INNER JOIN 
-    #     tests ON specimens.id = tests.specimen_id
-    # WHERE 
-    #     specimens.specimen_type_id = {getDepartmentId()}
-    #     AND tests.test_status_id NOT IN (1, 6, 7, 8)
-    #     AND tests.time_created >= NOW() - INTERVAL {interval} DAY
-    #     AND tests.test_type_id IN ({getTestTypeId(testType1)}, {getTestTypeId(testType2)}, {getTestTypeId(testType3)}, {getTestTypeId(testType4)});

@@ -20,7 +20,10 @@ class TATData:
         if not self.cursor:
             print("Database connection not established.")
             return None
-
+        # srsDB obj
+        # query = 'SELECT targetTAT FROM test_definitions WHERE LOWER(test_short_name) = ?;'
+        # return results its a string
+        
         query = 'SELECT targetTAT FROM test_definitions WHERE LOWER(test_short_name) = ?;'
         try:
             self.cursor.execute(query, (self.testType.lower(),))
