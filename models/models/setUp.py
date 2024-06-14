@@ -1,5 +1,4 @@
 from mysql.connector import Error
-import mysql.connector
 from config import srsDBConn, srsDB, department
 
 
@@ -32,7 +31,7 @@ def createIntermediate():
             cursor.close()
         if mydb is not None and mydb.is_connected():
             mydb.close()
-createIntermediate()
+# createIntermediate()
 
 # define the tables
 def defineTables():
@@ -84,7 +83,7 @@ def defineTables():
             cursor.execute('''
                 CREATE TABLE IF NOT EXISTS tests (
                     id INT NOT NULL AUTO_INCREMENT UNIQUE,
-                    accession_id INT NOT NULL,
+                    accession_id VARCHAR(100) NOT NULL,
                     test_type VARCHAR(100) NOT NULL,
                     test_status VARCHAR(100) NOT NULL,
                     write_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -140,6 +139,7 @@ def defineTables():
                     accession_id VARCHAR(100) NOT NULL,
                     test_type INT NOT NULL,
                     test_status INT NOT NULL,
+                    write_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
                     PRIMARY KEY (id),
                     INDEX idx_accession_id (accession_id),
                     INDEX idx_test_type (test_type),
@@ -152,4 +152,4 @@ def defineTables():
 
     except Error as e:
         print(f"Error: {e}")
-defineTables()
+# defineTables()
