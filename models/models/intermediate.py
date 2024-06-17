@@ -1,35 +1,20 @@
-# department_id = getDepartmentIDHelper()
-    # test_type_id1 = getTestTypeID(testType1)
-    # test_type_id2 = getTestTypeID(testType2)
-    # test_type_id3 = getTestTypeID(testType3)
-    # test_type_id4 = getTestTypeID(testType4)
-
-# def migrateAllUnique():
-    # this will run at the begining of loading the db
-    
-    # weeklyIncrementorObj = WeeklyIncrementor()
-    # monthlyIncrementorOnj = MonthlyIncrementor()
-    # using the data from fetchFromJoin()
-    # try srsDB obj
-    # insert entry value into tests
-        # but first, check if the entries fetched status test_status is not = 5
-        # 5 means its already completed
-            # check if the entry with the fetched accession_id is not already in the tests
-            # if the entry does not already exist, then insert values
-            # 'INSERT INTO tests in these columns(accession_id, test_type, test_status) the fetched values as (accession_id, test_type, test_status))
-        # address all closing and exceptions
-
-
 from config import srsDB, Error
 from helper import fetchFromJoin
 from monthlyData import MonthlyIncremator
 from weeklyData import WeeklyIncremator
 
+def _updateFieldHelper(connectionObj, cursorObj, table, column_name):
+    try:
+        if cursorObj:
+            query = f"UPDATE {table} SET {column_name} = {column_name} + 1 WHERE id = 1;"
+            cursorObj.execute(query)
+            connectionObj.commit()  # Commit the transaction to save changes
+        else:
+            print("Cursor not initialized.")
+    except Error as e:
+        print(f"Error: {e}")
 
 def migrateAllUnique():
-    weeklyIncrementorObj = WeeklyIncremator()
-    monthlyIncrementorObj = MonthlyIncremator()
-
     try:
         srsConnection = srsDB()
         if srsConnection is None:
@@ -54,29 +39,31 @@ def migrateAllUnique():
 
                 if not exists:
                     insert_query = """
-                    INSERT INTO tests (accession_id, test_type_id, test_status)
+                    INSERT INTO tests (accession_id, test_type, test_status)
                     VALUES (%s, %s, %s)
                     """
+                    if test_status == 2:
+                        print("2")
+                        _updateFieldHelper(srsConnection, srsCursor, 'weekly_summary', 'weekly_registered')
+                        _updateFieldHelper(srsConnection, srsCursor, 'monthly_summary', 'monthly_registered')
+                    elif test_status == 3:
+                        print("not 2")
+                        _updateFieldHelper(srsConnection, srsCursor, 'weekly_summary', 'weekly_progress')
+                        _updateFieldHelper(srsConnection, srsCursor, 'monthly_summary', 'monthly_progress')
+                    elif test_status == 4:
+                        print("not 2,3")
+                        _updateFieldHelper(srsConnection, srsCursor, 'weekly_summary', 'weekly_pending')
+                        _updateFieldHelper(srsConnection, srsCursor, 'monthly_summary', 'monthly_pending')
+
                     srsCursor.execute(insert_query, (accession_id, test_type_id, test_status))
                     srsConnection.commit()
-
-                    if test_status == 2:
-                        weeklyIncrementorObj.incrementRegistered()
-                        monthlyIncrementorObj.incrementRegistered()
-                    elif test_status == 3:
-                        weeklyIncrementorObj.incrementInprogress()
-                        monthlyIncrementorObj.incrementInprogress()
-                    elif test_status == 4:
-                        weeklyIncrementorObj.incrementPendingAuth()
-                        monthlyIncrementorObj.incrementPendingAuth()
 
     except Error as e:
         print(f"Error: {e}")
     finally:
         if srsCursor:
             srsCursor.close()
-        if srsConnection and srsConnection.is_connected():
+        if srsConnection:
             srsConnection.close()
-        weeklyIncrementorObj.closeConnections()
-        monthlyIncrementorObj.closeConnections()
+
 migrateAllUnique()
