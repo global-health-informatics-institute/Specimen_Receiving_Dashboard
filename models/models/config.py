@@ -11,7 +11,7 @@ testType3 = "APTT"
 testType4 = "INR"
 
 # how many days do you need the test to be alive
-interval = 1
+interval = 100
 
 # MySQL Iblis config depending on server properties
 def iBlissDB():
