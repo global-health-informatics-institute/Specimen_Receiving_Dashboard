@@ -1,43 +1,50 @@
-import sqlite3
+from config import srsDB, Error
 
-class TATData:
-    def __init__(self, testType):
-        self.connection = None
-        self.cursor = None
-        self.testType = testType
-        self._connect()
+class getTATData:
+    def __init__(self):
+        self.srsDB = srsDB()
+        if self.srsDB is None:
+            print("Failed to connect to srsDB.")
+        else:
+            self.srsCursor = self.srsDB.cursor()
 
-    def _connect(self):
-        """Establish a database connection and create a cursor."""
+    def _getSummaryValueHelper(self, test_short_name):
         try:
-            self.connection = sqlite3.connect('models/intermediateDB.db')
-            self.cursor = self.connection.cursor()
-        except sqlite3.Error as e:
-            print(f"Error connecting to database: {e}")
+            if self.srsCursor:
+                query = "SELECT targetTAT FROM test_definitions WHERE LOWER(test_short_name) = %s;"
+                self.srsCursor.execute(query, (test_short_name.lower(),))
+                result = self.srsCursor.fetchone()
+                if result:
+                    return result[0]  # Return the targetTAT as a string
+                else:
+                    print("No result found.")
+                    return ""
+            else:
+                print("Cursor not initialized.")
+                return ""
+        except Error as e:
+            print(f"Error: {e}")
+            return ""
 
-    def targetTAT(self):
-        """Get the total count of tests with status 'registered'."""
-        if not self.cursor:
-            print("Database connection not established.")
-            return None
+    def getTATForTestType(self, test_short_name):
+        return self._getSummaryValueHelper(test_short_name)
 
-        query = 'SELECT targetTAT FROM test_definitions WHERE LOWER(test_short_name) = ?;'
+    def closeConnections(self):
         try:
-            self.cursor.execute(query, (self.testType.lower(),))
-            result = self.cursor.fetchone()
-            return result[0] if result else None
-        except sqlite3.Error as e:
-            print(f"Error executing query: {e}")
-            return None
+            if self.srsCursor:
+                self.srsCursor.close()
+            if self.srsDB and self.srsDB.is_connected():
+                self.srsDB.close()
+        except Error as e:
+            print(f"Error closing connection: {e}")
+# Example usage:
+# tat_data = getTATData()
+# target_tat = tat_data.getTATForTestType('APTT')
+# print(target_tat)
+# tat_data.closeConnections()
 
-    def close(self):
-        """Close the database connection."""
-        if self.connection:
-            self.connection.close()
+def getCurrent(self):
+    ""
 
-    
-    def getCurrent(self):
-        ""
-
-    def getAverage(self):
-        ""
+def getAverage(self):
+    ""
