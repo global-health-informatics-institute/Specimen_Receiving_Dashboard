@@ -10,7 +10,7 @@ test_type_id3 = getTestTypeID(testType3)  # 40
 test_type_id4 = getTestTypeID(testType4)  # 41
 
 # i want to keep track of each status as per week and monthly
-def _updateFieldHelperWeekly( status):
+def _updateFieldHelperWeekly(status):
     if status == 2:
         column_name = "weekly_registered"
     elif status == 0:
@@ -25,7 +25,7 @@ def _updateFieldHelperWeekly( status):
     query = f"UPDATE weekly_summary SET {column_name} = {column_name} + 1 WHERE id = 1;"
     return query
 
-def _updateFieldHelperMonthly( status):
+def _updateFieldHelperMonthly(status):
     if status == 2:
         column_name = "monthly_registered"
     elif status == 0:
@@ -107,21 +107,19 @@ def updateEntries():
                     srs_cursor.execute("SELECT test_status FROM tests WHERE accession_id = %s AND test_type = %s", (accession_id, test_type))
                     existing_record = srs_cursor.fetchone()
 
-                    # condition 1: insert if the entry does not exist
-                    if not existing_record and int(existing_record) !=5:
-                        # Insert the record into srsDB If status not 5 (5 means its completed already)
+                    # condition 1: insert if the entry does not exist and status is not 5 (5 means it's completed already)
+                    if not existing_record:
+                        # Insert the record into srsDB
                         srs_insert_query = """
                         INSERT INTO tests (accession_id, test_type, test_status)
                         VALUES (%s, %s, %s)
                         """
-
-                        # Keep track
-
-                        srs_cursor.execute(_updateFieldHelperWeekly, (test_status))
-                        srs_cursor.execute(_updateFieldHelperMonthly, (test_status))
+                        srs_cursor.execute(_updateFieldHelperWeekly(test_status))
+                        srs_cursor.execute(_updateFieldHelperMonthly(test_status))
                         srs_cursor.execute(srs_insert_query, (accession_id, test_type, test_status))
                         srs_connection.commit()
                         print(f"Inserted new record for accession_id: {accession_id}, test_type: {test_type}, test_status: {test_status}")
+
                     else:
                         existing_status = int(existing_record['test_status'])  # Convert to int
                         print(f"Comparing new test_status: {test_status} (type: {type(test_status)}) with old test_status: {existing_status} (type: {type(existing_status)})")
@@ -130,8 +128,8 @@ def updateEntries():
                             print(f"No update needed for accession_id: {accession_id}, test_type: {test_type}, test_status: {test_status}")
                             continue
 
-                        # condition 2: skip if the existing status = 0  and new entry is either 1, 2, 3
-                        elif existing_status == 0 and test_status in [1, 2, 3]:
+                        # condition 2: skip if the existing status = 0 and new entry is either 1, 2
+                        elif existing_status == 0 and test_status in [1, 2]:
                             continue
 
                         else:
@@ -142,6 +140,8 @@ def updateEntries():
                             WHERE accession_id = %s AND test_type = %s
                             """
                             srs_cursor.execute(srs_update_query, (test_status, accession_id, test_type))
+                            srs_cursor.execute(_updateFieldHelperWeekly(test_status))
+                            srs_cursor.execute(_updateFieldHelperMonthly(test_status))
                             srs_connection.commit()
                             print(f"Updated record for accession_id: {accession_id}, test_type: {test_type}, new test_status: {test_status}, old test_status: {existing_status}")
 

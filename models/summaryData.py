@@ -1,59 +1,61 @@
-import sqlite3
+from config import srsDB, Error
+from datetime import datetime
 
 class SummaryData:
     def __init__(self):
-        self.connection = sqlite3.connect('models/intermediateDB.db')
-        self.cursor = self.connection.cursor()
+        self.srsDB = srsDB()
+        if self.srsDB is None:
+            print("Failed to connect to srsDB.")
+        else:
+            self.srsCursor = self.srsDB.cursor()
+
+    def _getSummaryCount(self, query):
+        try:
+            if self.srsCursor:
+                self.srsCursor.execute(query)
+                result = self.srsCursor.fetchone()
+                return result[0] if result else 0
+            else:
+                print("Cursor not initialized.")
+                return 0
+        except Error as e:
+            print(f"Error: {e}")
+            return 0
 
     def getSummaryRegistered(self):
-        """Get the total count of tests with status 'registered'."""
-        query = 'SELECT COUNT(id) AS totalStatus FROM tests;'
-        self.cursor.execute(query)
-        result = self.cursor.fetchone()
-        total_status = result[0] if result else 0
-        return total_status
+        query = "SELECT COUNT(id) AS totalStatus FROM tests WHERE DATE(write_date) = CURDATE();"
+        return self._getSummaryCount(query)
 
     def getSummaryReceived(self):
-        query = 'SELECT COUNT(id) AS totalStatus FROM tests WHERE test_status = 0;'
-        self.cursor.execute(query)
-        result = self.cursor.fetchone()
-        total_status = result[0] if result else 0
-        return total_status
+        query = "SELECT COUNT(id) AS totalStatus FROM tests WHERE test_status = 0 AND DATE(write_date) = CURDATE();"
+        return self._getSummaryCount(query)
 
     def getSummaryInprogress(self):
-        """Get the total count of tests with status 'in_progress'."""
-        query = 'SELECT COUNT(id) AS totalStatus FROM tests WHERE test_status = 3;'
-        self.cursor.execute(query)
-        result = self.cursor.fetchone()
-        total_status = result[0] if result else 0
-        return total_status
+        query = "SELECT COUNT(id) AS totalStatus FROM tests WHERE test_status = 3 AND DATE(write_date) = CURDATE();"
+        return self._getSummaryCount(query)
 
     def getSummaryPendingAuth(self):
-        """Get the total count of tests with status 'pending_auth'."""
-        query = 'SELECT COUNT(id) AS totalStatus FROM tests WHERE test_status = 4;'
-        self.cursor.execute(query)
-        result = self.cursor.fetchone()
-        total_status = result[0] if result else 0
-        return total_status
+        query = "SELECT COUNT(id) AS totalStatus FROM tests WHERE test_status = 4 AND DATE(write_date) = CURDATE();"
+        return self._getSummaryCount(query)
 
     def getSummaryComplete(self):
-        """Get the total count of tests with status 'complete'."""
-        query = 'SELECT COUNT(id) AS totalStatus FROM tests WHERE test_status = 5;'
-        self.cursor.execute(query)
-        result = self.cursor.fetchone()
-        total_status = result[0] if result else 0
-        return total_status
+        query = "SELECT COUNT(id) AS totalStatus FROM tests WHERE test_status = 5 AND DATE(write_date) = CURDATE();"
+        return self._getSummaryCount(query)
 
-    def closeConn(self):
-        """Close the database connection."""
-        self.cursor.close()
-        self.connection.close()
+    def closeConnections(self):
+        try:
+            if self.srsCursor:
+                self.srsCursor.close()
+            if self.srsDB and self.srsDB.is_connected():
+                self.srsDB.close()
+        except Error as e:
+            print(f"Error closing connection: {e}")
 
-# # Example usage:
+# Example usage:
 # summary_data = SummaryData()
-# print(f"Registered: {summary_data.getSummaryRegistered()}")
-# print(f"Received: {summary_data.getSummaryReceived()}")
-# print(f"In Progress: {summary_data.getSummaryInprogress()}")
-# print(f"Pending Auth: {summary_data.getSummaryPendingAuth()}")
-# print(f"Complete: {summary_data.getSummaryComplete()}")
-# summary_data.closeConn()
+# print(summary_data.getSummaryRegistered())
+# print(summary_data.getSummaryReceived())
+# print(summary_data.getSummaryInprogress())
+# print(summary_data.getSummaryPendingAuth())
+# print(summary_data.getSummaryComplete())
+# summary_data.closeConnections()
