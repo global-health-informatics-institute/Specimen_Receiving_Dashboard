@@ -1,18 +1,5 @@
 from config import srsDB, Error
 from helper import fetchFromJoin
-from monthlyData import MonthlyIncremator
-from weeklyData import WeeklyIncremator
-
-def _updateFieldHelper(connectionObj, cursorObj, table, column_name):
-    try:
-        if cursorObj:
-            query = f"UPDATE {table} SET {column_name} = {column_name} + 1 WHERE id = 1;"
-            cursorObj.execute(query)
-            connectionObj.commit()  # Commit the transaction to save changes
-        else:
-            print("Cursor not initialized.")
-    except Error as e:
-        print(f"Error: {e}")
 
 def migrateAllUnique():
     try:
@@ -47,11 +34,11 @@ def migrateAllUnique():
                         _updateFieldHelper(srsConnection, srsCursor, 'weekly_summary', 'weekly_registered')
                         _updateFieldHelper(srsConnection, srsCursor, 'monthly_summary', 'monthly_registered')
                     elif test_status == 3:
-                        print("not 2")
+                        print("3")
                         _updateFieldHelper(srsConnection, srsCursor, 'weekly_summary', 'weekly_progress')
                         _updateFieldHelper(srsConnection, srsCursor, 'monthly_summary', 'monthly_progress')
                     elif test_status == 4:
-                        print("not 2,3")
+                        print("4")
                         _updateFieldHelper(srsConnection, srsCursor, 'weekly_summary', 'weekly_pending')
                         _updateFieldHelper(srsConnection, srsCursor, 'monthly_summary', 'monthly_pending')
 
@@ -66,4 +53,4 @@ def migrateAllUnique():
         if srsConnection:
             srsConnection.close()
 
-migrateAllUnique()
+# print(fetchFromJoin())

@@ -131,11 +131,11 @@ def dbSetup():
 
         cursor.execute("SELECT COUNT(*) FROM status_definitions")
         if cursor.fetchone()[0] == 0:
-            populateStatusDefinitions(1, "registered", 2, "Pending", 2, "specimen_accepted")
-            populateStatusDefinitions(2, "Received", 3, "Started", 2, "specimen_accepted")
-            populateStatusDefinitions(3, "registered", 3, "Started", 2, "specimen_accepted")
-            populateStatusDefinitions(4, "registered", 4, "Completed", 2, "specimen_accepted")
-            populateStatusDefinitions(5, "registered", 5, "Verified", 2, "specimen_accepted")
+            populateStatusDefinitions(2, "registered", 2, "Pending", 2, "specimen_accepted")
+            populateStatusDefinitions(0, "Received", 3, "Started", 2, "specimen_accepted")
+            populateStatusDefinitions(3, "inProgress", 3, "Started", 2, "specimen_accepted")
+            populateStatusDefinitions(4, "pendingAuth", 4, "Completed", 2, "specimen_accepted")
+            populateStatusDefinitions(5, "complete", 5, "Verified", 2, "specimen_accepted")
 
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS tests (

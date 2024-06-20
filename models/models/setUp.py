@@ -31,7 +31,7 @@ def createIntermediate():
             cursor.close()
         if mydb is not None and mydb.is_connected():
             mydb.close()
-# createIntermediate()
+createIntermediate()
 
 # define the tables
 def defineTables():
@@ -132,24 +132,24 @@ def defineTables():
             ''')
 
             # Create View Table
-            dept = department.lower()
-            cursor.execute(f'''
-                CREATE TABLE IF NOT EXISTS {dept} (
-                    id INT NOT NULL AUTO_INCREMENT,
-                    accession_id VARCHAR(100) NOT NULL,
-                    test_type INT NOT NULL,
-                    test_status INT NOT NULL,
-                    write_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                    PRIMARY KEY (id),
-                    INDEX idx_accession_id (accession_id),
-                    INDEX idx_test_type (test_type),
-                    INDEX idx_test_status (test_status)
-                )
-            ''')
+            # dept = department.lower()
+            # cursor.execute(f'''
+            #     CREATE TABLE IF NOT EXISTS {dept} (
+            #         id INT NOT NULL AUTO_INCREMENT,
+            #         accession_id VARCHAR(100) NOT NULL,
+            #         test_type INT NOT NULL,
+            #         test_status INT NOT NULL,
+            #         write_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            #         PRIMARY KEY (id),
+            #         INDEX idx_accession_id (accession_id),
+            #         INDEX idx_test_type (test_type),
+            #         INDEX idx_test_status (test_status)
+            #     )
+            # ''')
 
             # Commit the transactions
             conn.commit()
 
     except Error as e:
         print(f"Error: {e}")
-# defineTables()
+defineTables()

@@ -132,9 +132,9 @@ def populateStatusDefinitions():
             status_definitions = [
                 (1, "registered", 2, "Pending", 2, "specimen_accepted"),
                 (2, "Received", 3, "Started", 2, "specimen_accepted"),
-                (3, "registered", 3, "Started", 2, "specimen_accepted"),
-                (4, "registered", 4, "Completed", 2, "specimen_accepted"),
-                (5, "registered", 5, "Verified", 2, "specimen_accepted")
+                (3, "inProgress", 3, "Started", 2, "specimen_accepted"),
+                (4, "pendingAuth", 4, "Completed", 2, "specimen_accepted"),
+                (5, "complete", 5, "Verified", 2, "specimen_accepted")
             ]
             
             for status in status_definitions:
@@ -151,3 +151,74 @@ def populateStatusDefinitions():
             srsConnection.close()
 populateStatusDefinitions()
 
+
+def populateWeeklySummary():
+    try:
+        # Connect to srsDB
+        srsConnection = srsDB()
+        if srsConnection is None:
+            print("Failed to connect to srsDB.")
+            return
+        
+        srsCursor = srsConnection.cursor()
+
+        # Check if the table is empty
+        srsCursor.execute("SELECT COUNT(*) FROM weekly_summary")
+        count = srsCursor.fetchone()[0]
+
+        if count == 0:
+            # Populate the weekly_summary table
+            srsCursor.execute(
+                "INSERT INTO weekly_summary (id) VALUES (1)"
+            )
+            srsConnection.commit()
+
+            print("Weekly summary populated successfully.")
+        else:
+            print("Weekly summary table is already populated.")
+
+    except Error as e:
+        print(f"Error: {e}")
+    finally:
+        if 'srsCursor' in locals() and srsCursor:
+            srsCursor.close()
+        if srsConnection and srsConnection.is_connected():
+            srsConnection.close()
+
+populateWeeklySummary()
+
+
+def populateMonthlySummary():
+    try:
+        # Connect to srsDB
+        srsConnection = srsDB()
+        if srsConnection is None:
+            print("Failed to connect to srsDB.")
+            return
+        
+        srsCursor = srsConnection.cursor()
+
+        # Check if the table is empty
+        srsCursor.execute("SELECT COUNT(*) FROM monthly_summary")
+        count = srsCursor.fetchone()[0]
+
+        if count == 0:
+            # Populate the weekly_summary table
+            srsCursor.execute(
+                "INSERT INTO monthly_summary (id) VALUES (1)"
+            )
+            srsConnection.commit()
+
+            print("Monthly summary populated successfully.")
+        else:
+            print("Monthly summary table is already populated.")
+
+    except Error as e:
+        print(f"Error: {e}")
+    finally:
+        if 'srsCursor' in locals() and srsCursor:
+            srsCursor.close()
+        if srsConnection and srsConnection.is_connected():
+            srsConnection.close()
+
+populateMonthlySummary()

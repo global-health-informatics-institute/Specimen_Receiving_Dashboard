@@ -1,0 +1,102 @@
+from config import srsDB, Error
+from helper import fetchFromJoin
+
+def _updateFieldHelper(connectionObj, cursorObj, table, column_name):
+    try:
+        if cursorObj:
+            query = f"UPDATE {table} SET {column_name} = {column_name} + 1 WHERE id = 1;"
+            cursorObj.execute(query)
+            connectionObj.commit()
+        else:
+            print("Cursor not initialized.")
+    except Error as e:
+        print(f"Error: {e}")
+
+def updateEntries():
+    try:
+        srsConnection = srsDB()
+        if srsConnection is None:
+            print("Failed to connect to srsDB.")
+            return
+        
+        srsCursor = srsConnection.cursor()
+
+        fetched_data = fetchFromJoin()
+        if fetched_data is None:
+            print("Failed to fetch data from join.")
+            return
+
+        for entry in fetched_data:
+            accession_id = entry["accession_id"]
+            test_type_id = entry["test_type_id"]
+            test_status = entry["test_status"]
+
+            srsCursor.execute("SELECT test_status FROM tests WHERE accession_id = %s AND test_type = %s", (accession_id, test_type_id))
+            result = srsCursor.fetchone()
+
+            if result:
+                existing_test_status = result[0]
+
+                # Skip update if existing test_status is 0 and entry test_status is either 1, 2, or 3
+                if existing_test_status == 0 and test_status in [1, 2, 3]:
+                    continue
+                
+                # Skip update if existing test_status matches the fetched entry test_status
+                if test_status == existing_test_status:
+                    continue
+                
+                # Update and increment if existing test_status does not match the fetched entry test_status
+                update_query = """
+                    UPDATE tests SET test_status = %s WHERE accession_id = %s AND test_type = %s
+                """
+                srsCursor.execute(update_query, (test_status, accession_id, test_type_id))
+                srsConnection.commit()
+                
+                if test_status == 2:
+                    _updateFieldHelper(srsConnection, srsCursor, 'weekly_summary', 'weekly_registered')
+                    _updateFieldHelper(srsConnection, srsCursor, 'monthly_summary', 'monthly_registered')
+                elif test_status == 3:
+                    _updateFieldHelper(srsConnection, srsCursor, 'weekly_summary', 'weekly_progress')
+                    _updateFieldHelper(srsConnection, srsCursor, 'monthly_summary', 'monthly_progress')
+                elif test_status == 4:
+                    _updateFieldHelper(srsConnection, srsCursor, 'weekly_summary', 'weekly_pending')
+                    _updateFieldHelper(srsConnection, srsCursor, 'monthly_summary', 'monthly_pending')
+                elif test_status == 5:
+                    _updateFieldHelper(srsConnection, srsCursor, 'weekly_summary', 'weekly_complete')
+                    _updateFieldHelper(srsConnection, srsCursor, 'monthly_summary', 'monthly_complete')
+            else:
+                # Insert and increment if fetched status does not exist and is not 5
+                if test_status != 5:
+                    insert_query = """
+                    INSERT INTO tests (accession_id, test_type, test_status)
+                    VALUES (%s, %s, %s)
+                    """
+                    srsCursor.execute(insert_query, (accession_id, test_type_id, test_status))
+                    srsConnection.commit()
+                    print(f"{accession_id} - {test_type_id} - {test_status}")
+
+                    if test_status == 2:
+                        _updateFieldHelper(srsConnection, srsCursor, 'weekly_summary', 'weekly_registered')
+                        _updateFieldHelper(srsConnection, srsCursor, 'monthly_summary', 'monthly_registered')
+                    elif test_status == 3:
+                        _updateFieldHelper(srsConnection, srsCursor, 'weekly_summary', 'weekly_progress')
+                        _updateFieldHelper(srsConnection, srsCursor, 'monthly_summary', 'monthly_progress')
+                    elif test_status == 4:
+                        _updateFieldHelper(srsConnection, srsCursor, 'weekly_summary', 'weekly_pending')
+                        _updateFieldHelper(srsConnection, srsCursor, 'monthly_summary', 'monthly_pending')
+
+    except Error as e:
+        print(f"Error: {e}")
+    finally:
+        if srsCursor:
+            try:
+                srsCursor.close()
+            except Error as e:
+                print(f"Error closing cursor: {e}")
+        if srsConnection:
+            try:
+                srsConnection.close()
+            except Error as e:
+                print(f"Error closing connection: {e}")
+
+updateEntries()

@@ -1,4 +1,3 @@
-from sqlalchemy import Interval
 from config import iBlissDB, srsDB, Error, department, testType1, testType2, testType3, testType4, interval
 
 
@@ -152,8 +151,8 @@ def fetchFromJoin():
 
 
 # creating a view will be used to fetch the only needed data
-# Example usage
-results = fetchFromJoin()
-if results is not None:
-    for result in results:
-        print(result)
+# # Example usage
+# results = fetchFromJoin()
+# if results is not None:
+#     for result in results:
+#         print(result)
