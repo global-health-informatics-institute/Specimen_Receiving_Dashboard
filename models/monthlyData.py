@@ -1,77 +1,108 @@
-import sqlite3
+from config import *
 
-class MonthlyCounter:
+class monthlyCounter:
     def __init__(self):
-        self.connection = sqlite3.connect('models/intermediateDB.db')
-        self.cursor = self.connection.cursor()
+        self.srsDB = srsDB()
+        if self.srsDB is None:
+            print("Failed to connect to srsDB.")
+        else:
+            self.srsCursor = self.srsDB.cursor()
 
-    def _get_summary_value(self, column_name):
+    def _getSummaryValueHelper(self, column_name):
         try:
-            query = f'SELECT {column_name} FROM monthly_summary WHERE id = 1;'
-            self.cursor.execute(query)
-            result = self.cursor.fetchone()
-            return result[0] if result and result[0] is not None else 0
-        except Exception as e:
-            print(f"An error occurred: {e}")
+            if self.srsCursor:
+                query = f"SELECT {column_name} FROM monthly_summary WHERE id = 1"
+                self.srsCursor.execute(query)
+                result = self.srsCursor.fetchone()
+                return int(result[0]) if result else 0
+            else:
+                print("Cursor not initialized.")
+                return 0
+        except Error as e:
+            print(f"Error: {e}")
             return 0
 
     def getSummaryRegistered(self):
-        return self._get_summary_value('monthly_registered')
+        return self._getSummaryValueHelper('monthly_registered')
 
     def getSummaryReceived(self):
-        return self._get_summary_value('monthly_received')
+        return self._getSummaryValueHelper('monthly_received')
 
     def getSummaryInprogress(self):
-        return self._get_summary_value('monthly_progress')
+        return self._getSummaryValueHelper('monthly_progress')
 
     def getSummaryPendingAuth(self):
-        return self._get_summary_value('monthly_pending')
+        return self._getSummaryValueHelper('monthly_pending')
 
     def getSummaryComplete(self):
-        return self._get_summary_value('monthly_complete')
+        return self._getSummaryValueHelper('monthly_complete')
 
-    def closeConn(self):
-        self.cursor.close()
-        self.connection.close()
-
-
-class MonthlyIncrementor:
-    def __init__(self):
-        self.connection = sqlite3.connect('models/intermediateDB.db')
-        self.cursor = self.connection.cursor()
-
-    def _updateField(self, column_name):
+    def closeConnections(self):
         try:
-            query = f'UPDATE monthly_summary SET {column_name} = {column_name} + 1 WHERE id = 1;'
-            self.cursor.execute(query)
-            self.connection.commit()  # Commit the transaction to save changes
-        except Exception as e:
-            print(f"An error occurred: {e}")
+            if self.srsCursor:
+                self.srsCursor.close()
+            if self.srsDB and self.srsDB.is_connected():
+                self.srsDB.close()
+        except Error as e:
+            print(f"Error closing connection: {e}")
+
+# Example usage:
+# monthlyCounterObj = monthlyCounter()
+# print(monthlyCounterObj.getSummaryRegistered())
+# print(monthlyCounterObj.getSummaryReceived())
+# print(monthlyCounterObj.getSummaryInprogress())
+# print(monthlyCounterObj.getSummaryPendingAuth())
+# print(monthlyCounterObj.getSummaryComplete())
+# monthlyCounterObj.closeConnections()
+
+class MonthlyIncremator:
+    def __init__(self):
+        self.srsDB = srsDB()
+        if self.srsDB is None:
+            print("Failed to connect to srsDB.")
+        else:
+            self.srsCursor = self.srsDB.cursor()
+
+    def _updateFieldHelper(self, column_name):
+        try:
+            if self.srsCursor:
+                query = f"UPDATE monthly_summary SET {column_name} = {column_name} + 1 WHERE id = 1;"
+                self.srsCursor.execute(query)
+                self.srsDB.commit()  # Commit the transaction to save changes
+            else:
+                print("Cursor not initialized.")
+        except Error as e:
+            print(f"Error: {e}")
 
     def incrementRegistered(self):
-        self._updateField('monthly_registered')
+        self._updateFieldHelper('monthly_registered')
 
     def incrementReceived(self):
-        self._updateField('monthly_received')
+        self._updateFieldHelper('monthly_received')
 
     def incrementInprogress(self):
-        self._updateField('monthly_progress')
+        self._updateFieldHelper('monthly_progress')
 
     def incrementPendingAuth(self):
-        self._updateField('monthly_pending')
+        self._updateFieldHelper('monthly_pending')
 
     def incrementComplete(self):
-        self._updateField('monthly_complete')
+        self._updateFieldHelper('monthly_complete')
 
-    def closeConn(self):
-        self.cursor.close()
-        self.connection.close()
+    def closeConnections(self):
+        try:
+            if self.srsCursor:
+                self.srsCursor.close()
+            if self.srsDB and self.srsDB.is_connected():
+                self.srsDB.close()
+        except Error as e:
+            print(f"Error closing connection: {e}")
 
-# incrementor = MonthlyIncrementor()
-# incrementor.incrementRegistered()
-# incrementor.incrementReceived()
-# incrementor.incrementInprogress()
-# incrementor.incrementPendingAuth()
-# incrementor.incrementComplete()
-# incrementor.closeConn()
-
+# Example usage:
+# monthly_incremator = MonthlyIncremator()
+# monthly_incremator.incrementRegistered()
+# monthly_incremator.incrementReceived()
+# monthly_incremator.incrementInprogress()
+# monthly_incremator.incrementPendingAuth()
+# monthly_incremator.incrementComplete()
+# monthly_incremator.closeConnections()
