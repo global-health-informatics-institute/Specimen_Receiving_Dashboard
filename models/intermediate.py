@@ -147,3 +147,4 @@ def updateExisting():
             mycursor.close()
         if conn:
             conn.close()
+

@@ -64,21 +64,3 @@ def srsDBConn():
         print(f"Error: {e}")
         return None
 
-
-
-# def getTestTypeId(testType):
-#     try:
-#         # Connect to your SQLite database
-#         conn = sqlite3.connect(db_path)
-#         cursor = conn.cursor()
-#         query = 'SELECT test_id FROM test_definitions WHERE lower(test_short_name) = ?;'
-#         cursor.execute(query, (testType.lower(),))  # Make sure this is a tuple
-#         result = cursor.fetchone()
-#         test_id = result[0] if result else 0
-#         return test_id
-#     except sqlite3.Error as e:
-#         print(f"Error connecting to database: {e}")
-#         return None
-#     finally:
-#         if 'conn' in locals() and conn:
-#             conn.close()
