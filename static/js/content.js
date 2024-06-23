@@ -18,7 +18,6 @@ $(document).ready(function() {
 });
 
 
-
 $(document).ready(function() {
     function fetchTestContent1() {
         $.ajax({
@@ -36,7 +35,6 @@ $(document).ready(function() {
     fetchTestContent1();
     setInterval(fetchTestContent1, 30000); // 30000ms = 30 seconds
 });
-
 
 
 $(document).ready(function() {
@@ -132,25 +130,5 @@ $(document).ready(function() {
     setInterval(fetchMonthlyContent, 30000); // 30000ms = 30 seconds
 });
 
-// function fetchData() {
-//     fetch('http://127.0.0.1:5000')
-//         .then(response => {
-//             if (!response.ok) {
-//                 throw new Error('Network response was not ok');
-//             }
-//             return response.json(); // assuming the response is JSON
-//         })
-//         .then(data => {
-//             console.log('Data received:', data);
-//             // You can add more code here to handle the data
-//         })
-//         .catch(error => {
-//             console.error('There has been a problem with your fetch operation:', error);
-//         });
-// }
 
-// // Run fetchData every 15 seconds
-// setInterval(fetchData, 15000);
 
-// // Optionally, you can call fetchData immediately if you don't want to wait 15 seconds for the first call
-// fetchData();

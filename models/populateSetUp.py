@@ -1,5 +1,5 @@
-from config import iBlissDB, department, srsDB, testType1,testType2,testType3,testType4, Error
-from helper import populateStatusDefinitionsHelper
+from models.config import iBlissDB, department, srsDB, testType1,testType2,testType3,testType4, Error
+from models.helper import populateStatusDefinitionsHelper
 
 def populateDepartmentDefinitions():
     iBlisCursor = None
@@ -184,8 +184,7 @@ def populateWeeklySummary():
             srsCursor.close()
         if srsConnection and srsConnection.is_connected():
             srsConnection.close()
-
-populateWeeklySummary()
+# populateWeeklySummary()
 
 
 def populateMonthlySummary():
@@ -220,5 +219,4 @@ def populateMonthlySummary():
             srsCursor.close()
         if srsConnection and srsConnection.is_connected():
             srsConnection.close()
-
-populateMonthlySummary()
+# populateMonthlySummary()
