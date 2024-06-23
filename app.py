@@ -1,14 +1,12 @@
 from flask import Flask, jsonify, render_template
 from models.config import department, testType1, testType2, testType3, testType4
-from models.dbSetup import createView, dbSetup, dropView
-from models.intermediate import migrateAllUnique, updateExisting
 from models.monthlyData import MonthlyCounter
 from models.summaryData import SummaryData
 from models.tests import TestsData
-from models.tat import TATData
+from models.tat import getTATData as TATData
+from models.updateEntries import updateEntries
 from models.weeklyData import WeeklyCounter
 from modules.client import receiveBarcode
-from scripts.erasers import clearTable
 
 app = Flask(__name__)
 
@@ -24,65 +22,14 @@ def get_test_content(test_type, prefix):
     test_data_obj.closeConn()
     return test_content
 
-
 @app.route("/", methods=["POST"])
 def client():
     return receiveBarcode()
 
-# drop view at 07:00
-# create view at 07:02
-# migrateData every morning 07:05
-# weeklyEraser first day of the week
-# monthlyEraser first day of the month
-# update periodically
+@app.route("/update/")
+def update():
+    return updateEntries()
 
-# drop view at 07:00
-@app.route("/dropView/..blackEvil")
-def runDropView():
-    return dropView()
-# red
-@app.route("/dbSetup/..blackEvil")
-def runDBSetup():
-    if dbSetup():
-        return dbSetup()
-    else:
-        return "dbSetUp is Up and running"
-    
-
-
-# create view at 07:02
-@app.route("/createView/")
-def runCreateView():
-    return createView()
-
-# migrateData every morning 07:05
-@app.route("/migrateData/")
-def runMigrateData():
-    if migrateAllUnique():
-        return migrateAllUnique()
-    else:
-        return "This returned none"
-
-# weeklyEraser first day of the week
-@app.route("/weeklyEraser/")
-def runWeeklyEraser():
-    if clearTable("weekly_summary"):
-        return clearTable("weekly_summary")
-    else:
-        return "This returned a none"
-
-# monthlyEraser first day of the month
-@app.route("/monthlyEraser/")
-def runMonthlyEraser():
-    if clearTable("monthly_summary"):
-        return clearTable("monthly_summary")
-    else:
-        return "This returned a none"
-
-# update periodically
-@app.route("/updatePeriodically/")
-def runUpdatePeriodically():
-    return updateExisting()
 
 @app.route("/dashboard/")
 def index():
@@ -102,7 +49,7 @@ def index():
         "summaryPendingAuthTotal": summary_data_obj.getSummaryPendingAuth(),
         "summaryCompleteTotal": summary_data_obj.getSummaryComplete()
     }
-    summary_data_obj.closeConn()
+    summary_data_obj.closeConnections()
 
     test_content1 = get_test_content(testType1, '1')
     test_content2 = get_test_content(testType2, '2')
@@ -110,11 +57,12 @@ def index():
     test_content4 = get_test_content(testType4, '4')
 
     tat_content = {
-        "target1": TATData(testType1).targetTAT(),
-        "target2": TATData(testType2).targetTAT(),
-        "target3": TATData(testType3).targetTAT(),
-        "target4": TATData(testType4).targetTAT()
+        "target1": TATData(testType1).getTATForTestType(),
+        "target2": TATData(testType2).getTATForTestType(),
+        "target3": TATData(testType3).getTATForTestType(),
+        "target4": TATData(testType4).getTATForTestType()
     }
+
 
     counter = WeeklyCounter()
     weekly_content = {
@@ -124,7 +72,7 @@ def index():
         "weeklyPending": counter.getSummaryPendingAuth(),
         "weeklyComplete": counter.getSummaryComplete()
     }
-    counter.closeConn()
+    counter.closeConnections()
 
     counter_monthly = MonthlyCounter()
     monthly_content = {
@@ -134,7 +82,7 @@ def index():
         "monthlyPending": counter_monthly.getSummaryPendingAuth(),
         "monthlyComplete": counter_monthly.getSummaryComplete()
     }
-    counter_monthly.closeConn()
+    counter_monthly.closeConnections()
 
     return render_template(
         "dashboard.template.html",
@@ -159,7 +107,7 @@ def summary_data():
         "summaryPendingAuthTotal": summary_data_obj.getSummaryPendingAuth(),
         "summaryCompleteTotal": summary_data_obj.getSummaryComplete()
     }
-    summary_data_obj.closeConn()
+    summary_data_obj.closeConnections()
     return jsonify(summary_content)
 
 @app.route("/test_content1")
@@ -185,10 +133,10 @@ def test_content4():
 @app.route("/tat_content")
 def tat_content():
     tat_content = {
-        "target1": TATData(testType1).targetTAT(),
-        "target2": TATData(testType2).targetTAT(),
-        "target3": TATData(testType3).targetTAT(),
-        "target4": TATData(testType4).targetTAT()
+        "target1": TATData(testType1).getTATForTestType(),
+        "target2": TATData(testType2).getTATForTestType(),
+        "target3": TATData(testType3).getTATForTestType(),
+        "target4": TATData(testType4).getTATForTestType()
     }
     return jsonify(tat_content)
 
@@ -202,7 +150,7 @@ def weekly_content():
         "weeklyPending": counter.getSummaryPendingAuth(),
         "weeklyComplete": counter.getSummaryComplete()
     }
-    counter.closeConn()
+    counter.closeConnections()
     return jsonify(weekly_content)
 
 @app.route("/monthly_content")
@@ -215,7 +163,7 @@ def monthly_content():
         "monthlyPending": counter_monthly.getSummaryPendingAuth(),
         "monthlyComplete": counter_monthly.getSummaryComplete()
     }
-    counter_monthly.closeConn()
+    counter_monthly.closeConnections()
     return jsonify(monthly_content)
 
 

@@ -4,5 +4,7 @@
 # weeklyEraser first day of the week
 # monthlyEraser first day of the month
 # update periodically
-from models.dbSetup import dropView
+# from models.dbSetup import dropView
+
+# 
 

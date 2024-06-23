@@ -1,4 +1,4 @@
-from config import *
+from models.config import *
 
 class WeeklyCounter:
     def __init__(self):
