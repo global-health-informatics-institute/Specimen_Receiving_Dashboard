@@ -1,4 +1,4 @@
-from config import iBlissDB, srsDB, Error, department, testType1, testType2, testType3, testType4, interval
+from models.config import iBlissDB, srsDB, Error, department, testType1, testType2, testType3, testType4, interval
 
 
 def populateStatusDefinitionsHelper(statusId, statusName, testStatusId, testStatusName, specimenStatusId, specimenStatusName):

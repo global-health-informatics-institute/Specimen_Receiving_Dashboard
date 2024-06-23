@@ -1,8 +1,6 @@
-import os
 from flask import request, jsonify
-import sqlite3
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-db_path = os.path.join(BASE_DIR,'intermediateDB.db')
+import mysql.connector
+from mysql.connector import Error
 
 def receiveBarcode():
     data = request.json
@@ -13,22 +11,35 @@ def receiveBarcode():
 
     # Update the test_status in the database
     try:
-        conn = sqlite3.connect('models/intermediateDB.db')
-        cursor = conn.cursor()
-        cursor.execute("""
-            UPDATE tests
-            SET test_status = 0
-            WHERE accession_id = ?
-        """, (accession_id,))
-        conn.commit()
+        connection = mysql.connector.connect(
+            host="127.0.0.1",
+            port="3306",
+            user="root",
+            password="root",
+            database="Haematology",
+        )
 
-        if cursor.rowcount == 0:
-            return jsonify({"error": "No matching accession ID found"}), 404
-        
-        return "ok", 200  # Return "ok" instead of JSON
+        if connection.is_connected():
+            cursor = connection.cursor()
 
-    except Exception as e:
+            cursor.execute("""
+                UPDATE tests
+                SET test_status = 0
+                WHERE accession_id = %s
+            """, (accession_id,))
+
+            connection.commit()
+
+            if cursor.rowcount == 0:
+                return jsonify({"error": "No matching accession ID found"}), 404
+
+            return "ok", 200  # Return "ok" instead of JSON
+
+    except Error as e:
         return jsonify({"error": str(e)}), 500
 
     finally:
-        conn.close()
+        if 'cursor' in locals() and cursor:
+            cursor.close()
+        if 'connection' in locals() and connection.is_connected():
+            connection.close()

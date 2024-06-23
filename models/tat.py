@@ -1,18 +1,19 @@
-from config import srsDB, Error
+from models.config import srsDB, Error
 
 class getTATData:
-    def __init__(self):
+    def __init__(self, test_type):
+        self.test_type = test_type
         self.srsDB = srsDB()
         if self.srsDB is None:
             print("Failed to connect to srsDB.")
         else:
             self.srsCursor = self.srsDB.cursor()
 
-    def _getSummaryValueHelper(self, test_short_name):
+    def _getSummaryValueHelper(self):
         try:
             if self.srsCursor:
                 query = "SELECT targetTAT FROM test_definitions WHERE LOWER(test_short_name) = %s;"
-                self.srsCursor.execute(query, (test_short_name.lower(),))
+                self.srsCursor.execute(query, (self.test_type.lower(),))
                 result = self.srsCursor.fetchone()
                 if result:
                     return result[0]  # Return the targetTAT as a string
@@ -23,20 +24,17 @@ class getTATData:
                 print("Cursor not initialized.")
                 return ""
         except Error as e:
-            print(f"Error: {e}")
-            return ""
-
-    def getTATForTestType(self, test_short_name):
-        return self._getSummaryValueHelper(test_short_name)
-
-    def closeConnections(self):
-        try:
             if self.srsCursor:
                 self.srsCursor.close()
             if self.srsDB and self.srsDB.is_connected():
                 self.srsDB.close()
-        except Error as e:
-            print(f"Error closing connection: {e}")
+            print(f"Error: {e}")
+
+
+    def getTATForTestType(self):
+        tat = self._getSummaryValueHelper()
+        return tat
+
 # Example usage:
 # tat_data = getTATData()
 # target_tat = tat_data.getTATForTestType('APTT')
@@ -48,3 +46,5 @@ def getCurrent(self):
 
 def getAverage(self):
     ""
+
+# print(getTATData("FBC").getTATForTestType())

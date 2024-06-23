@@ -1,6 +1,6 @@
 import mysql.connector
-from helper import getDepartmentIdHelper, getTestTypeID
-from config import testType1, testType2, testType3, testType4, interval
+from models.helper import getDepartmentIdHelper, getTestTypeID
+from models.config import testType1, testType2, testType3, testType4, interval
 
 intvl = interval  # 100
 department_id = getDepartmentIdHelper()  # 3
@@ -80,7 +80,8 @@ def updateEntries():
                     WHERE 
                         specimens.specimen_type_id = %s
                         AND tests.test_status_id NOT IN (1, 6, 7, 8)
-                        AND tests.time_created >= NOW() - INTERVAL %s DAY
+                        AND tests.time_created >= CURDATE() + INTERVAL 7 HOUR
+                        AND tests.time_created <= CURDATE() + INTERVAL 1 DAY + INTERVAL 7 HOUR 
                         AND tests.test_type_id IN (%s, %s, %s, %s)
                 )
                 SELECT
@@ -94,7 +95,7 @@ def updateEntries():
                 """
 
                 # Execute the query
-                iblis_cursor.execute(iblis_query, (department_id, intvl, test_type_id1, test_type_id2, test_type_id3, test_type_id4))
+                iblis_cursor.execute(iblis_query, (department_id, test_type_id1, test_type_id2, test_type_id3, test_type_id4))
                 iblis_results = iblis_cursor.fetchall()
 
                 # Insert the results into srsDB if they don't already exist
@@ -144,9 +145,11 @@ def updateEntries():
                             srs_cursor.execute(_updateFieldHelperMonthly(test_status))
                             srs_connection.commit()
                             print(f"Updated record for accession_id: {accession_id}, test_type: {test_type}, new test_status: {test_status}, old test_status: {existing_status}")
+        return "ok"
 
     except mysql.connector.Error as err:
         print(f"Error: {err}")
+        return "Error occurred while updating entries"
 
     finally:
         # Close all connections and cursors
@@ -155,4 +158,4 @@ def updateEntries():
         if 'srs_cursor' in locals() and srs_cursor:
             srs_cursor.close()
 
-updateEntries()
+

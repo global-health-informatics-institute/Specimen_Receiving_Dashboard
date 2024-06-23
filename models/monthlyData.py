@@ -1,6 +1,6 @@
-from config import *
+from models.config import *
 
-class monthlyCounter:
+class MonthlyCounter:
     def __init__(self):
         self.srsDB = srsDB()
         if self.srsDB is None:
