@@ -132,3 +132,41 @@ $(document).ready(function() {
 
 
 
+$(document).ready(function() {
+    function fetchTatCurrent() {
+        $.ajax({
+            url: "/tat_current",
+            method: "GET",
+            success: function(data) {
+                $("#current1").text(data.current1);
+                $("#current2").text(data.current2);
+                $("#current3").text(data.current3);
+                $("#current4").text(data.current4);
+            }
+        });
+    }
+
+    fetchTatCurrent();
+    setInterval(fetchTatCurrent, 30000); // 30000ms = 30 seconds
+});
+
+
+$(document).ready(function() {
+    function fetchTatAverage() {
+        $.ajax({
+            url: "/tat_average",
+            method: "GET",
+            success: function(data) {
+                $("#average1").text(data.average1);
+                $("#average2").text(data.average2);
+                $("#average3").text(data.average3);
+                $("#average4").text(data.average4);
+            }
+        });
+    }
+
+    fetchTatAverage();
+    setInterval(fetchTatAverage, 30000); // 30000ms = 30 seconds
+});
+
+

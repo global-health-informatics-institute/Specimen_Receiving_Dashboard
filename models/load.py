@@ -40,7 +40,7 @@ def _updateFieldHelperMonthly(status):
     query = f"UPDATE monthly_summary SET {column_name} = {column_name} + 1 WHERE id = 1;"
     return query
 
-def updateEntries():
+def loadEntries():
     try:
         # Connect to iBlissDB
         with mysql.connector.connect(

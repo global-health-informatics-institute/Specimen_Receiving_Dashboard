@@ -1,8 +1,8 @@
-function fetchData() {
-    fetch('http://127.0.0.1:5000/update/')
+function loadEntries() {
+    fetch('http://127.0.0.1:5000/loadZ/')
         .then(response => {
             // Optionally log the status
-            console.log('Request made to http://127.0.0.1:5000. Status:', response.status);
+            console.log('Request made to  Status:', response.status);
         })
         .catch(error => {
             console.error('There has been a problem with your fetch operation:', error);
@@ -10,6 +10,4 @@ function fetchData() {
 }
 
 // Run fetchData every 15 seconds
-setInterval(fetchData, 15000);
-
-
+setInterval(loadEntries, 15000);
