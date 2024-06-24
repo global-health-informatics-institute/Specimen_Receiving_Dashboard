@@ -4,7 +4,7 @@ from models.monthlyData import MonthlyCounter
 # from models.populateSetUp import populateDepartmentDefinitions, populateMonthlySummary, populateStatusDefinitions, populateTestDefinitions, populateWeeklySummary
 # from models.setUp import createIntermediate, defineTables
 from models.summaryData import SummaryData
-from models.tatCurrentPlusAverage import tatCurrent
+from models.tatCurrentPlusAverage import tatAverage, tatCurrent
 from models.tests import TestsData
 from models.tat import getTATData as TATData
 from models.updateEntries import updateEntries
@@ -85,6 +85,12 @@ def index():
         "current4": tatCurrent(testType4)
     }
 
+    tat_average = {
+        "average1": tatAverage(testType1),
+        "average2": tatAverage(testType2),
+        "average3": tatAverage(testType3),
+        "average4": tatAverage(testType4)
+    }
 
     counter = WeeklyCounter()
     weekly_content = {
