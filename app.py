@@ -116,6 +116,7 @@ def index():
         **test_content4,
         **tat_content,
         **tat_current,
+        **tat_average,
         **weekly_content,
         **monthly_content
     )

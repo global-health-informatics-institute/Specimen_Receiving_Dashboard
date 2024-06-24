@@ -33,8 +33,8 @@ def tatCurrent(test_type):
                 FROM tests
                 WHERE time_started IS NOT NULL 
                     AND time_completed IS NOT NULL
-                    AND time_started >= DATE_ADD(DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY), INTERVAL 7 HOUR)
-                    AND time_started < DATE_ADD(DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY) + INTERVAL 7 DAY, INTERVAL 7 HOUR)
+                    AND tests.time_created >= CURDATE() + INTERVAL 7 HOUR
+                    AND tests.time_created <= CURDATE() + INTERVAL 1 DAY + INTERVAL 7 HOUR 
                     AND test_type_id = %s;
             """
             iBlissCursor.execute(query, (test_type,))
@@ -60,7 +60,7 @@ result = tatCurrent("35")
 print(result)
 
 
-def tatCurrent(test_type):
+def tatAverage(test_type):
     connection = iBlissDB()
     if connection is None:
         print("Failed to connect to srsDB.")
@@ -72,9 +72,10 @@ def tatCurrent(test_type):
         if iBlissCursor:
             query = """
                 SELECT 
-                    AVG(TIMESTAMPDIFF(SECOND, time_started, time_completed)) AS average_duration_in_hours
+                    AVG(TIMESTAMPDIFF(HOUR, time_started, time_completed)) AS average_duration_in_hours
                 FROM tests
-                WHERE time_started IS NOT NULL 
+                WHERE
+                    time_started IS NOT NULL 
                     AND time_completed IS NOT NULL
                     AND time_started >= DATE_ADD(DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY), INTERVAL 7 HOUR)
                     AND time_started < DATE_ADD(DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY) + INTERVAL 7 DAY, INTERVAL 7 HOUR)
