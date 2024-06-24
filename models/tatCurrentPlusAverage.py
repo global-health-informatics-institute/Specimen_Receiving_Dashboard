@@ -1,5 +1,6 @@
 import mysql.connector
 from mysql.connector import Error
+from models.helper import getTestTypeID
 
 def iBlissDB():
     try: 
@@ -37,7 +38,7 @@ def tatCurrent(test_type):
                     AND tests.time_created <= CURDATE() + INTERVAL 1 DAY + INTERVAL 7 HOUR 
                     AND test_type_id = %s;
             """
-            iBlissCursor.execute(query, (test_type,))
+            iBlissCursor.execute(query, (getTestTypeID(test_type),))
             result = iBlissCursor.fetchone()
             if result:
                 return result[0]  # Return the average duration in hours
@@ -81,7 +82,7 @@ def tatAverage(test_type):
                     AND time_started < DATE_ADD(DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY) + INTERVAL 7 DAY, INTERVAL 7 HOUR)
                     AND test_type_id = %s;
             """
-            iBlissCursor.execute(query, (test_type,))
+            iBlissCursor.execute(query, (getTestTypeID(test_type),))
             result = iBlissCursor.fetchone()
             if result:
                 return result[0]  # Return the average duration in hours
