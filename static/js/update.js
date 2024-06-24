@@ -1,17 +1,15 @@
-async function updateEntries() {
-    try {
-        const response = await fetch("http:127.0.0.1:5000/update/", { method: 'HEAD' });
-        if (response.ok) {
-            statusElement.textContent = `Website is up! Status: ${response.status}`;
-        } else {
-            statusElement.textContent = `Website is down. Status: ${response.status}`;
-        }
-    } catch (error) {
-        statusElement.textContent = `Error: ${error.message}`;
-    }
-
+function fetchData() {
+    fetch('http://127.0.0.1:5000/update/')
+        .then(response => {
+            // Optionally log the status
+            console.log('Request made to http://127.0.0.1:5000. Status:', response.status);
+        })
+        .catch(error => {
+            console.error('There has been a problem with your fetch operation:', error);
+        });
 }
-updateEntries();
+
 // Run fetchData every 15 seconds
-setInterval(updateEntries, 15000);
+setInterval(fetchData, 15000);
+
 

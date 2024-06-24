@@ -1,8 +1,6 @@
 from flask import Flask, jsonify, render_template
 from models.config import department, testType1, testType2, testType3, testType4
 from models.monthlyData import MonthlyCounter
-# from models.populateSetUp import populateDepartmentDefinitions, populateMonthlySummary, populateStatusDefinitions, populateTestDefinitions, populateWeeklySummary
-# from models.setUp import createIntermediate, defineTables
 from models.summaryData import SummaryData
 from models.tatCurrentPlusAverage import tatAverage, tatCurrent
 from models.tests import TestsData
@@ -32,18 +30,6 @@ def client():
 @app.route("/update/")
 def update():
     return updateEntries()
-
-# @app.route("/setUp/")
-# def setUp():
-#     createIntermediate()
-#     defineTables()
-#     populateDepartmentDefinitions()
-#     populateTestDefinitions()
-#     populateStatusDefinitions()
-#     populateWeeklySummary()
-#     populateMonthlySummary()
-#     return "ok"
-
 
 
 @app.route("/dashboard/")
