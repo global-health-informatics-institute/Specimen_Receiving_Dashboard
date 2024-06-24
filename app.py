@@ -5,9 +5,10 @@ from models.summaryData import SummaryData
 from models.tatCurrentPlusAverage import tatAverage, tatCurrent
 from models.tests import TestsData
 from models.tat import getTATData as TATData
-from models.updateEntries import updateEntries
+from models.load import loadEntries
 from models.weeklyData import WeeklyCounter
 from modules.client import receiveBarcode
+from flask import make_response
 
 app = Flask(__name__)
 
@@ -23,13 +24,15 @@ def get_test_content(test_type, prefix):
     test_data_obj.closeConn()
     return test_content
 
+@app.route("/loadZ/")
+def load():
+    return loadEntries()
+
+
 @app.route("/", methods=["POST"])
 def client():
     return receiveBarcode()
 
-@app.route("/update/")
-def update():
-    return updateEntries()
 
 
 @app.route("/dashboard/")
@@ -155,6 +158,28 @@ def tat_content():
         "target4": TATData(testType4).getTATForTestType()
     }
     return jsonify(tat_content)
+
+
+@app.route("/tat_current")
+def tat_current():
+    tat_current = {
+        "current1": tatCurrent(testType1),
+        "current2": tatCurrent(testType2),
+        "current3": tatCurrent(testType3),
+        "current4": tatCurrent(testType4)
+    }
+    return jsonify(tat_current)
+
+
+@app.route("/tat_average")
+def tat_average():
+    tat_average = {
+        "average1": tatAverage(testType1),
+        "average2": tatAverage(testType2),
+        "average3": tatAverage(testType3),
+        "average4": tatAverage(testType4)
+    }
+    return jsonify(tat_average)
 
 @app.route("/weekly_content")
 def weekly_content():

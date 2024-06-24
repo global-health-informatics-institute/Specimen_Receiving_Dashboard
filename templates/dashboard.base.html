@@ -118,7 +118,7 @@
                         <div class="cardTitle">
                             CURRENT
                         </div>
-                        <div class="cardValue">
+                        <div class="cardValue" id="current1">
                             {{current1}} Mins
                         </div>
                     </div>
@@ -126,7 +126,7 @@
                         <div class="cardTitle">
                             AVERAGE
                         </div>
-                        <div class="cardValue">
+                        <div class="cardValue" id="average1">
                             {{average1}} Hrs
                         </div>
                     </div>
@@ -191,7 +191,7 @@
                         <div class="cardTitle">
                             CURRENT
                         </div>
-                        <div class="cardValue">
+                        <div class="cardValue" id="current2">
                             {{current2}} Mins
                         </div>
                     </div>
@@ -199,7 +199,7 @@
                         <div class="cardTitle">
                             AVERAGE
                         </div>
-                        <div class="cardValue">
+                        <div class="cardValue" id="average2">
                             {{average2}} Hrs
                         </div>
                     </div>
@@ -264,7 +264,7 @@
                         <div class="cardTitle">
                             CURRENT
                         </div>
-                        <div class="cardValue">
+                        <div class="cardValue" id="current3">
                             {{current3}} Mins
                         </div>
                     </div>
@@ -272,7 +272,7 @@
                         <div class="cardTitle">
                             AVERAGE
                         </div>
-                        <div class="cardValue">
+                        <div class="cardValue" id="average3">
                             {{average3}} Hrs
                         </div>
                     </div>
@@ -336,7 +336,7 @@
                         <div class="cardTitle">
                             CURRENT
                         </div>
-                        <div class="cardValue">
+                        <div class="cardValue" id="current4">
                             {{current4}} Mins
                         </div>
                     </div>
@@ -344,7 +344,7 @@
                         <div class="cardTitle">
                             AVERAGE
                         </div>
-                        <div class="cardValue">
+                        <div class="cardValue" id="average4">
                             {{average4}} Hrs
                         </div>
                     </div>
@@ -556,10 +556,8 @@
             </div>
         </div>
     </div>
+    <script src="{{url_for('static',filename='js/load.js')}}"></script>
     <script src="{{url_for('static',filename='js/dashBoard.js')}}"></script>
-
     <script src="{{url_for('static',filename='js/content.js')}}"></script>
-    <script src="{{url_for('static',filename='js/update.js')}}"></script>
-    <script src="../static/js/dashBoard.js"></script>
 </body>
 </html>
