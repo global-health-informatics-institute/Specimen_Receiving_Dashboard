@@ -1,5 +1,5 @@
 from mysql.connector import Error
-from models.config import srsDBConn, srsDB, department
+from config import srsDBConn, srsDB, department
 
 
 # create database
@@ -31,7 +31,7 @@ def createIntermediate():
             cursor.close()
         if mydb is not None and mydb.is_connected():
             mydb.close()
-# createIntermediate()
+createIntermediate()
 
 # define the tables
 def defineTables():
@@ -135,4 +135,4 @@ def defineTables():
 
     except Error as e:
         print(f"Error: {e}")
-# defineTables()
+defineTables()

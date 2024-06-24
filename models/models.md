@@ -19,3 +19,11 @@
 - load the file (alone) `models/setUp`
 - set up two cron jobs that log into `logs/clearTables.log`
     - one that clears weeklySummary and another monthlySummary
+______________________________________
+
+
+# monthlyEraser run every first day of the month at the very beginning of the day 00:01
+- 1 0 1 * * /home/kumbu/Desktop/8/manda.branch/manda.srs/Specimen_Receive_Station-/venv/bin/python /home/kumbu/Desktop/8/manda.branch/manda.srs/Specimen_Receive_Station-/models/monthlyEraser.py >> /home/kumbu/Desktop/8/manda.branch/manda.srs/Specimen_Receive_Station-/logs/monthlyEraser.log 2>&1
+
+# weeklyEraser run every first day of the week at the very beginning of the day 00:01
+- 1 0 * * 0 /home/kumbu/Desktop/8/manda.branch/manda.srs/Specimen_Receive_Station-/venv/bin/python /home/kumbu/Desktop/8/manda.branch/manda.srs/Specimen_Receive_Station-/models/weeklyEraser.py >> /home/kumbu/Desktop/8/manda.branch/manda.srs/Specimen_Receive_Station-/logs/weeklyEraser.log 2>&1

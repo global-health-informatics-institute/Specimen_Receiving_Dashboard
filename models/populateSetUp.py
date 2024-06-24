@@ -1,5 +1,27 @@
-from models.config import iBlissDB, department, srsDB, testType1,testType2,testType3,testType4, Error
-from models.helper import populateStatusDefinitionsHelper
+from config import iBlissDB, department, srsDB, testType1,testType2,testType3,testType4, Error
+# from helper import populateStatusDefinitionsHelper
+def populateStatusDefinitionsHelper(statusId, statusName, testStatusId, testStatusName, specimenStatusId, specimenStatusName):
+    try:
+        srsConnection = srsDB()
+        if srsConnection is None:
+            print("Failed to connect to srsDB.")
+            return
+        
+        srsCursor = srsConnection.cursor()
+        
+        srsCursor.execute(
+            "INSERT INTO status_definitions (status_id, status_name, test_status_id, test_status_name, specimen_status_id, specimen_status_name) VALUES (%s, %s, %s, %s, %s, %s)",
+            (statusId, statusName, testStatusId, testStatusName, specimenStatusId, specimenStatusName)
+        )
+        srsConnection.commit()
+
+    except Error as e:
+        print(f"Error: {e}")
+    finally:
+        if srsCursor:
+            srsCursor.close()
+        if srsConnection and srsConnection.is_connected():
+            srsConnection.close()
 
 def populateDepartmentDefinitions():
     iBlisCursor = None
@@ -184,7 +206,7 @@ def populateWeeklySummary():
             srsCursor.close()
         if srsConnection and srsConnection.is_connected():
             srsConnection.close()
-# populateWeeklySummary()
+populateWeeklySummary()
 
 
 def populateMonthlySummary():
@@ -219,4 +241,4 @@ def populateMonthlySummary():
             srsCursor.close()
         if srsConnection and srsConnection.is_connected():
             srsConnection.close()
-# populateMonthlySummary()
+populateMonthlySummary()
