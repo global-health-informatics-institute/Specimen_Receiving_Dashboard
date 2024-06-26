@@ -150,10 +150,10 @@ def unLoadEntries():
                             AND write_date <= CURDATE() + INTERVAL 1 DAY + INTERVAL 7 HOUR 
                         """, (accession_id, test_type))
                     existing_record = srs_cursor.fetchone()
-                    current_status = int(existing_record["currentStatus"])
 
                     if existing_record:
                         # Delete the existing record and update summaries
+                        current_status = int(existing_record["currentStatus"])
                         srs_delete_query = """
                         DELETE FROM tests 
                         WHERE accession_id = %s 
@@ -166,6 +166,8 @@ def unLoadEntries():
                         srs_cursor.execute(_updateFieldHelperMonthly(current_status))
                         srs_connection.commit()
                         print(f"Deleted the record for accession_id: {accession_id}, test_type: {test_type}, test_status: {current_status}")
+                    else:
+                        continue
 
         return "ok"
 
