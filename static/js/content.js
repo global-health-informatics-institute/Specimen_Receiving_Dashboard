@@ -14,7 +14,7 @@ $(document).ready(function() {
     }
 
     fetchSummaryData();
-    setInterval(fetchSummaryData, 30000); // 30000ms = 30 seconds
+    setInterval(fetchSummaryData, 13000); // 30000ms = 30 seconds
 });
 
 
@@ -33,7 +33,7 @@ $(document).ready(function() {
     }
 
     fetchTestContent1();
-    setInterval(fetchTestContent1, 30000); // 30000ms = 30 seconds
+    setInterval(fetchTestContent1, 13000); // 30000ms = 30 seconds
 });
 
 
@@ -51,7 +51,7 @@ $(document).ready(function() {
         });
     }
     fetchTestContent2();
-    setInterval(fetchTestContent2, 30000); // 30000ms = 30 seconds
+    setInterval(fetchTestContent2, 13000); // 30000ms = 30 seconds
 });
 
 
@@ -70,7 +70,7 @@ $(document).ready(function() {
     }
 
     fetchTestContent3();
-    setInterval(fetchTestContent3, 30000); // 30000ms = 30 seconds
+    setInterval(fetchTestContent3, 13000); // 30000ms = 30 seconds
 });
 
 
@@ -89,7 +89,7 @@ $(document).ready(function() {
     }
 
     fetchTestContent4();
-    setInterval(fetchTestContent4, 30000); // 30000ms = 30 seconds
+    setInterval(fetchTestContent4, 13000); // 30000ms = 30 seconds
 });
 
 
@@ -109,7 +109,7 @@ $(document).ready(function() {
         });
     }
     fetchWeeklyContent();
-    setInterval(fetchWeeklyContent, 30000); // 30000ms = 30 seconds
+    setInterval(fetchWeeklyContent, 13000); // 30000ms = 30 seconds
 });
 
 $(document).ready(function() {
@@ -127,7 +127,7 @@ $(document).ready(function() {
     }
 
     fetchMonthlyContent();
-    setInterval(fetchMonthlyContent, 30000); // 30000ms = 30 seconds
+    setInterval(fetchMonthlyContent, 13000); // 30000ms = 30 seconds
 });
 
 
@@ -147,7 +147,7 @@ $(document).ready(function() {
     }
 
     fetchTatCurrent();
-    setInterval(fetchTatCurrent, 30000); // 30000ms = 30 seconds
+    setInterval(fetchTatCurrent, 13000); // 30000ms = 30 seconds
 });
 
 
@@ -166,7 +166,7 @@ $(document).ready(function() {
     }
 
     fetchTatAverage();
-    setInterval(fetchTatAverage, 30000); // 30000ms = 30 seconds
+    setInterval(fetchTatAverage, 13000); // 30000ms = 30 seconds
 });
 
 

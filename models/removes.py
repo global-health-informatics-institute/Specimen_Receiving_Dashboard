@@ -9,38 +9,69 @@ test_type_id2 = getTestTypeID(testType2)  # 39
 test_type_id3 = getTestTypeID(testType3)  # 40
 test_type_id4 = getTestTypeID(testType4)  # 41
 
-# i want to keep track of each status as per week and monthly
 def _updateFieldHelperWeekly(status):
     if status == 2:
-        column_name = "weekly_registered"
+        return "UPDATE weekly_summary SET weekly_registered = weekly_registered - 1 WHERE id = 1;"
     elif status == 0:
-        column_name = "weekly_received"
+        return """
+            UPDATE weekly_summary SET weekly_received = weekly_received - 1, 
+            weekly_registered = weekly_registered - 1 WHERE id = 1;
+        """
     elif status == 3:
-        column_name = "weekly_progress"
+        return """
+            UPDATE weekly_summary SET weekly_progress = weekly_progress - 1, 
+            weekly_received = weekly_received - 1, 
+            weekly_registered = weekly_registered - 1 WHERE id = 1;
+        """
     elif status == 4:
-        column_name = "weekly_pending"
+        return """
+            UPDATE weekly_summary SET weekly_progress = weekly_progress - 1, 
+            weekly_received = weekly_received - 1, 
+            weekly_registered = weekly_registered - 1, 
+            weekly_pending = weekly_pending - 1 WHERE id = 1;
+        """
     elif status == 5:
-        column_name = "weekly_complete"
-
-    query = f"UPDATE weekly_summary SET {column_name} = {column_name} + 1 WHERE id = 1;"
-    return query
+        return """
+            UPDATE weekly_summary SET weekly_progress = weekly_progress - 1, 
+            weekly_received = weekly_received - 1, 
+            weekly_registered = weekly_registered - 1, 
+            weekly_pending = weekly_pending - 1, 
+            weekly_complete = weekly_complete - 1 WHERE id = 1;
+        """
+    return ""
 
 def _updateFieldHelperMonthly(status):
     if status == 2:
-        column_name = "monthly_registered"
+        return "UPDATE monthly_summary SET monthly_registered = monthly_registered - 1 WHERE id = 1;"
     elif status == 0:
-        column_name = "monthly_received"
+        return """
+            UPDATE monthly_summary SET monthly_received = monthly_received - 1, 
+            monthly_registered = monthly_registered - 1 WHERE id = 1;
+        """
     elif status == 3:
-        column_name = "monthly_progress"
+        return """
+            UPDATE monthly_summary SET monthly_progress = monthly_progress - 1, 
+            monthly_received = monthly_received - 1, 
+            monthly_registered = monthly_registered - 1 WHERE id = 1;
+        """
     elif status == 4:
-        column_name = "monthly_pending"
+        return """
+            UPDATE monthly_summary SET monthly_progress = monthly_progress - 1, 
+            monthly_received = monthly_received - 1, 
+            monthly_registered = monthly_registered - 1, 
+            monthly_pending = monthly_pending - 1 WHERE id = 1;
+        """
     elif status == 5:
-        column_name = "monthly_complete"
-        
-    query = f"UPDATE monthly_summary SET {column_name} = {column_name} + 1 WHERE id = 1;"
-    return query
+        return """
+            UPDATE monthly_summary SET monthly_progress = monthly_progress - 1, 
+            monthly_received = monthly_received - 1, 
+            monthly_registered = monthly_registered - 1, 
+            monthly_pending = monthly_pending - 1, 
+            monthly_complete = monthly_complete - 1 WHERE id = 1;
+        """
+    return ""
 
-def loadEntries():
+def unLoadEntries():
     try:
         # Connect to iBlissDB
         with mysql.connector.connect(
@@ -80,7 +111,7 @@ def loadEntries():
                     WHERE
                         specimens.time_accepted IS NOT NULL
                         AND specimens.specimen_type_id = %s
-                        AND tests.test_status_id NOT IN (1, 6, 7, 8)
+                        AND tests.test_status_id IN (1, 6, 7, 8)
                         AND tests.time_created >= CURDATE() + INTERVAL 7 HOUR
                         AND tests.time_created <= CURDATE() + INTERVAL 1 DAY + INTERVAL 7 HOUR 
                         AND tests.test_type_id IN (%s, %s, %s, %s)
@@ -106,46 +137,37 @@ def loadEntries():
                     test_status = result['test_status']
 
                     # Check if accession_id with the same test_type already exists in the srsDB tests table
-                    srs_cursor.execute("SELECT test_status FROM tests WHERE accession_id = %s AND test_type = %s", (accession_id, test_type))
+                    srs_cursor.execute(
+                        """
+                        SELECT
+                            accession_id,
+                            test_type,
+                            test_status
+                        FROM
+                            tests
+                        WHERE
+                            accession_id = %s
+                            AND test_type = %s
+                            AND write_date >= CURDATE() + INTERVAL 7 HOUR
+                            AND write_date <= CURDATE() + INTERVAL 1 DAY + INTERVAL 7 HOUR 
+                        """, (accession_id, test_type))
                     existing_record = srs_cursor.fetchone()
 
-                    # condition 1: insert if the entry does not exist and status is not 5 (5 means it's completed already)
-                    if not existing_record:
-                        # Insert the record into srsDB
-                        srs_insert_query = """
-                        INSERT INTO tests (accession_id, test_type, test_status)
-                        VALUES (%s, %s, %s)
+                    if existing_record:
+                        # Delete the existing record and update summaries
+                        srs_delete_query = """
+                        DELETE FROM tests 
+                        WHERE accession_id = %s 
+                        AND test_type = %s 
+                        AND write_date >= CURDATE() + INTERVAL 7 HOUR 
+                        AND write_date <= CURDATE() + INTERVAL 1 DAY + INTERVAL 7 HOUR;
                         """
+                        srs_cursor.execute(srs_delete_query, (accession_id, test_type))
                         srs_cursor.execute(_updateFieldHelperWeekly(test_status))
                         srs_cursor.execute(_updateFieldHelperMonthly(test_status))
-                        srs_cursor.execute(srs_insert_query, (accession_id, test_type, test_status))
                         srs_connection.commit()
-                        print(f"Inserted new record for accession_id: {accession_id}, test_type: {test_type}, test_status: {test_status}")
+                        print(f"Deleted the record for accession_id: {accession_id}, test_type: {test_type}, test_status: {test_status}")
 
-                    else:
-                        existing_status = int(existing_record['test_status'])  # Convert to int
-                        print(f"Comparing new test_status: {test_status} (type: {type(test_status)}) with old test_status: {existing_status} (type: {type(existing_status)})")
-
-                        if existing_status == test_status:
-                            print(f"No update needed for accession_id: {accession_id}, test_type: {test_type}, test_status: {test_status}")
-                            continue
-
-                        # condition 2: skip if the existing status = 0 and new entry is either 1, 2
-                        elif existing_status == 0 and test_status in [1, 2]:
-                            continue
-
-                        else:
-                            # condition 3: Update the status if it is different
-                            srs_update_query = """
-                            UPDATE tests
-                            SET test_status = %s
-                            WHERE accession_id = %s AND test_type = %s
-                            """
-                            srs_cursor.execute(srs_update_query, (test_status, accession_id, test_type))
-                            srs_cursor.execute(_updateFieldHelperWeekly(test_status))
-                            srs_cursor.execute(_updateFieldHelperMonthly(test_status))
-                            srs_connection.commit()
-                            print(f"Updated record for accession_id: {accession_id}, test_type: {test_type}, new test_status: {test_status}, old test_status: {existing_status}")
         return "ok"
 
     except mysql.connector.Error as err:
@@ -159,4 +181,5 @@ def loadEntries():
         if 'srs_cursor' in locals() and srs_cursor:
             srs_cursor.close()
 
-
+# Call the function to execute
+# unLoadEntries()
