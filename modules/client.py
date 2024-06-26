@@ -33,6 +33,11 @@ def receiveBarcode():
 
             if cursor.rowcount == 0:
                 return jsonify({"error": "No matching accession ID found"}), 404
+            else:
+                cursor.execute("UPDATE weekly_summary SET weekly_received = weekly_received + 1 WHERE id = 1;")
+                cursor.execute("UPDATE monthly_summary SET monthly_received = monthly_received + 1 WHERE id = 1;")
+                connection.commit()
+    
 
             return "ok", 200  # Return "ok" instead of JSON
 
