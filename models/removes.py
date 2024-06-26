@@ -130,11 +130,9 @@ def unLoadEntries():
                 iblis_cursor.execute(iblis_query, (department_id, test_type_id1, test_type_id2, test_type_id3, test_type_id4))
                 iblis_results = iblis_cursor.fetchall()
 
-                # Insert the results into srsDB if they don't already exist
                 for result in iblis_results:
                     accession_id = result['accession_id']
                     test_type = result['test_type']
-                    test_status = result['test_status']
 
                     # Check if accession_id with the same test_type already exists in the srsDB tests table
                     srs_cursor.execute(
@@ -142,7 +140,7 @@ def unLoadEntries():
                         SELECT
                             accession_id,
                             test_type,
-                            test_status
+                            test_status as currentStatus
                         FROM
                             tests
                         WHERE
@@ -152,6 +150,7 @@ def unLoadEntries():
                             AND write_date <= CURDATE() + INTERVAL 1 DAY + INTERVAL 7 HOUR 
                         """, (accession_id, test_type))
                     existing_record = srs_cursor.fetchone()
+                    current_status = int(existing_record["currentStatus"])
 
                     if existing_record:
                         # Delete the existing record and update summaries
@@ -163,10 +162,10 @@ def unLoadEntries():
                         AND write_date <= CURDATE() + INTERVAL 1 DAY + INTERVAL 7 HOUR;
                         """
                         srs_cursor.execute(srs_delete_query, (accession_id, test_type))
-                        srs_cursor.execute(_updateFieldHelperWeekly(test_status))
-                        srs_cursor.execute(_updateFieldHelperMonthly(test_status))
+                        srs_cursor.execute(_updateFieldHelperWeekly(current_status))
+                        srs_cursor.execute(_updateFieldHelperMonthly(current_status))
                         srs_connection.commit()
-                        print(f"Deleted the record for accession_id: {accession_id}, test_type: {test_type}, test_status: {test_status}")
+                        print(f"Deleted the record for accession_id: {accession_id}, test_type: {test_type}, test_status: {current_status}")
 
         return "ok"
 
