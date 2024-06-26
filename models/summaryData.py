@@ -40,7 +40,7 @@ class SummaryData:
             FROM
                 tests
             WHERE
-                test_status = 0
+                test_status IN ('0', '3', '4', '5')
                 AND write_date >= CURDATE() + INTERVAL 7 HOUR
                 AND write_date <= CURDATE() + INTERVAL 1 DAY + INTERVAL 7 HOUR 
         """
@@ -57,6 +57,16 @@ class SummaryData:
                 AND write_date >= CURDATE() + INTERVAL 7 HOUR
                 AND write_date <= CURDATE() + INTERVAL 1 DAY + INTERVAL 7 HOUR 
         """
+        # query = """
+        #     SELECT
+        #         COUNT(id) AS totalStatus
+        #     FROM
+        #         tests
+        #     WHERE
+        #         test_status IN ('3', '4', '5')
+        #         AND write_date >= CURDATE() + INTERVAL 7 HOUR
+        #         AND write_date <= CURDATE() + INTERVAL 1 DAY + INTERVAL 7 HOUR 
+        # """
         return self._getSummaryCount(query)
 
     def getSummaryPendingAuth(self):
@@ -70,19 +80,39 @@ class SummaryData:
                 AND write_date >= CURDATE() + INTERVAL 7 HOUR
                 AND write_date <= CURDATE() + INTERVAL 1 DAY + INTERVAL 7 HOUR 
         """
+        # query = """
+        #     SELECT
+        #         COUNT(id) AS totalStatus
+        #     FROM
+        #         tests
+        #     WHERE
+        #         test_status IN ('4', '5')
+        #         AND write_date >= CURDATE() + INTERVAL 7 HOUR
+        #         AND write_date <= CURDATE() + INTERVAL 1 DAY + INTERVAL 7 HOUR 
+        # """
         return self._getSummaryCount(query)
 
     def getSummaryComplete(self):
+        # query = """
+        #     SELECT
+        #         COUNT(id) AS totalStatus
+        #     FROM
+        #         tests
+        #     WHERE
+        #         test_status = 5
+        #         AND write_date >= CURDATE() + INTERVAL 7 HOUR
+        #         AND write_date <= CURDATE() + INTERVAL 1 DAY + INTERVAL 7 HOUR 
+        # """
         query = """
             SELECT
                 COUNT(id) AS totalStatus
             FROM
                 tests
             WHERE
-                test_status = 5
+                test_status IN ('5')
                 AND write_date >= CURDATE() + INTERVAL 7 HOUR
                 AND write_date <= CURDATE() + INTERVAL 1 DAY + INTERVAL 7 HOUR 
-        """
+        """        
         return self._getSummaryCount(query)
 
     def closeConnections(self):

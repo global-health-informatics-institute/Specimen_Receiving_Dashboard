@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, render_template
 from models.config import department, testType1, testType2, testType3, testType4
 from models.monthlyData import MonthlyCounter
+from models.removes import unLoadEntries
 from models.summaryData import SummaryData
 from models.tatCurrentPlusAverage import tatAverage, tatCurrent
 from models.tests import TestsData
@@ -8,7 +9,6 @@ from models.tat import getTATData as TATData
 from models.load import loadEntries
 from models.weeklyData import WeeklyCounter
 from modules.client import receiveBarcode
-from flask import make_response
 
 app = Flask(__name__)
 
@@ -28,6 +28,10 @@ def get_test_content(test_type, prefix):
 def load():
     return loadEntries()
 
+
+@app.route("/unLoadZ/")
+def unload():
+    return unLoadEntries()
 
 @app.route("/", methods=["POST"])
 def client():

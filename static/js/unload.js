@@ -1,13 +1,13 @@
-function loadEntries() {
-    fetch('http://127.0.0.1:5000/loadZ/')
+function unLoadEntries() {
+    fetch('http://127.0.0.1:5000/unLoadZ/')
         .then(response => {
             // Optionally log the status
             console.log('Request made to  Status:', response.status);
         })
         .catch(error => {
-            console.error('There has been a problem with your fetch operation:', error);
+            console.error('There has been a problem with your purge operation:', error);
         });
 }
 
 // Run fetchData every 15 seconds
-setInterval(loadEntries, 10000);
+setInterval(unLoadEntries, 10000);
