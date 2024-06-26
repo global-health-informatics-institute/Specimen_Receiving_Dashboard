@@ -7,4 +7,4 @@ function clearCache() {
         });
     }        
 }
-setInterval(clearCache, 300000);
+setInterval(clearCache, 10000);
