@@ -81,6 +81,7 @@ def tatAverage(test_type):
                 WHERE
                     time_started IS NOT NULL 
                     AND time_completed IS NOT NULL
+                    AND test_status_id NOT IN (8.6,7)
                     AND time_started >= DATE_ADD(DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY), INTERVAL 7 HOUR)
                     AND time_started < DATE_ADD(DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY) + INTERVAL 7 DAY, INTERVAL 7 HOUR)
                     AND test_type_id = %s;        
@@ -88,6 +89,7 @@ def tatAverage(test_type):
             iBlissCursor.execute(query, (getTestTypeID(test_type),))
             result = iBlissCursor.fetchone()
             if result:
+                print(f"AVERAGE is {result}")
                 return result[0]  # Return the average duration in hours
             else:
                 print("No result found.")
