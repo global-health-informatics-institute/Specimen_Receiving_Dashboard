@@ -21,7 +21,8 @@ def iBlissDB():
             port="3306",
             user="root",
             password="root",
-            database="tests"
+            database="tests",
+            auth_plugin='mysql_native_password'
         )
         if connection.is_connected():
             print("Successfully connected to IBliss database")
@@ -39,7 +40,8 @@ def srsDB():
             port="3306",
             user="root",
             password="root",
-            database=department
+            database=department,
+            auth_plugin='mysql_native_password'
         )
         if connection.is_connected():
             print("Successfully connected to the database")
@@ -56,6 +58,7 @@ def srsDBConn():
         port="3306",
         user="root",
         password="root",
+        auth_plugin='mysql_native_password'
         )
         if connection.is_connected():
             print("Successfully connected to server")
