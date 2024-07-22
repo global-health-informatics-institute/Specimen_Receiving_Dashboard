@@ -1,3 +1,11 @@
+# Deployement
+- activate environment,
+  - python3 -m venv pwd/.venv
+  - source pwd/.venv/bin/activate
+
+- install dependencies
+  - pip install -r requirements.txt
+
 **config.py**:
 - Stand alone to app.py
 - Contains app configurations and should be redefined manually
@@ -19,7 +27,7 @@
 - load the file (alone) `models/setUp`
 - set up two cron jobs that log into `logs/clearTables.log`
     - one that clears weeklySummary and another monthlySummary
-______________________________________
+______________
 
 
 # monthlyEraser run every first day of the month at the very beginning of the day 00:01
@@ -27,3 +35,4 @@ ______________________________________
 
 # weeklyEraser run every first day of the week at the very beginning of the day 00:01
 - 1 0 * * 0 /home/kumbu/Desktop/8/manda.branch/manda.srs/Specimen_Receive_Station-/venv/bin/python /home/kumbu/Desktop/8/manda.branch/manda.srs/Specimen_Receive_Station-/models/weeklyEraser.py >> /home/kumbu/Desktop/8/manda.branch/manda.srs/Specimen_Receive_Station-/logs/weeklyEraser.log 2>&1
+
