@@ -17,6 +17,7 @@ def receiveBarcode():
             user="root",
             password="root",
             database="Haematology",
+            auth_plugin='mysql_native_password',
         )
 
         if connection.is_connected():
@@ -37,7 +38,6 @@ def receiveBarcode():
                 cursor.execute("UPDATE weekly_summary SET weekly_received = weekly_received + 1 WHERE id = 1;")
                 cursor.execute("UPDATE monthly_summary SET monthly_received = monthly_received + 1 WHERE id = 1;")
                 connection.commit()
-    
 
             return "ok", 200  # Return "ok" instead of JSON
 
