@@ -37,3 +37,5 @@ ______________
 # weeklyEraser run every first day of the week at the very beginning of the day 00:01
 - 1 0 * * 0 /home/kumbu/Desktop/8/manda.branch/manda.srs/Specimen_Receive_Station-/venv/bin/python /home/kumbu/Desktop/8/manda.branch/manda.srs/Specimen_Receive_Station-/models/weeklyEraser.py >> /home/kumbu/Desktop/8/manda.branch/manda.srs/Specimen_Receive_Station-/logs/weeklyEraser.log 2>&1
 
+- Other materials
+  - `iBlissLaravel.md` && `iBlisReception.md`
