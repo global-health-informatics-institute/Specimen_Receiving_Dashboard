@@ -129,13 +129,6 @@ def unLoadEntries():
                     rn = 1;
                 """
 
-                # Execute the query
-                department_id = 1  # Example value, replace with actual
-                test_type_id1 = 1  # Example value, replace with actual
-                test_type_id2 = 2  # Example value, replace with actual
-                test_type_id3 = 3  # Example value, replace with actual
-                test_type_id4 = 4  # Example value, replace with actual
-
                 iblis_cursor.execute(iblis_query, (department_id, test_type_id1, test_type_id2, test_type_id3, test_type_id4))
                 iblis_results = iblis_cursor.fetchall()
 
