@@ -74,22 +74,25 @@ def _updateFieldHelperMonthly(status):
 def unLoadEntries():
     try:
         # Connect to iBlissDB
-        with mysql.connector.connect(
+        iblis_connection = mysql.connector.connect(
             host="127.0.0.1",
             port="3306",
             user="root",
             password="root",
-            database="tests"
-        ) as iblis_connection:
+            database="tests",
+            auth_plugin='mysql_native_password'
+        )
+        try:
             # Connect to srsDB
-            with mysql.connector.connect(
+            srs_connection = mysql.connector.connect(
                 host="127.0.0.1",
                 port="3306",
                 user="root",
                 password="root",
-                database="Haematology"
-            ) as srs_connection:
-
+                database="Haematology",
+                auth_plugin='mysql_native_password'
+            )
+            try:
                 iblis_cursor = iblis_connection.cursor(dictionary=True)
                 srs_cursor = srs_connection.cursor(dictionary=True)
 
@@ -127,6 +130,12 @@ def unLoadEntries():
                 """
 
                 # Execute the query
+                department_id = 1  # Example value, replace with actual
+                test_type_id1 = 1  # Example value, replace with actual
+                test_type_id2 = 2  # Example value, replace with actual
+                test_type_id3 = 3  # Example value, replace with actual
+                test_type_id4 = 4  # Example value, replace with actual
+
                 iblis_cursor.execute(iblis_query, (department_id, test_type_id1, test_type_id2, test_type_id3, test_type_id4))
                 iblis_results = iblis_cursor.fetchall()
 
@@ -168,8 +177,11 @@ def unLoadEntries():
                         print(f"Deleted the record for accession_id: {accession_id}, test_type: {test_type}, test_status: {current_status}")
                     else:
                         continue
-
-        return "ok"
+            finally:
+                srs_connection.close()
+        finally:
+            iblis_connection.close()
+            return "ok"
 
     except mysql.connector.Error as err:
         print(f"Error: {err}")
@@ -181,6 +193,3 @@ def unLoadEntries():
             iblis_cursor.close()
         if 'srs_cursor' in locals() and srs_cursor:
             srs_cursor.close()
-
-# Call the function to execute
-# unLoadEntries()
