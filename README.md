@@ -2,6 +2,23 @@
 - activate environment,
   - python3 -m venv pwd/.venv
   - source pwd/.venv/bin/activate
+  
+- Grant Preveledges to the station_dashboard
+  - ```sql
+    Grant all privileges on the '{db_name}' schema -- heamatology
+    GRANT ALL PRIVILEGES ON haematology.* TO 'ghii'@'{ip_address}'; -- 192.168.1.156
+    ```
+
+  - ```sql
+    Grant all privileges except DELETE on the '{iBliss_db_name}' schema -- tests
+    GRANT SELECT, INSERT, UPDATE, CREATE, DROP, INDEX, ALTER, CREATE TEMPORARY TABLES, 
+    LOCK TABLES, EXECUTE, CREATE VIEW, SHOW VIEW, CREATE ROUTINE, ALTER ROUTINE, 
+    EVENT, TRIGGER
+    ON tests.* TO 'ghii'@'{ip_address}'; -- 192.168.1.156
+    ```
+
+-- Apply the changes
+FLUSH PRIVILEGES;
 
 - install dependencies
   - pip install -r requirements.txt
