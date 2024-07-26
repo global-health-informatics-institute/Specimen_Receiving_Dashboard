@@ -16,7 +16,8 @@
     EVENT, TRIGGER
     ON tests.* TO 'ghii'@'{ip_address}'; -- 192.168.1.156
     ```
-
+- Modify url in the station_scanner to point to the station_dashboard
+  - 
 -- Apply the changes
 FLUSH PRIVILEGES;
 
