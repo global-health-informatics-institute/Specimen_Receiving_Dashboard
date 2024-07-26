@@ -45,20 +45,20 @@ def loadEntries():
     try:
         # Connect to iBlissDB
         iblis_connection = mysql.connector.connect(
-            host="127.0.0.1",
+            host="192.168.1.164",
             port="3306",
-            user="root",
-            password="root",
+            user="ghii",
+            password="..blackEvil89",
             database="tests",
             auth_plugin='mysql_native_password'
         )
         try:
             # Connect to srsDB
             srs_connection = mysql.connector.connect(
-                host="127.0.0.1",
+                host="192.168.1.164",
                 port="3306",
-                user="root",
-                password="root",
+                user="ghii",
+                password="..blackEvil89",
                 database="Haematology",
                 auth_plugin='mysql_native_password'
             )
