@@ -3,17 +3,18 @@ from mysql.connector import Error
 import logging
 
 # Configure logging
-logging.basicConfig(filename='/home/kumbu/Desktop/8/manda.branch/manda.srs/Specimen_Receive_Station-/logs/database_operations.log', level=logging.INFO,
+logging.basicConfig(filename='/home/ghii/Desktop/station/logs/database_operations.log', level=logging.INFO,
                     format='%(asctime)s %(levelname)s:%(message)s')
 
 try:
     # Connect to the MySQL database
     connection = mysql.connector.connect(
-        host="127.0.0.1",
+        host="192.168.1.164",
         port="3306",
-        user="root",
-        password="root",
-        database="Haematology"
+        user="ghii",
+        password="..blackEvil89",
+        database="Haematology",
+	auth_plugin="mysql_native_password"
     )
 
     if connection.is_connected():
