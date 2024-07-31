@@ -1,4 +1,4 @@
-from models.config import *
+from models.config import srsDB, Error
 
 class MonthlyCounter:
     def __init__(self):
@@ -46,14 +46,6 @@ class MonthlyCounter:
         except Error as e:
             print(f"Error closing connection: {e}")
 
-# Example usage:
-# monthlyCounterObj = monthlyCounter()
-# print(monthlyCounterObj.getSummaryRegistered())
-# print(monthlyCounterObj.getSummaryReceived())
-# print(monthlyCounterObj.getSummaryInprogress())
-# print(monthlyCounterObj.getSummaryPendingAuth())
-# print(monthlyCounterObj.getSummaryComplete())
-# monthlyCounterObj.closeConnections()
 
 class MonthlyIncremator:
     def __init__(self):
@@ -98,11 +90,3 @@ class MonthlyIncremator:
         except Error as e:
             print(f"Error closing connection: {e}")
 
-# Example usage:
-# monthly_incremator = MonthlyIncremator()
-# monthly_incremator.incrementRegistered()
-# monthly_incremator.incrementReceived()
-# monthly_incremator.incrementInprogress()
-# monthly_incremator.incrementPendingAuth()
-# monthly_incremator.incrementComplete()
-# monthly_incremator.closeConnections()

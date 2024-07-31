@@ -1,4 +1,4 @@
-from models.config import *
+from models.config import srsDB, Error
 
 class WeeklyCounter:
     def __init__(self):

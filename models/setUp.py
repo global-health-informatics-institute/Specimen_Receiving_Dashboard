@@ -1,5 +1,5 @@
 from mysql.connector import Error
-from config import srsDBConn, srsDB, department
+from models.config import srsDBConn, srsDB, department
 
 
 # create database
