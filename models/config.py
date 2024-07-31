@@ -13,14 +13,18 @@ testType4 = "INR"
 # how many days do you need the test to be alive
 interval = 1
 
+# at wat time should the dashboard clear itselfe
+time_out = 7
+
 # MySQL Iblis config depending on server properties
 def iBlissDB():
     try: 
         connection = mysql.connector.connect(
-            host="192.168.1.164",
+            # host="192.168.1",
+            host="127.0.0.1",
             port="3306",
-            user="ghii",
-            password="..blackEvil89",
+            user="root",
+            password="root",
             database="tests",
             auth_plugin='mysql_native_password'
         )
@@ -36,10 +40,10 @@ def iBlissDB():
 def srsDB():
     try:
         connection = mysql.connector.connect(
-            host="192.168.1.164",
+            host="127.0.0.1",
             port="3306",
-            user="ghii",
-            password="..blackEvil89",
+            user="root",
+            password="root",
             database=department,
             auth_plugin='mysql_native_password'
         )
@@ -54,10 +58,10 @@ def srsDB():
 def srsDBConn():
     try:
         connection = mysql.connector.connect(
-        host="192.168.1.164",
+        host="127.0.0.1",
         port="3306",
-        user="ghii",
-        password="..blackEvil89",
+        user="root",
+        password="root",
         auth_plugin='mysql_native_password'
         )
         if connection.is_connected():

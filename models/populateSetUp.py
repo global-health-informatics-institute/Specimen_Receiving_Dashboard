@@ -1,4 +1,4 @@
-from config import iBlissDB, department, srsDB, testType1,testType2,testType3,testType4, Error
+from models.config import iBlissDB, department, srsDB, testType1,testType2,testType3,testType4, Error
 # from helper import populateStatusDefinitionsHelper
 def populateStatusDefinitionsHelper(statusId, statusName, testStatusId, testStatusName, specimenStatusId, specimenStatusName):
     try:

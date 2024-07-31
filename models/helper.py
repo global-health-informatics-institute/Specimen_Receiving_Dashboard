@@ -149,10 +149,4 @@ def fetchFromJoin():
         if iblisConnection and iblisConnection.is_connected():
             iblisConnection.close()
 
-
-# creating a view will be used to fetch the only needed data
-# # Example usage
-# results = fetchFromJoin()
-# if results is not None:
-#     for result in results:
-#         print(result)
+# print(fetchFromJoin())
