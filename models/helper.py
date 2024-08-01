@@ -148,5 +148,5 @@ def fetchFromJoin():
             iblisCursor.close()
         if iblisConnection and iblisConnection.is_connected():
             iblisConnection.close()
-
+# test
 # print(fetchFromJoin())

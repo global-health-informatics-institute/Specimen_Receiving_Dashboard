@@ -2,7 +2,7 @@ import mysql.connector
 from models.helper import getDepartmentIdHelper, getTestTypeID
 from models.config import testType1, testType2, testType3, testType4, interval, iBlissDB, srsDB,time_out
 
-intvl = interval  # 100
+intvl = interval  # 1
 department_id = getDepartmentIdHelper()  # 3
 test_type_id1 = getTestTypeID(testType1)  # 35
 test_type_id2 = getTestTypeID(testType2)  # 39
@@ -181,4 +181,5 @@ def unLoadEntries():
             iblis_cursor.close()
         if 'srs_cursor' in locals() and srs_cursor:
             srs_cursor.close()
+# test
 # unLoadEntries()

@@ -43,10 +43,6 @@ def tatCurrent(test_type):
         if connection and connection.is_connected():
             connection.close()
 
-# Example usage:
-# result = tatCurrent("35")
-# print(result)
-
 
 def tatAverage(test_type):
     connection = iBlissDB()
@@ -68,7 +64,7 @@ def tatAverage(test_type):
                     AND time_completed IS NOT NULL
                     AND test_status_id NOT IN (8.6,7)
                     AND time_started >= DATE_ADD(DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY), INTERVAL {time_out} HOUR)
-                    AND time_started < DATE_ADD(DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY) + INTERVAL 7 DAY, INTERVAL 7 HOUR)
+                    AND time_started < DATE_ADD(DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY) + INTERVAL 7 DAY, INTERVAL {time_out} HOUR)
                     AND test_type_id = %s;        
             """
             iBlissCursor.execute(query, (getTestTypeID(test_type),))
@@ -89,7 +85,3 @@ def tatAverage(test_type):
             iBlissCursor.close()
         if connection and connection.is_connected():
             connection.close()
-
-# Example usage:
-# result = tatCurrent("35")
-# print(result)
