@@ -46,16 +46,6 @@ class WeeklyCounter:
         except Error as e:
             print(f"Error closing connection: {e}")
 
-# Example usage:
-# weeklyCounterObj = WeeklyCounter()
-# print(weeklyCounterObj.getSummaryRegistered())
-# print(weeklyCounterObj.getSummaryReceived())
-# print(weeklyCounterObj.getSummaryInprogress())
-# print(weeklyCounterObj.getSummaryPendingAuth())
-# print(weeklyCounterObj.getSummaryComplete())
-# weeklyCounterObj.closeConnections()
-
-
 
 class WeeklyIncremator:
     def __init__(self):
@@ -100,11 +90,3 @@ class WeeklyIncremator:
         except Error as e:
             print(f"Error closing connection: {e}")
 
-# Example usage:
-# weekly_incremator = WeeklyIncremator()
-# weekly_incremator.incrementRegistered()
-# weekly_incremator.incrementReceived()
-# weekly_incremator.incrementInprogress()
-# weekly_incremator.incrementPendingAuth()
-# weekly_incremator.incrementComplete()
-# weekly_incremator.closeConnections()

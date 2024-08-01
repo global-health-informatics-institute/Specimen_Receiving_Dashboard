@@ -151,4 +151,4 @@ def loadEntries():
         return "ok"
     except mysql.connector.Error as err:
         return f"Error: {err}"
-# loadEntries()
+# print(loadEntries())
