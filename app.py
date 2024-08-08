@@ -55,7 +55,8 @@ def index():
         "summaryReceivedTotal": summary_data_obj.getSummaryReceived(),
         "summaryInProgressTotal": summary_data_obj.getSummaryInprogress(),
         "summaryPendingAuthTotal": summary_data_obj.getSummaryPendingAuth(),
-        "summaryCompleteTotal": summary_data_obj.getSummaryComplete()
+        "summaryCompleteTotal": summary_data_obj.getSummaryComplete(),
+        "summaryRejectedTotal": summary_data_obj.getSummaryRejected()
     }
     summary_data_obj.closeConnections()
 
@@ -91,7 +92,8 @@ def index():
         "weeklyRecieved": counter.getSummaryReceived(),
         "weeklyProgress": counter.getSummaryInprogress(),
         "weeklyPending": counter.getSummaryPendingAuth(),
-        "weeklyComplete": counter.getSummaryComplete()
+        "weeklyComplete": counter.getSummaryComplete(),
+        "weeklyRejected": counter.getSummaryRejected()
     }
     counter.closeConnections()
 
@@ -101,7 +103,8 @@ def index():
         "monthlyRecieved": counter_monthly.getSummaryReceived(),
         "monthlyProgress": counter_monthly.getSummaryInprogress(),
         "monthlyPending": counter_monthly.getSummaryPendingAuth(),
-        "monthlyComplete": counter_monthly.getSummaryComplete()
+        "monthlyComplete": counter_monthly.getSummaryComplete(),
+        "monthlyRejected": counter_monthly.getSummaryRejected()
     }
     counter_monthly.closeConnections()
 
@@ -128,7 +131,8 @@ def summary_data():
         "summaryReceivedTotal": summary_data_obj.getSummaryReceived(),
         "summaryInProgressTotal": summary_data_obj.getSummaryInprogress(),
         "summaryPendingAuthTotal": summary_data_obj.getSummaryPendingAuth(),
-        "summaryCompleteTotal": summary_data_obj.getSummaryComplete()
+        "summaryCompleteTotal": summary_data_obj.getSummaryComplete(),
+        "summaryRejectedTotal": summary_data_obj.getSummaryRejected()
     }
     summary_data_obj.closeConnections()
     return jsonify(summary_content)
@@ -193,7 +197,8 @@ def weekly_content():
         "weeklyRecieved": counter.getSummaryReceived(),
         "weeklyProgress": counter.getSummaryInprogress(),
         "weeklyPending": counter.getSummaryPendingAuth(),
-        "weeklyComplete": counter.getSummaryComplete()
+        "weeklyComplete": counter.getSummaryComplete(),
+        "weeklyRejected": counter.getSummaryRejected()
     }
     counter.closeConnections()
     return jsonify(weekly_content)
@@ -206,7 +211,8 @@ def monthly_content():
         "monthlyRecieved": counter_monthly.getSummaryReceived(),
         "monthlyProgress": counter_monthly.getSummaryInprogress(),
         "monthlyPending": counter_monthly.getSummaryPendingAuth(),
-        "monthlyComplete": counter_monthly.getSummaryComplete()
+        "monthlyComplete": counter_monthly.getSummaryComplete(),
+        "monthlyRejected": counter_monthly.getSummaryRejected()
     }
     counter_monthly.closeConnections()
     return jsonify(monthly_content)

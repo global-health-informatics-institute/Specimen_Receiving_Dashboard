@@ -48,7 +48,7 @@ body{
     width: 250px;
     display: flex;
     flex-flow: column;
-    gap: 50px;
+    gap: 20px;
     border-right: 1px #c5c6c7 solid ;
     /* font-size: 40px; */
 }
@@ -66,6 +66,10 @@ body{
     gap: 25px;
     border: none;
     border-radius: 6px;
+}
+#deepRed{
+  background: #fe5858;
+  color: white;
 }
 .card .title{
     color: white;
@@ -92,6 +96,10 @@ body{
     background: #b2d6ca;
     color: #000;
 }
+.title.black{
+    background:#000;
+    color: white;
+}
 .card .value{
     padding: 10px 20px;
     color: #333;
@@ -104,24 +112,21 @@ body{
 .main{
     display: flex;
     flex-wrap: wrap;
-    gap: 20px 10px;
-    margin-left: 250px;
-    margin-top: 45px;
+    gap: 30px 20px;
+    margin-left: 260px;
+    margin-top: 60px;
     padding: 3px 0px;
 }
 .main .test{
-    /* flex: 1 1 600px; */
     flex: 0 1 250px;
     display: flex;
-    /* gap: 5px; */
-    padding: 5px;
+    padding: 0px;
     flex-direction: column;
-    background: #fff;
-    /* border: #0000008b 1.5px solid; */
+    background: white;
+    border-right: 5px #dfdfdf solid;
+    border-bottom:  10px #dfdfdf solid;
+    border-left: 2px #ddd solid;
     border-radius: 8px;
-    box-shadow: 5px 10px 5px #dfdfdf;
-
-    /* padding: 5px; */
 }
 .main .test .header{
     padding: 5px 10px;
@@ -135,21 +140,14 @@ body{
 .main .test .statusCards, .main .tat .statusCards{
     display: flex;
     gap: 5px;
-    /* padding: 0px; */
-    border: #dfdfdf 1px solid;
-    /* border: #0000008b 1px solid; */
     border-radius: 4px;
 }
 .cardWrapper{
     flex: 1 1 110px;
-    /* flex: 0 1 110px; */
     display: flex;
     flex-flow: column;
-    margin: 0 5px 2px 5px  ;
-    /* border: 2px solid #dfdfdf ;
-    border-radius: 20px; */
+    margin: 10px 5px 10px 5px  ;
     font-weight: bold;
-    /* border: none; */
 }
 .cardTitle{
     padding: 5px;
@@ -176,32 +174,26 @@ body{
     border-radius: 0 0 8px 8px;
     /* font-size: 32px; */
     font-size: 40px;
+    background-color: #b2d6ca;
+    color: #024b40;
+}
+.tat{
+    padding: 10px 0;
 }
 .tat .cardTitle{
+    padding: 15px 10px;
     height: fit-content;
-    font-weight: normal;
+    font-weight: 500;
+    font-size: 30px;
 }
 .tat .cardValue{
-    font-weight: 500;
+    font-weight: 400;
 }
 .tatHeader{
     padding: 15px 10px;
     font-weight: 600;
     font-size: 30px;
-
-}
-.bottomBanner{
-    margin: 20px 10px 0 0;
-    margin-left: 250px;
-    height: fit-content;
-    padding: 15px;
-    border: none;
-    border-radius: 10px;
-    background-color: #b2d6ca;
-    text-align: center;
-    font-size: 30px;
-    background: #5d353e;
-    color: white;
+    display: none;
 }
 
 .slideShowContainer{
@@ -219,9 +211,9 @@ body{
 .slideShow {
     flex-direction: column;
     margin-left: 30px;
-    min-height: 200px;
-    max-height: 200px;
-    margin-top: 10px;
+    min-height: 180px;
+    max-height: 180px;
+    margin-top: 20px;
     border: #b2b2b2 2px solid;
     border-radius: 10px;
     background-color: #b2d6ca;
@@ -234,9 +226,11 @@ body{
     width: 100%;
     text-align: center;
     height: fit-content;
-    font-size: 38px;
+    font-size: 30px;
     font-weight: 600;
     border-bottom: #b2d6ca 2px solid;
+    background: #024b40;
+    color: white;
 }
 .categoryContainer{
     display: flex;
@@ -248,13 +242,11 @@ body{
     display: flex;
     flex-direction: column;
     width: 100%;
-    /* padding: 10px; */
-    /* gap: 10px; */
     border: #fff 1px solid;
     border-radius: 3px;
 }
 .categoryResults .title, .categoryResults .value{
-    font-size: 40px;
+    font-size: 30px;
     font-weight:600;
     text-align: center;
 }
@@ -264,15 +256,12 @@ body{
     margin: 0;
     width: 100%;
     height: fit-content;
-    font-weight: normal;
+    font-weight: bold;
     border: none;
+    font-size: 40px;
     border-radius: 0 0 15px  15px;
 }
 .categoryResults .title{
     border-bottom: #000 1px solid;
 }
-
-
-
-
 
