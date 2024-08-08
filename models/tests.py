@@ -78,6 +78,7 @@ class TestsData:
                 FROM tests
                 WHERE write_date >= CURDATE() + INTERVAL {time_out} HOUR
                 AND write_date <= CURDATE() + INTERVAL {interval} DAY + INTERVAL {time_out} HOUR
+                AND test_status != 9
                 AND test_type = '{self.test_type}';
             """
         return self._getTestCount(query)
@@ -90,6 +91,17 @@ class TestsData:
                 self.srsDB.close()
         except Error as e:
             print(f"Error closing connection: {e}")
+
+    def getRejected(self):
+        query = f"""
+            SELECT COUNT(id) AS totalStatus
+                FROM tests
+                WHERE write_date >= CURDATE() + INTERVAL {time_out} HOUR
+                AND write_date <= CURDATE() + INTERVAL {interval} DAY + INTERVAL {time_out} HOUR
+                AND test_status = 9
+                AND test_type = '{self.test_type}';
+            """
+        return self._getTestCount(query)
 
 # print(TestsData("APTT").getComplete())
 # print(testTypeId("APTT"))
