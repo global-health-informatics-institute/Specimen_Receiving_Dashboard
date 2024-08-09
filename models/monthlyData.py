@@ -37,6 +37,9 @@ class MonthlyCounter:
     def getSummaryComplete(self):
         return self._getSummaryValueHelper('monthly_complete')
 
+    def getSummaryRejected(self):
+        return self._getSummaryValueHelper('monthly_rejected')
+
     def closeConnections(self):
         try:
             if self.srsCursor:
@@ -80,6 +83,9 @@ class MonthlyIncremator:
 
     def incrementComplete(self):
         self._updateFieldHelper('monthly_complete')
+
+    def incrementRejected(self):
+        self._updateFieldHelper('monthly_rejected')
 
     def closeConnections(self):
         try:

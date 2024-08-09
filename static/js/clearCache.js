@@ -5,6 +5,6 @@ function clearCache() {
                 caches.delete(name);
             }
         });
-    }        
+    }
 }
 setInterval(clearCache, 10000);

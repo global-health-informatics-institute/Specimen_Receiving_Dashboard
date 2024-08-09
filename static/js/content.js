@@ -9,12 +9,13 @@ $(document).ready(function() {
                 $("#summaryInProgressTotal").text(data.summaryInProgressTotal);
                 $("#summaryPendingAuthTotal").text(data.summaryPendingAuthTotal);
                 $("#summaryCompleteTotal").text(data.summaryCompleteTotal);
+                $("#summaryRejectedTotal").text(data.summaryRejectedTotal);
             }
         });
     }
 
     fetchSummaryData();
-    setInterval(fetchSummaryData, 13000); // 30000ms = 30 seconds
+    setInterval(fetchSummaryData, 1300); 
 });
 
 
@@ -33,7 +34,7 @@ $(document).ready(function() {
     }
 
     fetchTestContent1();
-    setInterval(fetchTestContent1, 13000); // 30000ms = 30 seconds
+    setInterval(fetchTestContent1, 1300); 
 });
 
 
@@ -51,7 +52,7 @@ $(document).ready(function() {
         });
     }
     fetchTestContent2();
-    setInterval(fetchTestContent2, 13000); // 30000ms = 30 seconds
+    setInterval(fetchTestContent2, 1300); 
 });
 
 
@@ -70,7 +71,7 @@ $(document).ready(function() {
     }
 
     fetchTestContent3();
-    setInterval(fetchTestContent3, 13000); // 30000ms = 30 seconds
+    setInterval(fetchTestContent3, 1300); 
 });
 
 
@@ -87,9 +88,8 @@ $(document).ready(function() {
             }
         });
     }
-
     fetchTestContent4();
-    setInterval(fetchTestContent4, 13000); // 30000ms = 30 seconds
+    setInterval(fetchTestContent4, 1300); 
 });
 
 
@@ -105,11 +105,12 @@ $(document).ready(function() {
                 $("#weeklyRecieved").text(data.weeklyRecieved);
                 $("#weeklyProgress").text(data.weeklyProgress);
                 $("#weeklyComplete").text(data.weeklyComplete);
+                $("#weeklyRejected").text(data.weeklyRejected);
             }
         });
     }
     fetchWeeklyContent();
-    setInterval(fetchWeeklyContent, 13000); // 30000ms = 30 seconds
+    setInterval(fetchWeeklyContent, 1300);
 });
 
 $(document).ready(function() {
@@ -122,12 +123,13 @@ $(document).ready(function() {
                 $("#monthlyRecieved").text(data.monthlyRecieved);
                 $("#monthlyProgress").text(data.monthlyProgress);
                 $("#monthlyComplete").text(data.monthlyComplete);
+                $("#monthlyRejected").text(data.monthlyRejected);
             }
         });
     }
 
     fetchMonthlyContent();
-    setInterval(fetchMonthlyContent, 13000); // 30000ms = 30 seconds
+    setInterval(fetchMonthlyContent, 1300); 
 });
 
 
@@ -147,7 +149,7 @@ $(document).ready(function() {
     }
 
     fetchTatCurrent();
-    setInterval(fetchTatCurrent, 13000); // 30000ms = 30 seconds
+    setInterval(fetchTatCurrent, 1300); 
 });
 
 
@@ -166,7 +168,7 @@ $(document).ready(function() {
     }
 
     fetchTatAverage();
-    setInterval(fetchTatAverage, 13000); // 30000ms = 30 seconds
+    setInterval(fetchTatAverage, 1300); 
 });
 
 

@@ -16,7 +16,7 @@ try:
         # Update all fields in the monthly_summary table to 0 where id = 1
         update_query = """
         UPDATE monthly_summary
-        SET monthly_registered = 0, monthly_received = 0, monthly_progress = 0, monthly_pending = 0, monthly_complete = 0
+        SET monthly_registered = 0, monthly_received = 0, monthly_progress = 0, monthly_pending = 0, monthly_complete = 0, monthly_rejected = 0
         WHERE id = 1;
         """
 

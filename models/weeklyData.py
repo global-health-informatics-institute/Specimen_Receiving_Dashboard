@@ -36,6 +36,9 @@ class WeeklyCounter:
 
     def getSummaryComplete(self):
         return self._getSummaryValueHelper('weekly_complete')
+    
+    def getSummaryRejected(self):
+        return self._getSummaryValueHelper('weekly_rejected')
 
     def closeConnections(self):
         try:

@@ -10,4 +10,4 @@ function unLoadEntries() {
 }
 
 // Run fetchData every 15 seconds
-setInterval(unLoadEntries, 10000);
+setInterval(unLoadEntries, 1000);
