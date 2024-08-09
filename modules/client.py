@@ -12,10 +12,10 @@ def receiveBarcode():
     # Update the test_status in the database
     try:
         connection = mysql.connector.connect(
-            host="127.0.0.1",
+            host="192.168.1.164",
             port="3306",
-            user="root",
-            password="root",
+            user="ghii",
+            password="..blackEvil89",
             database="Haematology",
             auth_plugin='mysql_native_password',
         )
