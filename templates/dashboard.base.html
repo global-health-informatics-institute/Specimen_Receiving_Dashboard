@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{departmentName}}</title>
     <link rel="stylesheet" href="{{url_for('static',filename='css/dashBoard.css')}}">
-    <link rel="stylesheet" href="../static/css/dashBoard.css">
+    <!-- <link rel="stylesheet" href="../static/css/v2.css"> -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
@@ -56,6 +56,14 @@
                 {{summaryCompleteTotal}}
             </span>
         </div>
+        <div class="card" id="deepRed">
+            <span class="title black">
+                REJECTED
+            </span>
+            <span class="value" id="summaryRejectedTotal">
+                {{summaryRejectedTotal}}
+            </span>
+        </div>
     </div>
 
 
@@ -63,7 +71,7 @@
     
     
     <div class="main">
-        <div class="test">
+        <div class="test t1">
             <span class ="header .green">
                 {{testType1}}
             </span>
@@ -135,7 +143,7 @@
         </div>
 
 
-        <div class="test">
+        <div class="test t2">
             <span class ="header .green">
                 {{testType2}}
             </span>
@@ -208,7 +216,7 @@
         </div>
 
 
-        <div class="test">
+        <div class="test t3">
             <span class ="header .green">
                 {{testType3}}
             </span>
@@ -280,7 +288,7 @@
             </div>
         </div>
 
-        <div class="test">
+        <div class="test t4">
             <span class ="header .green">
                 {{testType4}}
             </span>
@@ -353,13 +361,6 @@
         </div>
     </div>
 
-    <div class="bottomBanner">
-        <div class="title">
-            <span class="category">
-                WEEKLY & MONTHLY SUMMARY
-            </span>
-        </div>
-    </div>
 
 #1
     <div class="slideShowContainer" id="slide1">
@@ -551,6 +552,49 @@
                     </div>
                     <div class="value" id ="weeklyPending">
                         {{weeklyPending}}
+                    </div>
+                </div>  
+            </div>
+        </div>
+    </div>
+
+
+    #4
+    <div class="slideShowContainer" id="slide5">
+       
+       
+        <div class="slideShow">
+            <div class="category">
+                Monthly
+            </div>
+
+            <div class="categoryContainer">
+                <div class="categoryResults">
+                    <div class="title">
+                        Rejected
+                    </div>
+                    <div class="value" id="monthlyRejected">
+                        {{monthlyRejected}}
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+       
+
+        <div class="slideShow">
+            <div class="category">
+                WEEKLY
+            </div>
+
+            <div class="categoryContainer">
+                
+                <div class="categoryResults">
+                    <div class="title">
+                        Rejected
+                    </div>
+                    <div class="value" id ="weeklyRejected">
+                        {{weeklyRejected}}
                     </div>
                 </div>  
             </div>

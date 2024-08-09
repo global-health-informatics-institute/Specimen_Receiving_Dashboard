@@ -140,6 +140,7 @@ def unLoadEntries():
                         WHERE
                             accession_id = %s
                             AND test_type = %s
+                            AND test_status != 9
                             AND write_date >= CURDATE() + INTERVAL {time_out} HOUR
                             AND write_date <= CURDATE() + INTERVAL {interval} DAY + INTERVAL {time_out} HOUR 
                         """, (accession_id, test_type))
@@ -149,7 +150,8 @@ def unLoadEntries():
                         # Delete the existing record and update summaries
                         current_status = int(existing_record["currentStatus"])
                         srs_delete_query = f"""
-                        DELETE FROM tests 
+                        UPDATE tests
+                        SET test_status = '9'
                         WHERE accession_id = %s 
                         AND test_type = %s 
                         AND write_date >= CURDATE() + INTERVAL {time_out} HOUR 
@@ -158,8 +160,11 @@ def unLoadEntries():
                         srs_cursor.execute(srs_delete_query, (accession_id, test_type))
                         srs_cursor.execute(_updateFieldHelperWeekly(current_status))
                         srs_cursor.execute(_updateFieldHelperMonthly(current_status))
+                        srs_cursor.execute("UPDATE monthly_summary SET monthly_rejected = monthly_rejected + 1 WHERE id = 1;")
+                        srs_cursor.execute("UPDATE weekly_summary SET weekly_rejected = weekly_rejected + 1 WHERE id = 1;")
+
                         srsConnection.commit()
-                        print(f"Deleted the record for accession_id: {accession_id}, test_type: {test_type}, test_status: {current_status}")
+                        print(f"Updated the record for accession_id: {accession_id}, test_type: {test_type}, test_status: {current_status} as REJECTED")
                     else:
                         continue
             finally:
@@ -168,7 +173,7 @@ def unLoadEntries():
         finally:
             if iBlissConnection and iBlissConnection.is_connected():
                 iBlissConnection.close()
-                print("models.remove:green")
+                print("models.rejected:green")
             return "ok"
 
     except mysql.connector.Error as err:

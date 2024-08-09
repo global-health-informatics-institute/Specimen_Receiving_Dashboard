@@ -104,12 +104,14 @@ def defineTables():
                     weekly_progress INT DEFAULT 0,
                     weekly_pending INT DEFAULT 0,
                     weekly_complete INT DEFAULT 0,
+                    weekly_rejected INT DEFAULT 0,
                     PRIMARY KEY (id),
                     INDEX idx_weekly_registered (weekly_registered),
                     INDEX idx_weekly_received (weekly_received),
                     INDEX idx_weekly_progress (weekly_progress),
                     INDEX idx_weekly_pending (weekly_pending),
-                    INDEX idx_weekly_complete (weekly_complete)
+                    INDEX idx_weekly_complete (weekly_complete),
+                    INDEX idx_weekly_rejected (weekly_rejected)
                 )
             ''')
 
@@ -122,12 +124,14 @@ def defineTables():
                     monthly_progress INT DEFAULT 0,
                     monthly_pending INT DEFAULT 0,
                     monthly_complete INT DEFAULT 0,
+                    monthly_rejected INT DEFAULT 0,
                     PRIMARY KEY (id),
                     INDEX idx_monthly_registered (monthly_registered),
                     INDEX idx_monthly_received (monthly_received),
                     INDEX idx_monthly_progress (monthly_progress),
                     INDEX idx_monthly_pending (monthly_pending),
-                    INDEX idx_monthly_complete (monthly_complete)
+                    INDEX idx_monthly_complete (monthly_complete),
+                    INDEX idx_monthly_rejected (monthly_rejected)
                 )
             ''')
 

@@ -84,6 +84,19 @@ class SummaryData:
                 AND write_date <= CURDATE() + INTERVAL {interval} DAY + INTERVAL {time_out} HOUR 
         """        
         return self._getSummaryCount(query)
+    
+    def getSummaryRejected(self):
+        query = f"""
+            SELECT
+                COUNT(id) AS totalStatus
+            FROM
+                tests
+            WHERE
+                test_status IN ('9')
+                AND write_date >= CURDATE() + INTERVAL {time_out} HOUR
+                AND write_date <= CURDATE() + INTERVAL {interval} DAY + INTERVAL {time_out} HOUR 
+        """        
+        return self._getSummaryCount(query)
 
     def closeConnections(self):
         try:
