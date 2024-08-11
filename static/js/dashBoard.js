@@ -1,5 +1,5 @@
 let currentSlide = 1;
-const totalSlides = 4;
+const totalSlides = 5;
 
 function showSlide(slideNumber) {
     // Hide all slides
@@ -19,4 +19,4 @@ function nextSlide() {
 showSlide(currentSlide);
 
 // Change slide every 5 seconds
-setInterval(nextSlide, 5000);
+setInterval(nextSlide, 3000);

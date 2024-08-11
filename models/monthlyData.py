@@ -1,4 +1,4 @@
-from models.config import *
+from models.config import srsDB, Error
 
 class MonthlyCounter:
     def __init__(self):
@@ -37,6 +37,9 @@ class MonthlyCounter:
     def getSummaryComplete(self):
         return self._getSummaryValueHelper('monthly_complete')
 
+    def getSummaryRejected(self):
+        return self._getSummaryValueHelper('monthly_rejected')
+
     def closeConnections(self):
         try:
             if self.srsCursor:
@@ -46,14 +49,6 @@ class MonthlyCounter:
         except Error as e:
             print(f"Error closing connection: {e}")
 
-# Example usage:
-# monthlyCounterObj = monthlyCounter()
-# print(monthlyCounterObj.getSummaryRegistered())
-# print(monthlyCounterObj.getSummaryReceived())
-# print(monthlyCounterObj.getSummaryInprogress())
-# print(monthlyCounterObj.getSummaryPendingAuth())
-# print(monthlyCounterObj.getSummaryComplete())
-# monthlyCounterObj.closeConnections()
 
 class MonthlyIncremator:
     def __init__(self):
@@ -89,6 +84,9 @@ class MonthlyIncremator:
     def incrementComplete(self):
         self._updateFieldHelper('monthly_complete')
 
+    def incrementRejected(self):
+        self._updateFieldHelper('monthly_rejected')
+
     def closeConnections(self):
         try:
             if self.srsCursor:
@@ -98,11 +96,3 @@ class MonthlyIncremator:
         except Error as e:
             print(f"Error closing connection: {e}")
 
-# Example usage:
-# monthly_incremator = MonthlyIncremator()
-# monthly_incremator.incrementRegistered()
-# monthly_incremator.incrementReceived()
-# monthly_incremator.incrementInprogress()
-# monthly_incremator.incrementPendingAuth()
-# monthly_incremator.incrementComplete()
-# monthly_incremator.closeConnections()

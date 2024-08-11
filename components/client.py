@@ -1,10 +1,11 @@
 from time import sleep
 import requests
-from config.config import url
-import OPi.GPIO as GPIO
+# from config.config import url
+import OPi.GPIO as GPIO # a
 from evdev import InputDevice, categorize, ecodes
 import sys
 
+url = "http://192.168.1.168:5000"
 GPIO.setmode(GPIO.BOARD)
 GPIO.setwarnings(False)
 

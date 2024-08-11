@@ -1,25 +1,19 @@
-import mysql.connector
 from mysql.connector import Error
 import logging
+from models.config import srsDB
 
 # Configure logging
-logging.basicConfig(filename='/home/kumbu/Desktop/8/manda.branch/manda.srs/Specimen_Receive_Station-/logs/database_operations.log', level=logging.INFO,
+logging.basicConfig(filename='/home/eight/Desktop/GHII/optimized/logs/database_operations.log', level=logging.INFO,
                     format='%(asctime)s %(levelname)s:%(message)s')
 
 try:
     # Connect to the MySQL database
-    connection = mysql.connector.connect(
-        host="127.0.0.1",
-        port="3306",
-        user="root",
-        password="root",
-        database="Haematology"
-    )
+    srsConnection = srsDB()  # Get the connection object by calling the function
 
-    if connection.is_connected():
-        cursor = connection.cursor()
+    if srsConnection and srsConnection.is_connected():
+        cursor = srsConnection.cursor()
 
-        # Update all fields in the weekly_summary table to 0 where id = 1
+        # Update all fields in the monthly_summary table to 0 where id = 1
         update_query = """
         UPDATE monthly_summary
         SET monthly_registered = 0, monthly_received = 0, monthly_progress = 0, monthly_pending = 0, monthly_complete = 0
@@ -27,13 +21,14 @@ try:
         """
 
         cursor.execute(update_query)
-        connection.commit()
-        logging.info("monthly summary updated successfully")
+        srsConnection.commit()
+        logging.info("Monthly summary updated successfully")
 
 except Error as e:
     logging.error(f"Error: {e}")
 finally:
-    if connection.is_connected():
+    if 'cursor' in locals():
         cursor.close()
-        connection.close()
+    if 'srsConnection' in locals() and srsConnection.is_connected():
+        srsConnection.close()
         logging.info("MySQL connection is closed")

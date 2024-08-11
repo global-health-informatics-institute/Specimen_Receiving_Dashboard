@@ -1,8 +1,8 @@
 import mysql.connector
 from models.helper import getDepartmentIdHelper, getTestTypeID
-from models.config import testType1, testType2, testType3, testType4, interval
+from models.config import testType1, testType2, testType3, testType4, interval, iBlissDB, srsDB,time_out
 
-intvl = interval  # 100
+intvl = interval  # 1
 department_id = getDepartmentIdHelper()  # 3
 test_type_id1 = getTestTypeID(testType1)  # 35
 test_type_id2 = getTestTypeID(testType2)  # 39
@@ -74,30 +74,22 @@ def _updateFieldHelperMonthly(status):
 def unLoadEntries():
     try:
         # Connect to iBlissDB
-        iblis_connection = mysql.connector.connect(
-            host="192.168.1.164",
-            port="3306",
-            user="ghii",
-            password="..blackEvil89",
-            database="tests",
-            auth_plugin='mysql_native_password'
-        )
+        iBlissConnection = iBlissDB()
+        if iBlissConnection is None:
+            print("Failed to connect to iBlissDB")
+            return
         try:
             # Connect to srsDB
-            srs_connection = mysql.connector.connect(
-                host="192.168.1.164",
-                port="3306",
-                user="ghii",
-                password="..blackEvil89",
-                database="Haematology",
-                auth_plugin='mysql_native_password'
-            )
+            srsConnection = srsDB()
+            if srsConnection is None:
+                print("Failed to connect to srsDB")
+                return
             try:
-                iblis_cursor = iblis_connection.cursor(dictionary=True)
-                srs_cursor = srs_connection.cursor(dictionary=True)
+                iblis_cursor = iBlissConnection.cursor(dictionary=True)
+                srs_cursor = srsConnection.cursor(dictionary=True)
 
                 # iblis_query to fetch the required data
-                iblis_query = """
+                iblis_query = f"""
                 WITH RankedTests AS (
                     SELECT 
                         specimens.accession_number AS accession_id,
@@ -115,8 +107,8 @@ def unLoadEntries():
                         specimens.time_accepted IS NOT NULL
                         AND specimens.specimen_type_id = %s
                         AND tests.test_status_id IN (1, 6, 7, 8)
-                        AND tests.time_created >= CURDATE() + INTERVAL 7 HOUR
-                        AND tests.time_created <= CURDATE() + INTERVAL 1 DAY + INTERVAL 7 HOUR 
+                        AND tests.time_created >= CURDATE() + INTERVAL {time_out} HOUR
+                        AND tests.time_created <= CURDATE() + INTERVAL {interval} DAY + INTERVAL {time_out} HOUR 
                         AND tests.test_type_id IN (%s, %s, %s, %s)
                 )
                 SELECT
@@ -138,7 +130,7 @@ def unLoadEntries():
 
                     # Check if accession_id with the same test_type already exists in the srsDB tests table
                     srs_cursor.execute(
-                        """
+                        f"""
                         SELECT
                             accession_id,
                             test_type,
@@ -148,32 +140,39 @@ def unLoadEntries():
                         WHERE
                             accession_id = %s
                             AND test_type = %s
-                            AND write_date >= CURDATE() + INTERVAL 7 HOUR
-                            AND write_date <= CURDATE() + INTERVAL 1 DAY + INTERVAL 7 HOUR 
+                            AND write_date >= CURDATE() + INTERVAL {time_out} HOUR
+                            AND write_date <= CURDATE() + INTERVAL {interval} DAY + INTERVAL {time_out} HOUR 
                         """, (accession_id, test_type))
                     existing_record = srs_cursor.fetchone()
 
                     if existing_record:
                         # Delete the existing record and update summaries
                         current_status = int(existing_record["currentStatus"])
-                        srs_delete_query = """
-                        DELETE FROM tests 
+                        srs_delete_query = f"""
+                        UPDATE tests
+                        SET test_status = '9'
                         WHERE accession_id = %s 
                         AND test_type = %s 
-                        AND write_date >= CURDATE() + INTERVAL 7 HOUR 
-                        AND write_date <= CURDATE() + INTERVAL 1 DAY + INTERVAL 7 HOUR;
+                        AND write_date >= CURDATE() + INTERVAL {time_out} HOUR 
+                        AND write_date <= CURDATE() + INTERVAL {interval} DAY + INTERVAL {time_out} HOUR;
                         """
                         srs_cursor.execute(srs_delete_query, (accession_id, test_type))
                         srs_cursor.execute(_updateFieldHelperWeekly(current_status))
                         srs_cursor.execute(_updateFieldHelperMonthly(current_status))
-                        srs_connection.commit()
-                        print(f"Deleted the record for accession_id: {accession_id}, test_type: {test_type}, test_status: {current_status}")
+                        srs_cursor.execute("UPDATE monthly_summary SET monthly_rejected = monthly_rejected + 1 WHERE id = 1;")
+                        srs_cursor.execute("UPDATE weekly_summary SET weekly_rejected = weekly_rejected + 1 WHERE id = 1;")
+
+                        srsConnection.commit()
+                        print(f"Updated the record for accession_id: {accession_id}, test_type: {test_type}, test_status: {current_status} as REJECTED")
                     else:
                         continue
             finally:
-                srs_connection.close()
+                if srsConnection and srsConnection.is_connected():
+                    srsConnection.close()
         finally:
-            iblis_connection.close()
+            if iBlissConnection and iBlissConnection.is_connected():
+                iBlissConnection.close()
+                print("models.rejected:green")
             return "ok"
 
     except mysql.connector.Error as err:
@@ -186,3 +185,5 @@ def unLoadEntries():
             iblis_cursor.close()
         if 'srs_cursor' in locals() and srs_cursor:
             srs_cursor.close()
+# test
+# unLoadEntries()

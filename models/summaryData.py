@@ -1,4 +1,4 @@
-from models.config import srsDB, Error
+from models.config import srsDB, Error, time_out, interval
 
 class SummaryData:
     def __init__(self):
@@ -22,96 +22,79 @@ class SummaryData:
             return 0
 
     def getSummaryRegistered(self):
-        query = """
+        query = f"""
             SELECT
                 COUNT(id) AS totalStatus
             FROM
                 tests
             WHERE
-                write_date >= CURDATE() + INTERVAL 7 HOUR
-                AND write_date <= CURDATE() + INTERVAL 1 DAY + INTERVAL 7 HOUR;
+                write_date >= CURDATE() + INTERVAL {time_out} HOUR
+                AND write_date <= CURDATE() + INTERVAL {interval} DAY + INTERVAL {time_out} HOUR;
         """
         return self._getSummaryCount(query)
 
     def getSummaryReceived(self):
-        query = """
+        query = f"""
             SELECT
                 COUNT(id) AS totalStatus
             FROM
                 tests
             WHERE
                 test_status IN ('0', '3', '4', '5')
-                AND write_date >= CURDATE() + INTERVAL 7 HOUR
-                AND write_date <= CURDATE() + INTERVAL 1 DAY + INTERVAL 7 HOUR 
+                AND write_date >= CURDATE() + INTERVAL {time_out} HOUR
+                AND write_date <= CURDATE() + INTERVAL {interval} DAY + INTERVAL {time_out} HOUR 
         """
         return self._getSummaryCount(query)
 
     def getSummaryInprogress(self):
-        query = """
+        query = f"""
             SELECT
                 COUNT(id) AS totalStatus
             FROM
                 tests
             WHERE
                 test_status = 3
-                AND write_date >= CURDATE() + INTERVAL 7 HOUR
-                AND write_date <= CURDATE() + INTERVAL 1 DAY + INTERVAL 7 HOUR 
+                AND write_date >= CURDATE() + INTERVAL {time_out} HOUR
+                AND write_date <= CURDATE() + INTERVAL {interval} DAY + INTERVAL {time_out} HOUR 
         """
-        # query = """
-        #     SELECT
-        #         COUNT(id) AS totalStatus
-        #     FROM
-        #         tests
-        #     WHERE
-        #         test_status IN ('3', '4', '5')
-        #         AND write_date >= CURDATE() + INTERVAL 7 HOUR
-        #         AND write_date <= CURDATE() + INTERVAL 1 DAY + INTERVAL 7 HOUR 
-        # """
         return self._getSummaryCount(query)
 
     def getSummaryPendingAuth(self):
-        query = """
+        query = f"""
             SELECT
                 COUNT(id) AS totalStatus
             FROM
                 tests
             WHERE
                 test_status = 4
-                AND write_date >= CURDATE() + INTERVAL 7 HOUR
-                AND write_date <= CURDATE() + INTERVAL 1 DAY + INTERVAL 7 HOUR 
+                AND write_date >= CURDATE() + INTERVAL {time_out} HOUR
+                AND write_date <= CURDATE() + INTERVAL {interval} DAY + INTERVAL {time_out} HOUR 
         """
-        # query = """
-        #     SELECT
-        #         COUNT(id) AS totalStatus
-        #     FROM
-        #         tests
-        #     WHERE
-        #         test_status IN ('4', '5')
-        #         AND write_date >= CURDATE() + INTERVAL 7 HOUR
-        #         AND write_date <= CURDATE() + INTERVAL 1 DAY + INTERVAL 7 HOUR 
-        # """
         return self._getSummaryCount(query)
 
     def getSummaryComplete(self):
-        # query = """
-        #     SELECT
-        #         COUNT(id) AS totalStatus
-        #     FROM
-        #         tests
-        #     WHERE
-        #         test_status = 5
-        #         AND write_date >= CURDATE() + INTERVAL 7 HOUR
-        #         AND write_date <= CURDATE() + INTERVAL 1 DAY + INTERVAL 7 HOUR 
-        # """
-        query = """
+        query = f"""
             SELECT
                 COUNT(id) AS totalStatus
             FROM
                 tests
             WHERE
                 test_status IN ('5')
-                AND write_date >= CURDATE() + INTERVAL 7 HOUR
-                AND write_date <= CURDATE() + INTERVAL 1 DAY + INTERVAL 7 HOUR 
+                AND write_date >= CURDATE() + INTERVAL {time_out} HOUR
+                AND write_date <= CURDATE() + INTERVAL {interval} DAY + INTERVAL {time_out} HOUR 
+        """        
+        return self._getSummaryCount(query)
+    
+    def getSummaryRejected(self):
+        query = f"""
+            SELECT
+                COUNT(id) AS totalStatus
+            FROM
+                tests
+            WHERE
+                test_status IN ('9')
+                AND write_date >= CURDATE() + INTERVAL {time_out} HOUR
+                AND write_date <= CURDATE() + INTERVAL {interval} DAY + INTERVAL {time_out} HOUR 
         """        
         return self._getSummaryCount(query)
 

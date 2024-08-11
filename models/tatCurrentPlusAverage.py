@@ -1,23 +1,7 @@
 import mysql.connector
 from mysql.connector import Error
 from models.helper import getTestTypeID
-
-def iBlissDB():
-    try: 
-        connection = mysql.connector.connect(
-            host="192.168.1.164",
-            port="3306",
-            user="ghii",
-            password="..blackEvil89",
-            database="tests",
-            auth_plugin='mysql_native_password'
-        )
-        if connection.is_connected():
-            print("Successfully connected to IBliss database")
-            return connection
-    except Error as e:
-        print(f"Error: {e}")
-        return None
+from models.config import iBlissDB, interval, time_out
 
 def tatCurrent(test_type):
     connection = iBlissDB()
@@ -29,7 +13,7 @@ def tatCurrent(test_type):
     
     try:
         if iBlissCursor:
-            query = """
+            query = f"""
                 SELECT 
                     IFNULL(ROUND(AVG(TIMESTAMPDIFF(MINUTE, time_started, time_completed)), 2), 0) AS average_duration_in_hours
                 FROM 
@@ -37,8 +21,8 @@ def tatCurrent(test_type):
                 WHERE 
                     time_started IS NOT NULL 
                     AND time_completed IS NOT NULL
-                    AND tests.time_created >= CURDATE() + INTERVAL 7 HOUR
-                    AND tests.time_created <= CURDATE() + INTERVAL 1 DAY + INTERVAL 7 HOUR 
+                    AND tests.time_created >= CURDATE() + INTERVAL {time_out} HOUR
+                    AND tests.time_created <= CURDATE() + INTERVAL {interval} DAY + INTERVAL {time_out} HOUR 
                     AND test_type_id = %s;
             """
             iBlissCursor.execute(query, (getTestTypeID(test_type),))
@@ -59,10 +43,6 @@ def tatCurrent(test_type):
         if connection and connection.is_connected():
             connection.close()
 
-# Example usage:
-# result = tatCurrent("35")
-# print(result)
-
 
 def tatAverage(test_type):
     connection = iBlissDB()
@@ -74,7 +54,7 @@ def tatAverage(test_type):
     
     try:
         if iBlissCursor:
-            query = """
+            query = f"""
                 SELECT 
                     IFNULL(ROUND(AVG(TIMESTAMPDIFF(HOUR, time_started, time_completed)), 2), 0) AS average_duration_in_hours
                 FROM 
@@ -83,8 +63,8 @@ def tatAverage(test_type):
                     time_started IS NOT NULL 
                     AND time_completed IS NOT NULL
                     AND test_status_id NOT IN (8.6,7)
-                    AND time_started >= DATE_ADD(DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY), INTERVAL 7 HOUR)
-                    AND time_started < DATE_ADD(DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY) + INTERVAL 7 DAY, INTERVAL 7 HOUR)
+                    AND time_started >= DATE_ADD(DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY), INTERVAL {time_out} HOUR)
+                    AND time_started < DATE_ADD(DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY) + INTERVAL 7 DAY, INTERVAL {time_out} HOUR)
                     AND test_type_id = %s;        
             """
             iBlissCursor.execute(query, (getTestTypeID(test_type),))
@@ -105,7 +85,3 @@ def tatAverage(test_type):
             iBlissCursor.close()
         if connection and connection.is_connected():
             connection.close()
-
-# Example usage:
-# result = tatCurrent("35")
-# print(result)
