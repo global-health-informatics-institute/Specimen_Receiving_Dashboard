@@ -140,6 +140,7 @@ def unLoadEntries():
                         WHERE
                             accession_id = %s
                             AND test_type = %s
+                            AND test_status != 9
                             AND write_date >= CURDATE() + INTERVAL {time_out} HOUR
                             AND write_date <= CURDATE() + INTERVAL {interval} DAY + INTERVAL {time_out} HOUR 
                         """, (accession_id, test_type))
