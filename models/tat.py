@@ -34,17 +34,3 @@ class getTATData:
     def getTATForTestType(self):
         tat = self._getSummaryValueHelper()
         return tat
-
-# Example usage:
-# tat_data = getTATData()
-# target_tat = tat_data.getTATForTestType('APTT')
-# print(target_tat)
-# tat_data.closeConnections()
-
-def getCurrent(self):
-    ""
-
-def getAverage(self):
-    ""
-
-# print(getTATData("FBC").getTATForTestType())

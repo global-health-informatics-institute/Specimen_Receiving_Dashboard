@@ -61,3 +61,4 @@ ______________
 
 - Other materials
   - `iBlissLaravel.md` && `iBlisReception.md`
+  -  '[Click for extra Docs](git@github.com:89Tain/eightMarkdown.git)'

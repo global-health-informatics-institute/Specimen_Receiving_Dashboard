@@ -1,4 +1,4 @@
-from models.config import srsDB, Error
+from models.config import srsDB, Error, interval, time_out
 from models.helper import getTestTypeID
 
 def testTypeId(testType):
@@ -31,8 +31,8 @@ class TestsData:
         query = f"""
             SELECT COUNT(id) AS totalStatus
                 FROM tests
-                WHERE write_date >= CURDATE() + INTERVAL 7 HOUR
-                AND write_date <= CURDATE() + INTERVAL 1 DAY + INTERVAL 7 HOUR
+                WHERE write_date >= CURDATE() + INTERVAL {time_out} HOUR
+                AND write_date <= CURDATE() + INTERVAL {interval} DAY + INTERVAL {interval} HOUR
                 AND test_status = 0
                 AND test_type = '{self.test_type}';
             """
@@ -42,8 +42,8 @@ class TestsData:
         query = f"""
             SELECT COUNT(id) AS totalStatus
                 FROM tests
-                WHERE write_date >= CURDATE() + INTERVAL 7 HOUR
-                AND write_date <= CURDATE() + INTERVAL 1 DAY + INTERVAL 7 HOUR
+                WHERE write_date >= CURDATE() + INTERVAL {time_out} HOUR
+                AND write_date <= CURDATE() + INTERVAL {interval} DAY + INTERVAL {time_out} HOUR
                 AND test_status = 3
                 AND test_type = '{self.test_type}';
             """
@@ -53,8 +53,8 @@ class TestsData:
         query = f"""
             SELECT COUNT(id) AS totalStatus
                 FROM tests
-                WHERE write_date >= CURDATE() + INTERVAL 7 HOUR
-                AND write_date <= CURDATE() + INTERVAL 1 DAY + INTERVAL 7 HOUR
+                WHERE write_date >= CURDATE() + INTERVAL {time_out} HOUR
+                AND write_date <= CURDATE() + INTERVAL {interval} DAY + INTERVAL {time_out} HOUR
                 AND test_status = 4
                 AND test_type = '{self.test_type}';
             """
@@ -64,8 +64,8 @@ class TestsData:
         query = f"""
             SELECT COUNT(id) AS totalStatus
                 FROM tests
-                WHERE write_date >= CURDATE() + INTERVAL 7 HOUR
-                AND write_date <= CURDATE() + INTERVAL 1 DAY + INTERVAL 7 HOUR
+                WHERE write_date >= CURDATE() + INTERVAL {time_out} HOUR
+                AND write_date <= CURDATE() + INTERVAL {interval} DAY + INTERVAL {time_out} HOUR
                 AND test_status = 5
                 AND test_type = '{self.test_type}';
             """
@@ -76,8 +76,9 @@ class TestsData:
         query = f"""
             SELECT COUNT(id) AS totalStatus
                 FROM tests
-                WHERE write_date >= CURDATE() + INTERVAL 7 HOUR
-                AND write_date <= CURDATE() + INTERVAL 1 DAY + INTERVAL 7 HOUR
+                WHERE write_date >= CURDATE() + INTERVAL {time_out} HOUR
+                AND write_date <= CURDATE() + INTERVAL {interval} DAY + INTERVAL {time_out} HOUR
+                AND test_status != 9
                 AND test_type = '{self.test_type}';
             """
         return self._getTestCount(query)
@@ -91,5 +92,16 @@ class TestsData:
         except Error as e:
             print(f"Error closing connection: {e}")
 
-# print(TestsData("FBC").getReceived())
-# print(testTypeId("fbc"))
+    def getRejected(self):
+        query = f"""
+            SELECT COUNT(id) AS totalStatus
+                FROM tests
+                WHERE write_date >= CURDATE() + INTERVAL {time_out} HOUR
+                AND write_date <= CURDATE() + INTERVAL {interval} DAY + INTERVAL {time_out} HOUR
+                AND test_status = 9
+                AND test_type = '{self.test_type}';
+            """
+        return self._getTestCount(query)
+
+# print(TestsData("APTT").getComplete())
+# print(testTypeId("APTT"))

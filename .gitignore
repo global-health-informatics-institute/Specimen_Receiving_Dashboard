@@ -8,6 +8,7 @@ modules/__pycache__
 stashs/
 trash/
 .vscode
+logs/*
 
 ### Flask ###
 instance/*

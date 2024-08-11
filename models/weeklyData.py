@@ -1,4 +1,4 @@
-from models.config import *
+from models.config import srsDB, Error
 
 class WeeklyCounter:
     def __init__(self):
@@ -36,6 +36,9 @@ class WeeklyCounter:
 
     def getSummaryComplete(self):
         return self._getSummaryValueHelper('weekly_complete')
+    
+    def getSummaryRejected(self):
+        return self._getSummaryValueHelper('weekly_rejected')
 
     def closeConnections(self):
         try:
@@ -45,16 +48,6 @@ class WeeklyCounter:
                 self.srsDB.close()
         except Error as e:
             print(f"Error closing connection: {e}")
-
-# Example usage:
-# weeklyCounterObj = WeeklyCounter()
-# print(weeklyCounterObj.getSummaryRegistered())
-# print(weeklyCounterObj.getSummaryReceived())
-# print(weeklyCounterObj.getSummaryInprogress())
-# print(weeklyCounterObj.getSummaryPendingAuth())
-# print(weeklyCounterObj.getSummaryComplete())
-# weeklyCounterObj.closeConnections()
-
 
 
 class WeeklyIncremator:
@@ -100,11 +93,3 @@ class WeeklyIncremator:
         except Error as e:
             print(f"Error closing connection: {e}")
 
-# Example usage:
-# weekly_incremator = WeeklyIncremator()
-# weekly_incremator.incrementRegistered()
-# weekly_incremator.incrementReceived()
-# weekly_incremator.incrementInprogress()
-# weekly_incremator.incrementPendingAuth()
-# weekly_incremator.incrementComplete()
-# weekly_incremator.closeConnections()
