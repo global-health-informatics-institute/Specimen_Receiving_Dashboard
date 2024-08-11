@@ -27,7 +27,7 @@ def receiveBarcode():
                 UPDATE tests
                 SET test_status = 0
                 WHERE accession_id = %s
-                AND test_status NOT IN ( '0', '3', '4', '5')
+                AND test_status NOT IN ( '0', '3', '4', '5','9')
             """, (accession_id,))
 
             connection.commit()

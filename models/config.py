@@ -20,10 +20,10 @@ time_out = 7
 def iBlissDB():
     try: 
         connection = mysql.connector.connect(
-            host="127.0.0.1",
+            host="192.168.1.164",
             port="3306",
-            user="root",
-            password="root",
+            user="ghii",
+            password="..blackEvil89",
             database="tests",
             auth_plugin='mysql_native_password'
         )
@@ -39,10 +39,10 @@ def iBlissDB():
 def srsDB():
     try:
         connection = mysql.connector.connect(
-            host="127.0.0.1",
+            host="192.168.1.164",
             port="3306",
-            user="root",
-            password="root",
+            user="ghii",
+            password="..blackEvil89",
             database=department,
             auth_plugin='mysql_native_password'
         )
@@ -57,10 +57,10 @@ def srsDB():
 def srsDBConn():
     try:
         connection = mysql.connector.connect(
-        host="127.0.0.1",
+        host="192.168.1.164",
         port="3306",
-        user="root",
-        password="root",
+        user="ghii",
+        password="..blackEvil89",
         auth_plugin='mysql_native_password'
         )
         if connection.is_connected():

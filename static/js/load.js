@@ -11,3 +11,4 @@ function loadEntries() {
 
 // Run fetchData every 15 seconds
 setInterval(loadEntries, 1000);
+

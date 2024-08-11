@@ -3,7 +3,7 @@ import logging
 from models.config import srsDB
 
 # Configure logging
-log_file_path = '/home/eight/Desktop/GHII/optimized/logs/database_operations.log'
+log_file_path = '/home/ghii/Desktop/opz/logs/database_operations.log'
 logging.basicConfig(filename=log_file_path, level=logging.INFO, format='%(asctime)s %(levelname)s:%(message)s')
 
 try:
@@ -20,7 +20,7 @@ try:
         # Update all fields in the weekly_summary table to 0 where id = 1
         update_query = """
         UPDATE weekly_summary
-        SET weekly_registered = 0, weekly_received = 0, weekly_progress = 0, weekly_pending = 0, weekly_complete = 0
+        SET weekly_registered = 0, weekly_received = 0, weekly_progress = 0, weekly_pending = 0, weekly_complete = 0, weekly_rejected = 0 
         WHERE id = 1;
         """
 
@@ -36,3 +36,4 @@ finally:
     if 'srsConnection' in locals() and srsConnection.is_connected():
         srsConnection.close()
         logging.info("MySQL connection is closed")
+
