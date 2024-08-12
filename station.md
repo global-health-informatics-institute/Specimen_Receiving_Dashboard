@@ -8,4 +8,4 @@
      Netmask: 255.255.255.0
      Gateway: 192.168.1.1
      ```
-   -  
+   -  aAsk MT to help out. || use nmtui
