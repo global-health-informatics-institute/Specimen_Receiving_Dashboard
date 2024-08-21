@@ -71,7 +71,3 @@ ______________
   - [Station feedback. Distrubuted](docs/MedicalLedFeedback.md)
   - [Static Config](docs/station.md)
   - [iBliss Docs](docs/how%20to.pdf)
-    
-- Other materials
-  - `iBlissLaravel.md` && `iBlisReception.md`
-  -  '[Click for extra Docs](git@github.com:89Tain/eightMarkdown.git)'
