@@ -57,9 +57,9 @@ ______________
 
 
 ### Other materials
-  - [iBliss Laravel](docs/iBlissLaravel.md)
-  - [iBlis Reception](docs/iBlisReception.md)
-  - [Station feedback. Developer Edition](docs/devLedFeedback.md)
-  - [Station feedback. Distrubuted](docs/MedicalLedFeedback.md)
-  - [Static Config](docs/station.md)
-  - [iBliss Docs](docs/how%20to.pdf)
+  - [iBliss Laravel](https://drive.google.com/drive/folders/1v6X3Vw4KLlLtFhedVKyseUY8jli7y5Rg?usp=drive_link)
+  - [iBlis Reception](https://drive.google.com/drive/folders/1v6X3Vw4KLlLtFhedVKyseUY8jli7y5Rg?usp=drive_link)
+  - [Station feedback. Developer Edition](https://drive.google.com/drive/folders/1v6X3Vw4KLlLtFhedVKyseUY8jli7y5Rg?usp=drive_link)
+  - [Station feedback. Distrubuted](https://drive.google.com/drive/folders/1v6X3Vw4KLlLtFhedVKyseUY8jli7y5Rg?usp=drive_link)
+  - [Static Config](https://drive.google.com/drive/folders/1v6X3Vw4KLlLtFhedVKyseUY8jli7y5Rg?usp=drive_link)
+  - [iBliss Docs](https://drive.google.com/drive/folders/1v6X3Vw4KLlLtFhedVKyseUY8jli7y5Rg?usp=drive_link)
