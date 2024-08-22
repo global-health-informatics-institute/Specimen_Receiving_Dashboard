@@ -1,4 +1,4 @@
-# Deployement
+### Deployement
 - activate environment,
   - python3 -m venv pwd/.venv
   - source pwd/.venv/bin/activate
@@ -33,18 +33,14 @@ FLUSH PRIVILEGES;
 - every data functions is defined in a nameCorresponding model file
 
 **tatCurrent
-
-
-**
-
-# UpdateEntries (oka)
+### UpdateEntries
 - **iblis_connection**: from line 15-20, need external configurations
 - **srs_connection**: from line 25 - 29, need further configarations
 - will be called using `curl` 
 - configure the authentication method used by the iBlis LIMS systems 
 
 
-# INSTRUCTIONS
+### INSTRUCTIONS
 - config the database end points in `models/config`
 - config test type as short names for that screen`models/config`
 - load the file (alone) `models/setUp`
@@ -53,12 +49,17 @@ FLUSH PRIVILEGES;
 ______________
 
 
-# monthlyEraser run every first day of the month at the very beginning of the day 00:01
+### monthlyEraser run every first day of the month at the very beginning of the day 00:01
 - 1 0 1 * * /home/kumbu/Desktop/8/manda.branch/manda.srs/Specimen_Receive_Station-/venv/bin/python /home/kumbu/Desktop/8/manda.branch/manda.srs/Specimen_Receive_Station-/models/monthlyEraser.py >> /home/kumbu/Desktop/8/manda.branch/manda.srs/Specimen_Receive_Station-/logs/monthlyEraser.log 2>&1
 
-# weeklyEraser run every first day of the week at the very beginning of the day 00:01
+### weeklyEraser run every first day of the week at the very beginning of the day 00:01
 - 1 0 * * 0 /home/kumbu/Desktop/8/manda.branch/manda.srs/Specimen_Receive_Station-/venv/bin/python /home/kumbu/Desktop/8/manda.branch/manda.srs/Specimen_Receive_Station-/models/weeklyEraser.py >> /home/kumbu/Desktop/8/manda.branch/manda.srs/Specimen_Receive_Station-/logs/weeklyEraser.log 2>&1
 
-- Other materials
-  - `iBlissLaravel.md` && `iBlisReception.md`
-  -  '[Click for extra Docs](git@github.com:89Tain/eightMarkdown.git)'
+
+### Other materials
+  - [iBliss Laravel](https://drive.google.com/drive/folders/1v6X3Vw4KLlLtFhedVKyseUY8jli7y5Rg?usp=drive_link)
+  - [iBlis Reception](https://drive.google.com/drive/folders/1v6X3Vw4KLlLtFhedVKyseUY8jli7y5Rg?usp=drive_link)
+  - [Station feedback. Developer Edition](https://drive.google.com/drive/folders/1v6X3Vw4KLlLtFhedVKyseUY8jli7y5Rg?usp=drive_link)
+  - [Station feedback. Distrubuted](https://drive.google.com/drive/folders/1v6X3Vw4KLlLtFhedVKyseUY8jli7y5Rg?usp=drive_link)
+  - [Static Config](https://drive.google.com/drive/folders/1v6X3Vw4KLlLtFhedVKyseUY8jli7y5Rg?usp=drive_link)
+  - [iBliss Docs](https://drive.google.com/drive/folders/1v6X3Vw4KLlLtFhedVKyseUY8jli7y5Rg?usp=drive_link)
