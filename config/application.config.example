@@ -1,0 +1,25 @@
+{
+    "department":"Haematology",
+    "test_short_name":{
+        "test_type_1":"test_short_name",
+        "test_type_2":"test_short_name",
+        "test_type_3":"test_short_name",
+        "test_type_4":"test_short_name",
+    },
+    "interval":<integer>,
+    "refresh_rate": <integer>,
+    "iblis":{
+        "host":"",
+        "port":"",
+        "user":"",
+        "database":"",
+        "auth_plugin"=""
+    },
+    "dashboard"{
+        "host":"127.0.0.1",
+        "port":"3306",
+        "user":"root",
+        "database":"Haematology",
+        "auth_plugin"="mysql_native_password"
+    }
+}
