@@ -1,25 +1,16 @@
-# IDE/editor directories
 .idea/
 .vscode/
-
-# Python virtual environment directories
+.venv*/
+venv*/
+.venv
 .venv/
-venv/
-
-# Python cache and distribution files
+.venv/*
 __pycache__/
 dist/
-*.py[cod]
-
-# Coverage and testing output
 .coverage*
 htmlcov/
 .tox/
-
-# Documentation build output
 docs/_build/
-
-# Config files except for example files
 config/*
 !config/application.config.example
 !config/application.py.example
