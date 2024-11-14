@@ -1,0 +1,16 @@
+{% extends 'base.dashboard.html' %}
+
+{% block title %}
+    {{ static_data["department_name"] }}
+{% endblock %}
+
+{% block dashboard_styles %}
+    <link
+        rel="stylesheet" 
+        href="{{ url_for('static', filename='css/' + ('orange_pi.css' if static_data['screen'] else 'screen.css')) }}"
+    >
+{% endblock %}
+
+{% block department %}
+    {{ static_data["department_name"] }}
+{% endblock %}

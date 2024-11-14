@@ -1,4 +1,5 @@
 application_config = {
+    "using_orange_pi": False,
     "department":"Haematology",
     "test_short_name":{
         "test_type_1":"FBC",
@@ -12,6 +13,7 @@ application_config = {
         "host":"127.0.0.1",
         "port":"3306",
         "user":"root",
+        "password":"root",
         "database":"tests",
         "auth_plugin":"mysql_native_password"
     },
@@ -19,7 +21,8 @@ application_config = {
         "host":"127.0.0.1",
         "port":"3306",
         "user":"root",
-        "database":"Haematology",
+        "password":"root",
+        "database":"improved",
         "auth_plugin":"mysql_native_password"
     }
 }

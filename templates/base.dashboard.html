@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" {% block dashboard_styles %}{% endblock %}>
+    <!-- <link rel="stylesheet" href="../static/css/v2.css"> -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="nav">
+        {% block department %}{% endblock %}
+    </div>
+    <div class="sideNav">
+        <!-- <span>
+            SUMMERY
+        </span> -->
+        <div class="card">
+            <span class="title green">
+                REGISTERED
+            </span>
+            <span class="value" id="summaryRegisteredTotal">
+                {{summaryRegisteredTotal}}1
+            </span>
+        </div>
+        <div class="card">
+            <span class="title maroon">
+                RECIEVED
+            </span>
+            <span class="value" id="summaryReceivedTotal">
+                {{summaryReceivedTotal}}2
+            </span>
+        </div>
+        <div class="card">
+            <span class="title red">
+                IN PROGRESS
+            </span>
+            <span class="value" id="summaryInProgressTotal">
+                {{summaryInProgressTotal}}3
+            </span>
+        </div>
+        <div class="card">
+            <span class="title lightBlue">
+                PENDING AUTHORIZATION
+            </span>
+            <span class="value" id="summaryPendingAuthTotal">
+                {{summaryPendingAuthTotal}}4
+            </span>
+        </div>
+        <div class="card">
+            <span class="title green">
+                COMPLETED
+            </span>
+            <span class="value" id="summaryCompleteTotal">
+                {{summaryCompleteTotal}}5
+            </span>
+        </div>
+        <div class="card" id="deepRed">
+            <span class="title black">
+                REJECTED
+            </span>
+            <span class="value" id="summaryRejectedTotal">
+                {{summaryRejectedTotal}}6
+            </span>
+        </div>
+    </div>
+
+
+    <!-- ############################################## -->
+    
+    
+    <div class="main">
+        <div class="test t1">
+            <span class ="header .green">
+                {{testType1}}testType1
+            </span>
+            <div class="statusCards">
+                <div class="cardWrapper">
+                    <div class="cardTitle green">
+                        Received
+                    </div>
+                    <div class="cardValue" id="received1">
+                        {{received1}}000
+                    </div>
+                </div>
+                <div class="cardWrapper">
+                    <div class="cardTitle red">
+                        In Progress
+                    </div>
+                    <div class="cardValue" id="inProgress1">
+                        {{inProgress1}}000
+                    </div>
+                </div>
+                <div class="cardWrapper">
+                    <div class="cardTitle red">
+                        Pending Authorization
+                    </div>
+                    <div class="cardValue" id="pendingAuth1">
+                        {{pendingAuth1}}000
+                    </div>
+                </div>
+                <div class="cardWrapper">
+                    <div class="cardTitle green">
+                        Completed
+                    </div>
+                    <div class="cardValue" id="complete1">
+                        {{complete1}}000
+                    </div>
+                </div>       
+            </div>
+            <div class="tat">
+                <span class="tatHeader">
+                    TAT
+                </span>
+                <div class="statusCards">
+                    <div class="cardWrapper">
+                        <div class="cardTitle">
+                            TARGET
+                        </div>
+                        <div class="cardValue">
+                            {{target1}}1
+                        </div>
+                    </div>
+                    <div class="cardWrapper">
+                        <div class="cardTitle">
+                            CURRENT
+                        </div>
+                        <div class="cardValue" >
+                            <span id="current1">{{current1}}</span> <span>Min</span>
+                        </div>
+                    </div>
+                    <div class="cardWrapper">
+                        <div class="cardTitle">
+                            AVERAGE
+                        </div>
+                        <div class="cardValue">
+                            <span id="average1">{{average1}}</span> <span>HRs</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="test t2">
+            <span class ="header .green">
+                {{testType2}}testType2
+            </span>
+            <div class="statusCards">
+                <div class="cardWrapper">
+                    <div class="cardTitle green">
+                        Received
+                    </div>
+                    <div class="cardValue" id="received2">
+                        {{received2}}000
+                    </div>
+                </div>
+                <div class="cardWrapper">
+                    <div class="cardTitle red">
+                        In Progress
+                    </div>
+                    <div class="cardValue" id="inProgress2">
+                        {{inProgress2}}000
+                    </div>
+                </div>
+                <div class="cardWrapper">
+                    <div class="cardTitle red">
+                        Pending Authorization
+                    </div>
+                    <div class="cardValue" id="pendingAuth2">
+                        {{pendingAuth2}}000
+                    </div>
+                </div>
+                <div class="cardWrapper">
+                    <div class="cardTitle green">
+                        Completed
+                    </div>
+                    <div class="cardValue" id="complete2">
+                        {{complete2}}000
+                    </div>
+                </div>
+                
+            </div>
+            <div class="tat">
+                <span class="tatHeader">
+                    TAT
+                </span>
+                <div class="statusCards">
+                    <div class="cardWrapper">
+                        <div class="cardTitle">
+                            TARGET
+                        </div>
+                        <div class="cardValue">
+                            {{target2}}2
+                        </div>
+                    </div>
+                    <div class="cardWrapper">
+                        <div class="cardTitle">
+                            CURRENT
+                        </div>
+                        <div class="cardValue">
+                            <span id="current2">{{current2}}</span> <span>Min</span>
+                        </div>
+                    </div>
+                    <div class="cardWrapper">
+                        <div class="cardTitle">
+                            AVERAGE
+                        </div>
+                        <div class="cardValue">
+                            <span id="average2">{{average2}}</span> <span>HRs</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="test t3">
+            <span class ="header .green">
+                {{testType3}}testType3
+            </span>
+            <div class="statusCards">
+                <div class="cardWrapper">
+                    <div class="cardTitle green">
+                        Received
+                    </div>
+                    <div class="cardValue" id="received3">
+                        {{received3}}000
+                    </div>
+                </div>
+                <div class="cardWrapper">
+                    <div class="cardTitle red">
+                        In Progress
+                    </div>
+                    <div class="cardValue" id="inProgress3">
+                        {{inProgress3}}000
+                    </div>
+                </div>
+                <div class="cardWrapper">
+                    <div class="cardTitle red">
+                        Pending Authorization
+                    </div>
+                    <div class="cardValue" id="pendingAuth3">
+                        {{pendingAuth3}}000
+                    </div>
+                </div>
+                <div class="cardWrapper">
+                    <div class="cardTitle green">
+                        Completed
+                    </div>
+                    <div class="cardValue" id="complete3">
+                        {{complete3}}000
+                    </div>
+                </div>
+                
+            </div>
+            <div class="tat">
+                <span class="tatHeader">
+                    TAT
+                </span>
+                <div class="statusCards">
+                    <div class="cardWrapper">
+                        <div class="cardTitle">
+                            TARGET
+                        </div>
+                        <div class="cardValue">
+                            {{target3}}3
+                        </div>
+                    </div>
+                    <div class="cardWrapper">
+                        <div class="cardTitle">
+                            CURRENT
+                        </div>
+                        <div class="cardValue">
+                            <span id="current3">{{current3}}</span> <span>Min</span>
+                        </div>
+                    </div>
+                    <div class="cardWrapper">
+                        <div class="cardTitle">
+                            AVERAGE
+                        </div>
+                        <div class="cardValue">
+                            <span id="average3">{{average3}}</span> <span>HRs</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="test t4">
+            <span class ="header .green">
+                {{testType4}}testType4
+            </span>
+            <div class="statusCards">
+                <div class="cardWrapper">
+                    <div class="cardTitle green">
+                        Received
+                    </div>
+                    <div class="cardValue" id="received4">
+                        {{received4}}000
+                    </div>
+                </div>
+                <div class="cardWrapper">
+                    <div class="cardTitle red">
+                        In Progress
+                    </div>
+                    <div class="cardValue" id="inProgress4">
+                        {{inProgress4}}000
+                    </div>
+                </div>
+                <div class="cardWrapper">
+                    <div class="cardTitle red">
+                        Pending Authorization
+                    </div>
+                    <div class="cardValue" id="pendingAuth4">
+                        {{pendingAuth4}}000
+                    </div>
+                </div>
+                <div class="cardWrapper">
+                    <div class="cardTitle green">
+                        Completed
+                    </div>
+                    <div class="cardValue" id="complete4">
+                        {{complete4}}000
+                    </div>
+                </div>
+                
+            </div>
+            <div class="tat">
+                <span class="tatHeader">
+                    TAT
+                </span>
+                <div class="statusCards">
+                    <div class="cardWrapper">
+                        <div class="cardTitle">
+                            TARGET
+                        </div>
+                        <div class="cardValue">
+                            {{target4}}4
+                        </div>
+                    </div>
+                    <div class="cardWrapper">
+                        <div class="cardTitle">
+                            CURRENT
+                        </div>
+                        <div class="cardValue" >
+                            <span id="current4">{{current4}}</span> <span>Min</span>
+                        </div>
+                    </div>
+                    <div class="cardWrapper">
+                        <div class="cardTitle">
+                            AVERAGE
+                        </div>
+                        <div class="cardValue">
+                            <span id="average4">{{average4}}</span> <span>HRs</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+#1
+    <div class="slideShowContainer" id="slide1">
+       
+       
+        <div class="slideShow">
+            <div class="category">
+                Monthly
+            </div>
+
+            <div class="categoryContainer">
+                <div class="categoryResults">
+                    <div class="title">
+                        Registered
+                    </div>
+                    <div class="value" id = "monthlyRegistered">
+                        {{monthlyRegistered}}000
+                    </div>
+                </div>
+                
+                <div class="categoryResults">
+                    <div class="title">
+                    Received
+                    </div>
+                    <div class="value" id="monthlyRecieved">
+                        {{monthlyRecieved}}000
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+
+       
+
+        <div class="slideShow">
+            <div class="category">
+                WEEKLY
+            </div>
+
+            <div class="categoryContainer">
+                <div class="categoryResults">
+                    <div class="title">
+                        Registered
+                    </div>
+                    <div class="value" id="weeklyRegistered">
+                        {{weeklyRegistered}}000
+                    </div>
+                </div>
+                
+                <div class="categoryResults">
+                    <div class="title">
+                        Received
+                    </div>
+                    <div class="value" id="weeklyRecieved">
+                        {{weeklyRecieved}}000
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+
+       
+
+
+    </div> 
+    
+
+
+#2
+    <div class="slideShowContainer" id="slide2">
+       
+       
+        <div class="slideShow">
+            <div class="category">
+                Monthly
+            </div>
+
+            <div class="categoryContainer">
+                <div class="categoryResults">
+                    <div class="title">
+                        In Progress
+                    </div>
+                    <div class="value" id="monthlyProgress">
+                        {{monthlyProgress}}000
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+       
+
+        <div class="slideShow">
+            <div class="category">
+                WEEKLY
+            </div>
+
+            <div class="categoryContainer">
+                
+                <div class="categoryResults">
+                    <div class="title">
+                    In Progress
+                    </div>
+                    <div class="value" id="weeklyProgress">
+                        {{weeklyProgress}}000
+                    </div>
+                </div>  
+            </div>
+        </div>
+    </div>
+
+
+#3
+    <div class="slideShowContainer" id="slide4">
+       
+       
+        <div class="slideShow">
+            <div class="category">
+                Monthly
+            </div>
+
+            <div class="categoryContainer">
+                <div class="categoryResults">
+                    <div class="title">
+                        Completed
+                    </div>
+                    <div class="value" id="monthlyComplete">
+                        {{monthlyComplete}}000
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+       
+
+        <div class="slideShow">
+            <div class="category">
+                WEEKLY
+            </div>
+
+            <div class="categoryContainer">
+                
+                <div class="categoryResults">
+                    <div class="title">
+                        Completed
+                    </div>
+                    <div class="value" id="weeklyComplete">
+                        {{weeklyComplete}}000
+                    </div>
+                </div>  
+            </div>
+        </div>
+    </div>
+
+
+
+#3
+    <div class="slideShowContainer" id="slide3">
+       
+       
+        <div class="slideShow">
+            <div class="category">
+                Monthly
+            </div>
+
+            <div class="categoryContainer">
+                <div class="categoryResults">
+                    <div class="title">
+                        Pending Authorization
+                    </div>
+                    <div class="value" id="monthlyPending">
+                        {{monthlyPending}}000
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+       
+
+        <div class="slideShow">
+            <div class="category">
+                WEEKLY
+            </div>
+
+            <div class="categoryContainer">
+                
+                <div class="categoryResults">
+                    <div class="title">
+                    Pending Authorization
+                    </div>
+                    <div class="value" id ="weeklyPending">
+                        {{weeklyPending}}000
+                    </div>
+                </div>  
+            </div>
+        </div>
+    </div>
+
+
+    #4
+    <div class="slideShowContainer" id="slide5">
+       
+       
+        <div class="slideShow">
+            <div class="category">
+                Monthly
+            </div>
+
+            <div class="categoryContainer">
+                <div class="categoryResults">
+                    <div class="title">
+                        Rejected
+                    </div>
+                    <div class="value" id="monthlyRejected">
+                        {{monthlyRejected}}000
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+       
+
+        <div class="slideShow">
+            <div class="category">
+                WEEKLY
+            </div>
+
+            <div class="categoryContainer">
+                
+                <div class="categoryResults">
+                    <div class="title">
+                        Rejected
+                    </div>
+                    <div class="value" id ="weeklyRejected">
+                        {{weeklyRejected}}000
+                    </div>
+                </div>  
+            </div>
+        </div>
+    </div>
+    <!-- <script src="{{url_for('static',filename='js/clearCache.js')}}"></script> -->
+    <script src="{{url_for('static',filename='js/load.js')}}"></script>
+    <script src="{{url_for('static',filename='js/unload.js')}}"></script>
+    <script src="{{url_for('static',filename='js/dashBoard.js')}}"></script>
+    <script src="{{url_for('static',filename='js/content.js')}}"></script>
+</body>
+</html>
