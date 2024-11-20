@@ -5,7 +5,8 @@ class Weekly_Count(db.Model):
     """"Since first day of the week count"""
     __tablename__ = 'weekly_count'
     
-    id = db.Column(db.Integer, primary_key=True, nullable=False, default=1, index=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True, index=True)
+    test_id = db.Column(db.Integer, index=True, info={'Description':'Changed from one row to deparment count'})
     weekly_count_registered = db.Column(db.Integer, default=0, index=True)
     weekly_count_received = db.Column(db.Integer, default=0, index=True)
     weekly_count_progress = db.Column(db.Integer, default=0, index=True)
