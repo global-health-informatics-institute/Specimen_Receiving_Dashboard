@@ -5,7 +5,8 @@ class Monthly_Count(db.Model):
     """"Since first day of the week Month"""
     __tablename__ = 'monthly_count'
     
-    id = db.Column(db.Integer, primary_key=True, nullable=False, default=1, index=True)
+    id = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True, index=True)
+    test_id = db.Column(db.Integer, index=True, info={'Description':'Changed from one row to test id count'})
     monthly_count_registered = db.Column(db.Integer, default=0, index=True)
     monthly_count_received = db.Column(db.Integer, default=0, index=True)
     monthly_count_progress = db.Column(db.Integer, default=0, index=True)
