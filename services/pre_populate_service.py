@@ -4,7 +4,7 @@ During set up, run the migration script and pre populate dependent attributes as
 from app import create_app
 from sqlalchemy import create_engine, text
 from extensions.extensions import db, iblis_uri,application_config
-from models.mothly_count_model import Monthly_Count
+from models.monthly_count_model import Monthly_Count
 from models.status_definitions_model import Test_Status_Definition
 from sqlalchemy.orm import sessionmaker
 from models.department_model import Department
@@ -24,7 +24,8 @@ iblis_session = iblis_session_maker()
 
 # test types
 test_types = [application_config["test_short_name"]["test_type_1"], application_config["test_short_name"]["test_type_2"], application_config["test_short_name"]["test_type_3"], application_config["test_short_name"]["test_type_4"]]
-
+department_id = application_config["department_id"] #referenced as test_types.test_category_id 
+department = application_config["department"]
 
 
 def populate_status_definitions():
@@ -139,72 +140,67 @@ def populate_test_definitions():
 
 def populate_weekly_count():
     try:
-        """Populate zeros in the test_id entities."""
-        for test_type in test_types:
-            # Fetch id and store it as results
-            result = iblis_session.execute(
-                text("SELECT id FROM test_types WHERE LCASE(short_name) = :test_type"),
-                {"test_type": test_type.lower()}
-            ).fetchone()
-            
-            if result:
-                test_id = result[0]
-                
-                # Check if the test_id entry does not already exist
-                existing_test_id = db.session.query(Weekly_Count).filter(
-                    Weekly_Count.test_id == test_id
-                ).first()
+        """Populate zeros in the department_id entities."""
 
-                if not existing_test_id:
-                    # Create a new entry for Weekly_Count
-                    new_entry = Weekly_Count(test_id=test_id)
-                    db.session.add(new_entry)
-                    db.session.commit()
-                    logger.info(f"Weekly count entry for test_id {test_id} added successfully.")
-                else:
-                    logger.info(f"Weekly count entry for test_id {test_id} already exists.")
+        # varify the id against exists
+        result = iblis_session.execute(
+            text("SELECT test_category_id FROM test_types WHERE test_category_id = :department_id"),
+            {"department_id": department_id}
+        ).fetchone()
+
+        # Check if the department_id entry does not already exist
+        if result:
+            existing_department_id = db.session.query(Weekly_Count).filter(
+                Weekly_Count.department_id == department_id
+            ).first()
+            
+            if not existing_department_id:
+
+                # Create a new entry for Weekly_Count
+                new_entry = Weekly_Count(department_id=department_id)
+                db.session.add(new_entry)
+                db.session.commit()
+                logger.info(f"Weekly count entry for department {department_id} added successfully.")
             else:
-                logger.warning(f"Test type '{test_type}' not found in iBlissDB.")
+                logger.info(f"Weekly count entry for department_id {department_id} already exists.")
+        else:
+            logger.warning(f"Invalid Department id {department_id} for {department}")
     except Exception as e:
         logger.error(f"Error populating weekly count: {e}")
         db.session.rollback()
     finally:
-        # Close the iBliss session
         iblis_session.close()
 
 def populate_monthly_count():
     try:
         """Populate zeros in the test_id entities."""
-        for test_type in test_types:
-            # Fetch id and store it as results
-            result = iblis_session.execute(
-                text("SELECT id FROM test_types WHERE LCASE(short_name) = :test_type"),
-                {"test_type": test_type.lower()}
-            ).fetchone()
-            
-            if result:
-                test_id = result[0]
-                
-                # Check if the test_id entry does not already exist
-                existing_test_id = db.session.query(Monthly_Count).filter(
-                    Monthly_Count.test_id == test_id
-                ).first()
 
-                if not existing_test_id:
-                    # Create a new entry for Weekly_Count
-                    new_entry = Monthly_Count(test_id=test_id)
+        result = iblis_session.execute(
+            text("SELECT test_category_id FROM test_types WHERE test_category_id = :department_id"),
+            {"department_id": department_id}
+        ).fetchone()
+
+        if result:
+            existing_department_id = db.session.query(Monthly_Count).filter(
+                Monthly_Count.department_id == department_id
+            ).first()
+            
+            if not existing_department_id:
+
+
+                if not existing_department_id:
+                    new_entry = Monthly_Count(department_id=department_id)
                     db.session.add(new_entry)
                     db.session.commit()
-                    logger.info(f"monthly count entry for test_id {test_id} added successfully.")
-                else:
-                    logger.info(f"monthly count entry for test_id {test_id} already exists.")
+                    logger.info(f"monthly count entry for department_id {department_id} added successfully.")
             else:
-                logger.warning(f"Test type '{test_type}' not found in iBlissDB.")
+                logger.info(f"monthly count entry for department_id {department_id} already exists.")
+        else:
+            logger.warning(f" invalid department id '{department_id}' not found in iBlissDB.")
     except Exception as e:
         logger.error(f"Error populating monthly count: {e}")
         db.session.rollback()
     finally:
-        # Close the iBliss session
         iblis_session.close()
 
 

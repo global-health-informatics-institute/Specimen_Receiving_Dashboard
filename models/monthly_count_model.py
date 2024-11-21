@@ -6,7 +6,7 @@ class Monthly_Count(db.Model):
     __tablename__ = 'monthly_count'
     
     id = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True, index=True)
-    test_id = db.Column(db.Integer, index=True, info={'Description':'Changed from one row to test id count'})
+    department_id = db.Column(db.Integer, index=True, info={'Description':'Changed from one row to department_id count this means all screens will report the same samary'})
     monthly_count_registered = db.Column(db.Integer, default=0, index=True)
     monthly_count_received = db.Column(db.Integer, default=0, index=True)
     monthly_count_progress = db.Column(db.Integer, default=0, index=True)

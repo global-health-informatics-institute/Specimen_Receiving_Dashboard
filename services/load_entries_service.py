@@ -1,112 +1,194 @@
-from sqlalchemy import func, case
+import logging
+from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import SQLAlchemyError
-from models.config import testType1, testType2, testType3, testType4, interval, time_out
-from models import Test, WeeklySummary, MonthlySummary  # Example models, adjust as needed
-from extensions import iblis_engine, srs_engine  # SQLAlchemy engines
+from app import create_app
+from config.application import application_config
+from extensions.extensions import iblis_uri, db
+from models.monthly_count_model import Monthly_Count
+from models.test_definitions_model import Test_Definition
+from models.tests_model import Test
+from models.weekly_count_model import Weekly_Count
 
-# Helpers
-def get
+# Set up logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+def get_test_type_id(test_type):
+    try:
+        result = db.session.query(Test_Definition).filter(Test_Definition.test_short_name == test_type).first()
+        if result:
+            return result.test_id
+        else:
+            logger.warning(f"No matching short name {test_type}")
+            return None
+    except Exception as e:
+        logger.error(f"Error fetching test type ID: {e}")
+        return None
+
 
 # Define constants
-intvl = interval  # e.g., 1
-department_id = getDepartmentIdHelper()
-test_type_ids = [getTestTypeID(testType1), getTestTypeID(testType2), getTestTypeID(testType3), getTestTypeID(testType4)]
+interval = application_config["interval"]
+timeout = application_config["refresh_rate"]
+department_id = application_config["department_id"]
 
 # Create session factories
-IblisSession = sessionmaker(bind=iblis_engine)
-SrsSession = sessionmaker(bind=srs_engine)
+iblis_engine = create_engine(iblis_uri)
+iblis_session_maker = sessionmaker(bind=iblis_engine)
 
 # Helper functions for updating weekly and monthly summaries
-def _update_summary(session, table, status):
-    """Helper to update weekly or monthly summaries."""
-    column_name = case(
-        [
-            (status == 2, table.weekly_registered),
-            (status == 0, table.weekly_received),
-            (status == 3, table.weekly_progress),
-            (status == 4, table.weekly_pending),
-            (status == 5, table.weekly_complete),
-        ]
+def _update_summary(session, table, status, department_id):
+    """Helper to update weekly or monthly counters."""
+    # Determine the correct column names based on the table
+    if table == Weekly_Count:
+        column_mapping = {
+            2: table.weekly_count_registered,
+            0: table.weekly_count_received,
+            3: table.weekly_count_progress,
+            4: table.weekly_count_pending,
+            5: table.weekly_count_complete,
+        }
+
+    elif table == Monthly_Count:
+        column_mapping = {
+            2: table.monthly_count_registered,
+            0: table.monthly_count_received,
+            3: table.monthly_count_progress,
+            4: table.monthly_count_pending,
+            5: table.monthly_count_complete,
+        }
+    else:
+        logger.error(f"Unsupported table: {table}")
+        return
+
+    # Get the correct column for the given status
+    column_name = column_mapping.get(status)
+    if not column_name:
+        logger.warning(f"Unknown status: {status}")
+        return
+
+    # values being updated
+    logger.info(f"Updating {table.__tablename__}, column {column_name}, for department_id {department_id}")
+
+    # Perform the update
+    result = session.query(table).filter_by(department_id=department_id).update(
+        {column_name: column_name + 1},
+        synchronize_session="fetch"
     )
 
-    session.query(table).filter_by(id=1).update({column_name: column_name + 1})
+    # succeeds or fails
+    if result:
+        logger.info(f"Successfully incremented {column_name} for department_id {department_id}")
+    else:
+        logger.warning(f"No rows updated in {table.__tablename__} for department_id {department_id}")
+
+
 
 def load_entries():
+    _test_type_ids = [
+        get_test_type_id(application_config["test_short_name"]["test_type_1"]),
+        get_test_type_id(application_config["test_short_name"]["test_type_2"]),
+        get_test_type_id(application_config["test_short_name"]["test_type_3"]),
+        get_test_type_id(application_config["test_short_name"]["test_type_4"]),
+    ]
+    _test_type_ids = [t for t in _test_type_ids if t is not None]  # Remove None values
+
+    if not _test_type_ids:
+        logger.error("No valid test type IDs found. Skipping load_entries execution.")
+        return  # Exit early to avoid running the query with invalid parameters
+
+    iblis_session = iblis_session_maker()
     try:
-        # Open database sessions
-        iblis_session = IblisSession()
-        srs_session = SrsSession()
-
-        # Query for the latest tests from iBlissDB
-        tests_query = (
-            iblis_session.query(
-                Test.accession_number.label("accession_id"),
-                Test.test_type_id.label("test_type"),
-                Test.test_status_id.label("test_status"),
-                func.row_number().over(
-                    partition_by=(Test.accession_number, Test.test_type_id),
-                    order_by=Test.time_created.desc()
-                ).label("rn")
+        # Use a raw SQL query to fetch the latest tests
+        tests_query = text("""
+            WITH RankedTests AS (
+                SELECT 
+                    specimens.accession_number AS accession_id,
+                    tests.test_type_id AS test_type,
+                    tests.test_status_id AS test_status,
+                    ROW_NUMBER() OVER (
+                        PARTITION BY specimens.accession_number, tests.test_type_id
+                        ORDER BY tests.time_created DESC
+                    ) AS rn
+                FROM 
+                    specimens
+                INNER JOIN 
+                    tests ON specimens.id = tests.specimen_id
+                WHERE
+                    specimens.time_accepted IS NOT NULL
+                    AND specimens.specimen_type_id = :department_id
+                    AND tests.test_status_id NOT IN (1, 6, 7, 8)
+                    AND tests.time_created >= CURDATE() + INTERVAL :timeout HOUR
+                    AND tests.time_created <= CURDATE() + INTERVAL :interval DAY + INTERVAL :timeout HOUR
+                    AND tests.test_type_id IN :test_type_ids
             )
-            .join(Specimen, Test.specimen_id == Specimen.id)
-            .filter(
-                Specimen.time_accepted.isnot(None),
-                Specimen.specimen_type_id == department_id,
-                Test.test_status_id.notin_([1, 6, 7, 8]),
-                Test.time_created >= func.current_date() + func.interval(f"{time_out} HOUR"),
-                Test.time_created <= func.current_date() + func.interval(f"{intvl} DAY") + func.interval(f"{time_out} HOUR"),
-                Test.test_type_id.in_(test_type_ids),
-            )
-            .subquery()
-        )
+            SELECT
+                accession_id,
+                test_type,
+                test_status
+            FROM
+                RankedTests
+            WHERE
+                rn = 1;
+        """)
 
-        latest_tests = (
-            iblis_session.query(tests_query.c.accession_id, tests_query.c.test_type, tests_query.c.test_status)
-            .filter(tests_query.c.rn == 1)
-            .all()
-        )
+        # Execute the query and fetch results
+        latest_tests = iblis_session.execute(
+            tests_query,
+            {
+                "department_id": department_id,
+                "timeout": timeout,
+                "interval": interval,
+                "test_type_ids": tuple(_test_type_ids),  # Ensure it's a tuple for SQL compatibility
+            }
+        ).fetchall()
 
         # Process each result and update srsDB
         for test in latest_tests:
-            accession_id, test_type, test_status = test.accession_id, test.test_type, test.test_status
+            accession_id, test_type, test_status = test[0], test[1], test[2]  # Access fields by index
+            test_status_str = str(test_status)  # Ensure test_status is a string for comparison
 
             # Check if the record already exists in srsDB
             existing_test = (
-                srs_session.query(Test)
-                .filter(and_(Test.accession_id == accession_id, Test.test_type == test_type))
+                db.session.query(Test)
+                .filter(Test.test_accession_id == accession_id, Test.test_test_type == test_type)
                 .first()
             )
 
             if not existing_test:
                 # Insert new record if not found
                 new_test = Test(
-                    accession_id=accession_id,
-                    test_type=test_type,
-                    test_status=test_status,
+                    test_accession_id=accession_id,
+                    test_test_type=test_type,
+                    test_test_status=test_status_str,
                 )
-                srs_session.add(new_test)
-                _update_summary(srs_session, WeeklySummary, test_status)
-                _update_summary(srs_session, MonthlySummary, test_status)
-                print(f"Condition 1: Inserted new record for accession_id: {accession_id}, test_type: {test_type}, test_status: {test_status}")
+                db.session.add(new_test)
+                _update_summary(db.session, Weekly_Count, test_status, department_id)
+                _update_summary(db.session, Monthly_Count, test_status, department_id)
+                logger.info(f"Condition 1: Inserted new record for accession_id: {accession_id}, test_type: {test_type}, test_status: {test_status}")
             else:
-                existing_status = existing_test.test_status
-                # Skip if existing status = 0 and new status is 1 or 2
-                if existing_status == 0 and test_status in [1, 2]:
+                existing_status = int(existing_test.test_test_status)
+                # Skip if the status hasn't changed
+                if existing_status == test_status:
+                    logger.info(f"Skipping update for accession_id: {accession_id}, test_type: {test_type}, test_status unchanged: {test_status}")
                     continue
-                # Update the record if statuses are different
-                elif existing_status != test_status:
-                    existing_test.test_status = test_status
-                    _update_summary(srs_session, WeeklySummary, test_status)
-                    _update_summary(srs_session, MonthlySummary, test_status)
-                    print(f"Updated record for accession_id: {accession_id}, test_type: {test_type}, new test_status: {test_status}, old test_status: {existing_status}")
+
+                # Update logic if statuses are different
+                existing_test.test_test_status = test_status_str
+                _update_summary(db.session, Weekly_Count, test_status, department_id)
+                _update_summary(db.session, Monthly_Count, test_status, department_id)
 
         # Commit the changes to srsDB
-        srs_session.commit()
+        db.session.commit()
 
     except SQLAlchemyError as e:
-        print(f"Error: {e}")
+        logger.error(f"Error: {e}")
     finally:
-        # Close database sessions
         iblis_session.close()
-        srs_session.close()
+
+if __name__ == "__main__":
+    app = create_app()
+
+    # Push the application context
+    with app.app_context():
+        load_entries()
