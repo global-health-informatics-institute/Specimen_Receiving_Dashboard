@@ -1,5 +1,6 @@
 from flask import render_template, Blueprint
 
+from services.load_entries_service import load_entries
 from services.pre_populate_service import populate_department_definitions
 from services.serve_static_service import serve_static
 from models.status_definitions_model import Test_Status_Definition
@@ -20,3 +21,18 @@ def render_dashboard():
 @dashboard_bp.route('/pre_populate', methods=['GET'])
 def pre_populate_route():
     populate_department_definitions()
+
+
+# @dashboard_bp.route('/dashboard', methods=['GET'])
+# def render_dashboard():
+#     return render_template(
+#         'children/child.dashboard.html',
+#     )
+
+
+@dashboard_bp.route('/load_endtries', methods=['GET'])
+def render_entries():
+    load_entries()
+    return render_template(
+        'children/child.dashboard.html',
+    )
