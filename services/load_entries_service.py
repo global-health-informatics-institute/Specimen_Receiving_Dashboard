@@ -139,16 +139,16 @@ def load_entries():
                 "department_id": department_id,
                 "timeout": timeout,
                 "interval": interval,
-                "test_type_ids": tuple(_test_type_ids),  # Ensure it's a tuple for SQL compatibility
+                "test_type_ids": tuple(_test_type_ids),  # tuple for SQL compatibility
             }
         ).fetchall()
 
         # Process each result and update srsDB
         for test in latest_tests:
-            accession_id, test_type, test_status = test[0], test[1], test[2]  # Access fields by index
-            test_status_str = str(test_status)  # Ensure test_status is a string for comparison
+            accession_id, test_type, test_status = test[0], test[1], test[2]
+            test_status_str = str(test_status)
 
-            # Check if the record already exists in srsDB
+            # if already exists in srsDB
             existing_test = (
                 db.session.query(Test)
                 .filter(Test.test_accession_id == accession_id, Test.test_test_type == test_type)
