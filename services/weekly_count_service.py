@@ -2,7 +2,7 @@ import logging
 from app import create_app
 from extensions.extensions import db
 from config.application import application_config
-from models.monthly_count_model import Monthly_Count
+from models.weekly_count_model import Weekly_Count
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -13,24 +13,24 @@ department_id = application_config["department_id"]
 # Helper function
 def _counter_value(action, column=None):
     """
-    Handles fetching or updating monthly counter values.
+    Handles fetching or updating weekly counter values.
     Args:
         action (str): "fetch" to get counter values, "increment" to increase, or "decrement" to decrease a column.
         column (int, optional): The column identifier for updating. Not required for fetching all.
     Returns:
         dict or int: Returns fetched values as a dictionary or 0 in case of an error.
     """
-    table = Monthly_Count
+    table = Weekly_Count
     column_mapping = {
-        2: table.monthly_count_registered,
-        0: table.monthly_count_received,
-        3: table.monthly_count_progress,
-        4: table.monthly_count_pending,
-        5: table.monthly_count_complete,
-        6: table.monthly_count_rejected,
-        7: table.monthly_count_rejected,
-        8: table.monthly_count_rejected,
-        9: table.monthly_count_rejected,
+        2: table.weekly_count_registered,
+        0: table.weekly_count_received,
+        3: table.weekly_count_progress,
+        4: table.weekly_count_pending,
+        5: table.weekly_count_complete,
+        6: table.weekly_count_rejected,
+        7: table.weekly_count_rejected,
+        8: table.weekly_count_rejected,
+        9: table.weekly_count_rejected,
     }
     column_name = column_mapping.get(column)
 
@@ -42,12 +42,12 @@ def _counter_value(action, column=None):
             ).first()
             if count:
                 return {
-                    "registered": count.monthly_count_registered,
-                    "received": count.monthly_count_received,
-                    "in_progress": count.monthly_count_progress,
-                    "pending_auth": count.monthly_count_pending,
-                    "complete": count.monthly_count_complete,
-                    "rejected": count.monthly_count_rejected,
+                    "registered": count.weekly_count_registered,
+                    "received": count.weekly_count_received,
+                    "in_progress": count.weekly_count_progress,
+                    "pending_auth": count.weekly_count_pending,
+                    "complete": count.weekly_count_complete,
+                    "rejected": count.weekly_count_rejected,
                 }
             else:
                 logger.warning(f"No counts found for department_id {department_id}.")
