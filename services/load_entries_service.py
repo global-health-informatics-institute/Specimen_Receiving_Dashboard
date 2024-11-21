@@ -189,6 +189,5 @@ def load_entries():
 if __name__ == "__main__":
     app = create_app()
 
-    # Push the application context
     with app.app_context():
         load_entries()

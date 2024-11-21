@@ -18,3 +18,5 @@ migrations
 migrations*/
 migrations/*
 migrations/
+config/application.py
+config/*
