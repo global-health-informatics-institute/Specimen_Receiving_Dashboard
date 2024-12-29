@@ -1,8 +1,8 @@
 from flask import render_template, Blueprint
 
 from services.load_entries_service import load_entries
-from services.pre_populate_service import populate_department_definitions
-from services.serve_static_service import serve_static
+from scripts.pre_populate_script import populate_department_definitions
+from scripts.serve_static_script import serve_static
 from models.status_definitions_model import Test_Status_Definition
 from models.department_model import Department
 dashboard_bp = Blueprint('dashboard', __name__)

@@ -1,9 +1,14 @@
+import logging
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from config.application import application_config
 
 dt = datetime
 db = SQLAlchemy()
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 
 dashboard_uri = f'mysql+pymysql://{application_config["dashboard"]["user"]}:{application_config["dashboard"]["password"]}@{application_config["dashboard"]["host"]}/{application_config["dashboard"]["database"]}'
 

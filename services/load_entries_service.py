@@ -28,8 +28,8 @@ def get_test_type_id(test_type):
 
 
 # Define constants
-interval = application_config["interval"]
-timeout = application_config["refresh_rate"]
+days = application_config["days"] # can be numbers like 1
+hours = application_config["hours"]# can be numbers like 7
 department_id = application_config["department_id"]
 
 # Create session factories
@@ -83,6 +83,7 @@ def _update_summary(session, table, status, department_id):
         logger.warning(f"No rows updated in {table.__tablename__} for department_id {department_id}")
 
 
+from datetime import datetime, timedelta
 
 def load_entries():
     _test_type_ids = [
@@ -99,8 +100,20 @@ def load_entries():
 
     iblis_session = iblis_session_maker()
     try:
-        # Use a raw SQL query to fetch the latest tests
-        tests_query = text("""
+        # Calculate start time
+        start_day = datetime.utcnow().date() + timedelta(days=days - 1)
+        start_time = datetime.combine(start_day, datetime.min.time()) + timedelta(hours=hours)
+
+        # End time is optional, but let's include it for completeness
+        end_time = datetime.utcnow()
+
+        logger.info(f"Fetching tests starting from {start_time}")
+
+        # Dynamically create placeholders for the `IN` clause
+        placeholders = ", ".join([":test_type_id_" + str(i) for i in range(len(_test_type_ids))])
+        test_type_ids_mapping = {f"test_type_id_{i}": _test_type_ids[i] for i in range(len(_test_type_ids))}
+
+        tests_query = text(f"""
             WITH RankedTests AS (
                 SELECT 
                     specimens.accession_number AS accession_id,
@@ -118,9 +131,8 @@ def load_entries():
                     specimens.time_accepted IS NOT NULL
                     AND specimens.specimen_type_id = :department_id
                     AND tests.test_status_id NOT IN (1, 6, 7, 8)
-                    AND tests.time_created >= CURDATE() + INTERVAL :timeout HOUR
-                    AND tests.time_created <= CURDATE() + INTERVAL :interval DAY + INTERVAL :timeout HOUR
-                    AND tests.test_type_id IN :test_type_ids
+                    AND tests.time_created >= :start_time
+                    AND tests.test_type_id IN ({placeholders})
             )
             SELECT
                 accession_id,
@@ -132,23 +144,24 @@ def load_entries():
                 rn = 1;
         """)
 
+        # Combine all parameters
+        query_params = {
+            "department_id": department_id,
+            "start_time": start_time,
+        }
+        query_params.update(test_type_ids_mapping)  # Add dynamically mapped `test_type_ids`
+
         # Execute the query and fetch results
-        latest_tests = iblis_session.execute(
-            tests_query,
-            {
-                "department_id": department_id,
-                "timeout": timeout,
-                "interval": interval,
-                "test_type_ids": tuple(_test_type_ids),  # tuple for SQL compatibility
-            }
-        ).fetchall()
+        latest_tests = iblis_session.execute(tests_query, query_params).fetchall()
+
+        logger.info(f"Retrieved {len(latest_tests)} tests for processing.")
 
         # Process each result and update srsDB
         for test in latest_tests:
             accession_id, test_type, test_status = test[0], test[1], test[2]
             test_status_str = str(test_status)
 
-            # if already exists in srsDB
+            # Check for existing test in srsDB
             existing_test = (
                 db.session.query(Test)
                 .filter(Test.test_accession_id == accession_id, Test.test_test_type == test_type)
@@ -165,26 +178,32 @@ def load_entries():
                 db.session.add(new_test)
                 _update_summary(db.session, Weekly_Count, test_status, department_id)
                 _update_summary(db.session, Monthly_Count, test_status, department_id)
-                logger.info(f"Condition 1: Inserted new record for accession_id: {accession_id}, test_type: {test_type}, test_status: {test_status}")
+                logger.info(f"Inserted new record: accession_id={accession_id}, test_type={test_type}, test_status={test_status}")
             else:
                 existing_status = int(existing_test.test_test_status)
                 # Skip if the status hasn't changed
                 if existing_status == test_status:
-                    logger.info(f"Skipping update for accession_id: {accession_id}, test_type: {test_type}, test_status unchanged: {test_status}")
+                    logger.info(f"Skipping update for unchanged test: accession_id={accession_id}, test_type={test_type}")
                     continue
 
                 # Update logic if statuses are different
                 existing_test.test_test_status = test_status_str
                 _update_summary(db.session, Weekly_Count, test_status, department_id)
                 _update_summary(db.session, Monthly_Count, test_status, department_id)
+                logger.info(f"Updated existing record: accession_id={accession_id}, test_type={test_type}, test_status={test_status}")
 
         # Commit the changes to srsDB
         db.session.commit()
+        logger.info("Successfully committed changes to the database.")
 
     except SQLAlchemyError as e:
-        logger.error(f"Error: {e}")
+        logger.error(f"SQLAlchemy error: {e}")
+    except Exception as ex:
+        logger.error(f"Unexpected error: {ex}")
     finally:
         iblis_session.close()
+        logger.info("Database session closed.")
+
 
 if __name__ == "__main__":
     app = create_app()
