@@ -1,9 +1,10 @@
 """
 During set up, run the migration script and pre populate dependent attributes as python -m services.pre_populate_service
 """
+import yaml
 from app import create_app
 from sqlalchemy import create_engine, text
-from extensions.extensions import db, iblis_uri,application_config
+from extensions.extensions import db, iblis_uri
 from models.monthly_count_model import Monthly_Count
 from models.status_definitions_model import Test_Status_Definition
 from sqlalchemy.orm import sessionmaker
@@ -22,7 +23,10 @@ iblis_engine = create_engine(iblis_uri)
 iblis_session_maker = sessionmaker(bind=iblis_engine)    
 iblis_session = iblis_session_maker()
 
-# test types
+with open("config/application.config.yaml", "r") as file:
+    application_config = yaml.safe_load(file)
+
+# Set up the test types
 test_types = [application_config["test_short_name"]["test_type_1"], application_config["test_short_name"]["test_type_2"], application_config["test_short_name"]["test_type_3"], application_config["test_short_name"]["test_type_4"]]
 department_id = application_config["department_id"] #referenced as test_types.test_category_id 
 department = application_config["department"]

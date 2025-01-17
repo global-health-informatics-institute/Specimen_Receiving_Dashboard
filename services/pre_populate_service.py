@@ -3,7 +3,7 @@ During set up, run the migration script and pre populate dependent attributes as
 """
 from app import create_app
 from sqlalchemy import create_engine, text
-from extensions.extensions import db, iblis_uri,application_config
+from extensions.extensions import db, iblis_uri, application_config
 from models.monthly_count_model import Monthly_Count
 from models.status_definitions_model import Test_Status_Definition
 from sqlalchemy.orm import sessionmaker

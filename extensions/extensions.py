@@ -1,7 +1,13 @@
 import logging
+import yaml
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-from config.application import application_config
+
+with open("config/application.config.yaml", "r") as file:
+    config = yaml.safe_load(file)
+
+
+application_config = config 
 
 dt = datetime
 db = SQLAlchemy()

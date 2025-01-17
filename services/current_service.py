@@ -1,9 +1,7 @@
 from sqlalchemy import text
-from config.application import application_config
-from extensions.extensions import db, logger
+from extensions.extensions import db, logger, application_config
 from models.test_definitions_model import Test_Definition
 import app
-
 
 
 days = application_config["days"]

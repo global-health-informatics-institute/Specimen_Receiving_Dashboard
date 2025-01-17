@@ -1,6 +1,5 @@
 import app
-from config.application import application_config
-from extensions.extensions import db, logger
+from extensions.extensions import db, logger, application_config
 from models.test_definitions_model import Test_Definition
 
 # get all test ids

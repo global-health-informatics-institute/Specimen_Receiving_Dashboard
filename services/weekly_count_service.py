@@ -1,7 +1,6 @@
 import logging
 from app import create_app
-from extensions.extensions import db
-from config.application import application_config
+from extensions.extensions import db, application_config
 from models.weekly_count_model import Weekly_Count
 
 # Set up logging

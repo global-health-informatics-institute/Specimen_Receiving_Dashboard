@@ -1,8 +1,9 @@
 import logging
+import yaml
 from app import create_app
-from extensions.extensions import db
-from config.application import application_config
+from extensions.extensions import db, application_config
 from models.monthly_count_model import Monthly_Count
+
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)

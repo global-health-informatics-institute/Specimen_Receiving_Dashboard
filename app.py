@@ -20,17 +20,5 @@ def create_app():
 
     # Register each Blueprint with its respective prefix
     app.register_blueprint(dashboard_bp)
-    # app.register_blueprint(fixed_bp,)
-    # app.register_blueprint(index_bp,)
-    # app.register_blueprint(office_bp,)
-    # app.register_blueprint(office_management_bp,)
-    # app.register_blueprint(order_management_bp,)
-    # app.register_blueprint(order_bp,)
-    # app.register_blueprint(pos_bp,)
-    # app.register_blueprint(side_bp,)
-    # app.register_blueprint(stock_bp,)
-    # app.register_blueprint(login_bp,)
-    # app.register_blueprint(warehouse_bp,)
-    # app.register_blueprint(settings_bp,)
 
     return app

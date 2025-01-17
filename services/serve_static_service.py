@@ -1,4 +1,5 @@
-from config.application import application_config
+from extensions.extensions import application_config
+
 
 def serve_static():
     static_data = {

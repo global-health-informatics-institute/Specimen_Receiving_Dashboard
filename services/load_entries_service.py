@@ -3,16 +3,17 @@ from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import SQLAlchemyError
 from app import create_app
-from config.application import application_config
-from extensions.extensions import iblis_uri, db
+from extensions.extensions import iblis_uri, db, application_config
 from models.monthly_count_model import Monthly_Count
 from models.test_definitions_model import Test_Definition
 from models.tests_model import Test
 from models.weekly_count_model import Weekly_Count
 
+
 # Set up logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
 
 def get_test_type_id(test_type):
     try:

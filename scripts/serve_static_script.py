@@ -1,4 +1,9 @@
-from config.application import application_config
+import yaml
+"""
+Return screen size css if using_orange_pi is False
+"""
+with open("config/application.config.yaml", "r") as file:
+    application_config = yaml.safe_load(file)
 
 def serve_static():
     static_data = {

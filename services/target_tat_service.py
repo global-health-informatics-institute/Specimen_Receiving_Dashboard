@@ -1,6 +1,5 @@
 import app
-from extensions.extensions import db, logger
-from config.application import application_config
+from extensions.extensions import db, logger, application_config
 from models.test_definitions_model import Test_Definition
 
 def all_target_tat(key):

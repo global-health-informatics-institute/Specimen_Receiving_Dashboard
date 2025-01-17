@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta
 from app import create_app
-from extensions.extensions import db, logger
-from config.application import application_config
+from extensions.extensions import db, logger, application_config
 from models.test_definitions_model import Test_Definition
 from models.tests_model import Test
 
@@ -9,6 +8,8 @@ from models.tests_model import Test
 # Application configurations
 days = application_config["days"]
 hours = application_config["hours"]
+
+start_time = datetime.now() - timedelta(days=days, hours=hours)
 
 def _get_test_type_id(test_type):
     """
