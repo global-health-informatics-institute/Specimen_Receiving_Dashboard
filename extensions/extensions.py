@@ -1,10 +1,22 @@
+import mysql.connector
 import logging
 import yaml
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
-with open("config/application.config.yaml", "r") as file:
+with open("config/application.config.yml", "r") as file:
     config = yaml.safe_load(file)
+
+
+with open('data/departments.yml', 'r') as file:
+    department_data = yaml.safe_load(file)
+
+
+with open('data/test_types.yml', 'r') as file:
+    test_type_data = yaml.safe_load(file)
+
+department_data = department_data
+test_type_data = test_type_data
 
 
 application_config = config 
@@ -15,7 +27,19 @@ db = SQLAlchemy()
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+application_config = config['application_config']
+dashboard_uri = f'mariadb+pymysql://{application_config["dashboard"]["user"]}:{application_config["dashboard"]["password"]}@{application_config["dashboard"]["host"]}/{application_config["dashboard"]["database"]}'
 
-dashboard_uri = f'mysql+pymysql://{application_config["dashboard"]["user"]}:{application_config["dashboard"]["password"]}@{application_config["dashboard"]["host"]}/{application_config["dashboard"]["database"]}'
+iblis_uri = f'mariadb+pymysql://{application_config["iblis"]["user"]}:{application_config["iblis"]["password"]}@{application_config["iblis"]["host"]}:{application_config["iblis"]["port"]}/{application_config["iblis"]["database"]}'
 
-iblis_uri = f'mysql+pymysql://{application_config["iblis"]["user"]}:{application_config["iblis"]["password"]}@{application_config["iblis"]["host"]}:{application_config["iblis"]["port"]}/{application_config["iblis"]["database"]}'
+def iblis_db():
+    """Create a database connection using the configuration."""
+    db_config = config['application_config']['iblis']
+    return mysql.connector.connect(
+        host=db_config['host'],
+        port=db_config['port'],
+        user=db_config['user'],
+        password=db_config['password'],
+        database=db_config['database'],
+        auth_plugin=db_config.get('auth_plugin', 'mysql_native_password')
+    )

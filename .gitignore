@@ -22,3 +22,5 @@ config/application.py
 config/*
 todo
 data
+functions
+playground
