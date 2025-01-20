@@ -10,6 +10,7 @@ class Test_Definition(db.Model):
     test_name = db.Column(db.String(100), nullable=True, index=True, info={"description":"Test full name. Prothrombin Time"})
     test_short_name = db.Column(db.String(100), nullable=True, index=True, info={"description":"Test short name as abbreviated. PT"})
     target_tat = db.Column(db.String(20), nullable = False, index = True, info={"description":"Predefined Target TATs. 2hrs"})
+    test_departmet_id = db.Column(db.String(100), Nullable=True, index=True, info={"Future implementations which reference the department a test is conducted"})
     test_definition_status = db.Column(db.Integer, nullable = False, index=True, default=1)
     created_at = db.Column(db.TIMESTAMP, nullable=False, default=dt.now, index=True)
     updated_at = db.Column(db.TIMESTAMP, nullable=False, default=dt.now, onupdate=dt.now, index=True)
