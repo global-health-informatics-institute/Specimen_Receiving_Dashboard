@@ -1,130 +1,108 @@
 import logging
 from app import create_app
-from extensions.extensions import db, department_data, logger
+from extensions.extensions import db, application_config, logger
 from models.weekly_count_model import Weekly_Count
 
+# Set up department ID and column mappings
+department_id = application_config["department_id"]
 
-department_id = department_data["department_id"]
+COLUMN_MAPPING = {
+    2: "weekly_count_registered",
+    0: "weekly_count_received",
+    3: "weekly_count_progress",
+    4: "weekly_count_pending",
+    5: "weekly_count_complete",
+    6: "weekly_count_rejected",
+    7: "weekly_count_rejected",
+    8: "weekly_count_rejected",
+    9: "weekly_count_rejected",
+}
 
-# Helper function
+
 def _counter_value(action, column=None):
     """
     Handles fetching or updating weekly counter values.
     Args:
-        action (str): "fetch" to get counter values, "increment" to increase, or "decrement" to decrease a column.
-        column (int, optional): The column identifier for updating. Not required for fetching all.
+        action (str): "fetch", "increment", or "decrement".
+        column (int, optional): Column identifier for updating. Not required for fetching all.
     Returns:
-        dict or int: Returns fetched values as a dictionary or 0 in case of an error.
+        dict or None: Counter values as a dictionary for "fetch", None for update actions.
     """
     table = Weekly_Count
-    column_mapping = {
-        2: table.weekly_count_registered,
-        0: table.weekly_count_received,
-        3: table.weekly_count_progress,
-        4: table.weekly_count_pending,
-        5: table.weekly_count_complete,
-        6: table.weekly_count_rejected,
-        7: table.weekly_count_rejected,
-        8: table.weekly_count_rejected,
-        9: table.weekly_count_rejected,
-    }
-    column_name = column_mapping.get(column)
+    column_name = COLUMN_MAPPING.get(column)
 
     try:
         if action == "fetch":
-            # Fetch all counter values for the department
-            count = db.session.query(table).filter(
-                table.department_id == department_id
-            ).first()
+            count = db.session.query(table).filter_by(department_id=department_id).first()
             if count:
-                return {
-                    "registered": count.weekly_count_registered,
-                    "received": count.weekly_count_received,
-                    "in_progress": count.weekly_count_progress,
-                    "pending_auth": count.weekly_count_pending,
-                    "complete": count.weekly_count_complete,
-                    "rejected": count.weekly_count_rejected,
-                }
-            else:
-                logger.warning(f"No counts found for department_id {department_id}.")
-                return {}
+                return {col: getattr(count, col) for col in COLUMN_MAPPING.values()}
+            logger.warning(f"No counts found for department_id {department_id}.")
+            return {}
 
-        elif action in ["increment", "decrement"] and column_name:
-            # Determine adjustment value based on action
+        if action in ["increment", "decrement"] and column_name:
             adjustment = 1 if action == "increment" else -1
-            
-            # If decrementing, ensure the value doesn't go below zero
-            if action == "decrement":
-                current_value = db.session.query(column_name).filter_by(department_id=department_id).scalar()
-                if current_value is not None and current_value <= 0:
-                    logger.warning(f"Cannot decrement {column_name}. Value already at 0 for department_id {department_id}.")
-                    return
+            current_value = getattr(
+                db.session.query(table).filter_by(department_id=department_id).first(),
+                column_name,
+                0
+            )
+            if current_value is None or current_value + adjustment < 0:
+                logger.warning(f"Cannot {action} {column_name} below 0 for department_id {department_id}.")
+                return
 
-            # Update the specified column value
             result = db.session.query(table).filter_by(department_id=department_id).update(
-                {column_name: column_name + adjustment},
-                synchronize_session="fetch"
+                {column_name: table.__table__.c[column_name] + adjustment},
+                synchronize_session=False
             )
             db.session.commit()
-
             if result:
-                logger.info(f"Successfully {action}ed {column_name} for department_id {department_id}")
+                logger.info(f"{action.capitalize()}ed {column_name} for department_id {department_id}.")
             else:
-                logger.warning(f"No rows updated in {table.__tablename__} for department_id {department_id}")
+                logger.warning(f"No rows updated for department_id {department_id}.")
         else:
             logger.error("Invalid action or column specified.")
     except Exception as e:
         db.session.rollback()
         logger.error(f"Error during {action}: {e}")
-        return 0
 
-# fetch
+
+def update_counter(action, column_id):
+    """Update a specific counter."""
+    _counter_value(action, column_id)
+
+
 def get_counter_values():
+    """Fetch all counters for the department."""
     return _counter_value("fetch")
 
 
-# increment
-def increment_registered():
-    _counter_value("increment", 2)
-
-def increment_received():
-    _counter_value("increment", 0)
-
-def increment_in_progress():
-    _counter_value("increment", 3)
-
-def increment_pending_auth():
-    _counter_value("increment", 4)
-
-def increment_complete():
-    _counter_value("increment", 5)
-
-def increment_rejected():
-    _counter_value("increment", 9)
+def log_specific_counter(column_id):
+    """Log a specific counter value."""
+    column_name = COLUMN_MAPPING.get(column_id)
+    if column_name:
+        values = get_counter_values()
+        if values:
+            logger.info(f"{column_name}: {values.get(column_name)}")
+    else:
+        logger.error(f"Invalid column_id: {column_id}")
 
 
-# decrement
-def decrement_registered():
-    _counter_value("decrement", 2)
+# Increment/Decrement helpers
+def increment(column_id):
+    update_counter("increment", column_id)
 
-def decrement_received():
-    _counter_value("decrement", 0)
 
-def decrement_in_progress():
-    _counter_value("decrement", 3)
-
-def decrement_pending_auth():
-    _counter_value("decrement", 4)
-
-def decrement_complete():
-    _counter_value("decrement", 5)
-
-def decrement_rejected():
-    _counter_value("decrement", 9)
+def decrement(column_id):
+    update_counter("decrement", column_id)
 
 
 if __name__ == "__main__":
     app = create_app()
 
     with app.app_context():
-        ""
+        # Example usage
+        logger.info(get_counter_values())  # Log all values
+        increment(2)  # Increment registered
+        decrement(0)  # Increment received
+        log_specific_counter(0)  # Log weekly_count_received
+        logger.info(get_counter_values())  # Log updated values
