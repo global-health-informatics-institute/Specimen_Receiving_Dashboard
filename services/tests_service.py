@@ -37,7 +37,7 @@ def all_test_type_ids(key):
 app = app.create_app()
 if __name__ == "__main__":
     with app.app_context():
-        print(all_test_type_ids("1"))
-        print(all_test_type_ids("2"))
-        print(all_test_type_ids("3"))
-        print(all_test_type_ids("4"))
+        logger.info(all_test_type_ids("1"))
+        logger.info(all_test_type_ids("2"))
+        logger.info(all_test_type_ids("3"))
+        logger.info(all_test_type_ids("4"))
