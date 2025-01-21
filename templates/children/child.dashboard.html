@@ -89,3 +89,10 @@
     </div>
 
 {% endblock %}
+
+{% block dashboard_scripts %}
+    <script src="{{ url_for('static', filename=static_data.JS_BASE_URL ~ 'load.js') }}"></script>
+    <script src="{{ url_for('static', filename=static_data.JS_BASE_URL ~ 'unload.js') }}"></script>
+    <script src="{{ url_for('static', filename=static_data.JS_BASE_URL ~ 'dashBoard.js') }}"></script>
+    <script src="{{ url_for('static', filename=static_data.JS_BASE_URL ~ 'content.js') }}"></script>
+{% endblock %}

@@ -8,7 +8,7 @@ def serve_static():
         JS_BASE_URL = '/js/pi/'
         CSS_FILE = 'css/orange_pi.css'
     else:
-        JS_BASE_URL = '/js/acer'
+        JS_BASE_URL = '/js/acer/'
         CSS_FILE = 'css/screen.css'
     department_name = application_config["department"]
     return {
