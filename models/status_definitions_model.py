@@ -3,7 +3,7 @@ from extensions.extensions import db, dt
 
 class Test_Status_Definition(db.Model):
     """an extraction for development easy understanding"""
-    """Data is a logical connection form 'specimen_statuses', 'test_statuses'"""
+    """This data is a logical connection form 'specimen_statuses', 'test_statuses'"""
     __tablename__ = 'test_status_definitions'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)

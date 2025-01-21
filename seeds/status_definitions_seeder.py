@@ -1,4 +1,4 @@
-from extensions.extensions import db
+from extensions.extensions import db, logger
 from models.status_definitions_model import Test_Status_Definition
 
 # Define the data to be seeded
@@ -15,11 +15,14 @@ def seed_test_status_definitions():
     Seed the Test_Status_Definition table with predefined status data.
     """
     try:
+        seed_count = 0
         for status in test_status_definition_map:
             # Unpack the tuple values into variables
             status_id, status_meaning, test_status_id, test_status_meaning, specimen_status_id, specimen_status_meaning = status
 
-            # Create a new Test_Status_Definition record
+            if(Test_Status_Definition.query.filter_by(status_id=status_id).first()):
+                logger.info(f"Test status definition '{status_id}' already exists. Skipping.")
+                continue
             new_test_status_definition = Test_Status_Definition(
                 status_id=status_id,
                 status_meaning=status_meaning,
@@ -28,15 +31,15 @@ def seed_test_status_definitions():
                 specimen_status_id=specimen_status_id,
                 specimen_status_meaning=specimen_status_meaning
             )
-
+            seed_count+=1
             db.session.add(new_test_status_definition)
 
 
         db.session.commit()
-        return (f"Seeded {len(test_status_definition_map)} test status definitions.")
+        logger.info(f"Seeded {(seed_count)} test status definitions.")
     except Exception as e:
         db.session.rollback()
-        return (f"Error occurred while seeding test status definitions: {e}")
+        logger.error(f"Error occurred while seeding test status definitions: {e}")
 
 def run_test_status_definitions_seeder():
      seed_test_status_definitions()

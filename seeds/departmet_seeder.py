@@ -1,5 +1,4 @@
-import yaml
-from extensions.extensions import db, department_data
+from extensions.extensions import db, department_data, logger
 from models.department_model import Department
 
 
@@ -20,7 +19,7 @@ def seed_departments(department_data):
         for department in department_data:
             existing_department = Department.query.filter_by(department_id=department['id']).first()
             if existing_department:
-                print(f"Department '{department['id']}' already exists. Skipping.")
+                logger.warning(f"Department '{department['id']}' already exists. Skipping.")
                 continue
 
             # Add new department
@@ -31,10 +30,10 @@ def seed_departments(department_data):
             db.session.add(new_department)
 
         db.session.commit()
-        print(f"Seeded {len(department_data)} departments successfully.")
+        logger.info(f"Seeded {len(department_data)} departments successfully.")
     except Exception as e:
         db.session.rollback()
-        print(f"Error occurred while seeding departments: {e}")
+        logger.error(f"Error occurred while seeding departments: {e}")
 
 
 def run_department_seeder():

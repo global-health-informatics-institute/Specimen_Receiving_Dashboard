@@ -43,7 +43,7 @@ def seed_test_types():
                 test_name=test_type['id'],
                 test_short_name=test_type['name'],
                 target_tat=test_type['tat'],
-                test_department=test_type['department_id']
+                test_department_id=test_type['department_id']
             )
             db.session.add(new_test_type)
             seeded_count += 1
@@ -52,9 +52,10 @@ def seed_test_types():
         return f"Seeded {seeded_count} new test types successfully."
     except Exception as e:
         db.session.rollback()
+        logger.error(f"Error occurred while seeding test types: {e}")
         return f"Error occurred while seeding test types: {e}"
 
 
-def run_test_type_Seeder():
+def run_test_type_seeder():
     seed_test_types()
     
