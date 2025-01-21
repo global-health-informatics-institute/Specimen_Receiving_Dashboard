@@ -4,12 +4,8 @@ from extensions.extensions import db, logger, application_config
 from models.test_definitions_model import Test_Definition
 from models.tests_model import Test
 
-
-# Application configurations
-days = application_config["days"]
-hours = application_config["hours"]
-
-start_time = datetime.now() - timedelta(days=days, hours=hours)
+# Create the Flask app
+app = create_app()
 
 def _get_test_type_id(test_type):
     """
@@ -30,31 +26,32 @@ def _initialize_test_type_ids():
     """
     Initializes test type IDs by fetching them within the application context.
     """
-    with app.app_context():
+    try:
         return [
             _get_test_type_id(application_config["test_short_name"].get(f"test_type_{i}"))
             for i in range(1, 5)
         ]
+    except Exception as e:
+        logger.error(f"Error initializing test type IDs: {e}")
+        return []
 
-# Create the Flask app
-app = create_app()
+# Initialize test type IDs globally
+with app.app_context():
+    _test_type_ids = _initialize_test_type_ids()
 
-# Initialize test type IDs
-_test_type_ids = _initialize_test_type_ids()
-
-
-def _count_tests(status, additional_statuses=None):
+def _count_tests(status):
     """
     Count tests for specific statuses within the defined time constraints.
     """
     try:
-        statuses = [status] + (additional_statuses or [])
-        start_time 
+        if not _test_type_ids:
+            logger.warning("No valid test type IDs initialized.")
+            return 0
 
         count = db.session.query(Test).filter(
             Test.test_test_type.in_(_test_type_ids),
-            Test.test_test_status.in_(statuses),
-            Test.created_at >= start_time,
+            Test.test_test_status == status,  # Adjusted to compare with a single value
+            Test.created_at >= datetime.now() - timedelta(days=30),  # Example timeframe
         ).count()
         return count or 0
     except Exception as e:
@@ -63,10 +60,10 @@ def _count_tests(status, additional_statuses=None):
 
 # Status-specific count functions
 def count_registered():
-    return _count_tests("2")
+    return _count_tests("1")
 
 def count_received():
-    return _count_tests("0")
+    return _count_tests("2")
 
 def count_in_progress():
     return _count_tests("3")
@@ -78,9 +75,9 @@ def count_completed():
     return _count_tests("5")
 
 def count_rejected():
-    return _count_tests("6", additional_statuses=["7", "8", "9"])
+    return _count_tests("0")
 
 # Test the counts
 if __name__ == "__main__":
     with app.app_context():
-        print(count_completed())
+        print("Registered Tests Count:", count_registered())

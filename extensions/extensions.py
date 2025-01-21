@@ -43,3 +43,16 @@ def iblis_db():
         database=db_config['database'],
         auth_plugin=db_config.get('auth_plugin', 'mysql_native_password')
     )
+
+
+def start_time():
+    from datetime import datetime, timedelta
+    """
+    Returns the most recent occurrence of 7:00 AM.
+    """
+    now = datetime.now()
+    if now.hour >= 7:
+        result = now.replace(hour=7, minute=0, second=0, microsecond=0)
+    else: 
+        result = (now - timedelta(days=1)).replace(hour=7, minute=0, second=0, microsecond=0)
+    return result
