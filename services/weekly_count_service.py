@@ -1,13 +1,10 @@
 import logging
 from app import create_app
-from extensions.extensions import db, application_config
+from extensions.extensions import db, department_data, logger
 from models.weekly_count_model import Weekly_Count
 
-# Set up logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
 
-department_id = application_config["department_id"]
+department_id = department_data["department_id"]
 
 # Helper function
 def _counter_value(action, column=None):
