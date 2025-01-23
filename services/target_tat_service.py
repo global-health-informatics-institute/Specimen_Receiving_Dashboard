@@ -31,9 +31,17 @@ def tat_test_type_3():
 def tat_test_type_4():
      return all_target_tat(4)
 
+def all_tat():
+    return {
+        "test_type_1": tat_test_type_1(),
+        "test_type_2": tat_test_type_2(),
+        "test_type_3": tat_test_type_3(),
+        "test_type_4": tat_test_type_4(),
+    }
 app = app.create_app()
 if __name__ == "__main__":
     with app.app_context():
+        # example usage
         print(tat_test_type_1())
         print(tat_test_type_2())
         print(tat_test_type_3())

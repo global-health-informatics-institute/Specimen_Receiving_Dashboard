@@ -77,7 +77,18 @@ def count_completed():
 def count_rejected():
     return _count_tests("0")
 
+def all_counts():
+    return {
+        "registered": count_registered(),
+        "received": count_received(),
+        "in_progress": count_in_progress(),
+        "pending_auth": count_pending_auth(),
+        "completed": count_completed(),
+        "rejected": count_rejected(),
+    }
+
 # Test the counts
 if __name__ == "__main__":
     with app.app_context():
+        # example usage
         print("Registered Tests Count:", count_registered())
