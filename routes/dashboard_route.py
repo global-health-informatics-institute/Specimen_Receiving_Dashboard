@@ -1,12 +1,5 @@
 from flask import jsonify, render_template, Blueprint
 from scripts.serve_static_script import serve_static
-from models.test_definitions_model import Test_Definition
-from models.department_model import Department
-from models.monthly_count_model import Monthly_Count
-from models.weekly_count_model import Weekly_Count
-from models.tests_model import Test
-from models.status_definitions_model import Test_Status_Definition
-from models.oerr_status_model import OERR_Status_Definition
 from services.summary_service import all_counts
 dashboard_bp = Blueprint('dashboard', __name__)
 @dashboard_bp.route('/', methods=['GET'])
