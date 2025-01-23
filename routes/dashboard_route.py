@@ -1,4 +1,4 @@
-from flask import render_template, Blueprint
+from flask import jsonify, render_template, Blueprint
 from scripts.serve_static_script import serve_static
 from models.test_definitions_model import Test_Definition
 from models.department_model import Department
@@ -27,21 +27,8 @@ def render_dashboard():
         side_bar_data = all_counts(),
     )
 
-@dashboard_bp.route('/pre_populate', methods=['GET'])
-def pre_populate_route():
-    ""
-    # populate_department_definitions()
 
-
-# @dashboard_bp.route('/dashboard', methods=['GET'])
-# def render_dashboard():
-#     return render_template(
-#         'children/child.dashboard.html',
-#     )
-
-
-# @dashboard_bp.route('/load_endtries', methods=['GET'])
-# def render_entries():
-#     return render_template(
-#         'children/child.dashboard.html',
-#     )
+@dashboard_bp.route('/side_bar_data', methods=['GET'])
+def side_bar_data():
+    side_bar_data = all_counts() or {}
+    return jsonify(side_bar_data)
