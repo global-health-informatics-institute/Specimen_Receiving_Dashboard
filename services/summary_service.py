@@ -1,11 +1,8 @@
 from datetime import datetime, timedelta
-from app import create_app
 from extensions.extensions import db, logger, application_config
 from models.test_definitions_model import Test_Definition
 from models.tests_model import Test
 
-# Create the Flask app
-app = create_app()
 
 def _get_test_type_id(test_type):
     """
@@ -35,14 +32,14 @@ def _initialize_test_type_ids():
         logger.error(f"Error initializing test type IDs: {e}")
         return []
 
-# Initialize test type IDs globally
-with app.app_context():
-    _test_type_ids = _initialize_test_type_ids()
+
 
 def _count_tests(status):
     """
     Count tests for specific statuses within the defined time constraints.
     """
+    _test_type_ids = _initialize_test_type_ids()
+
     try:
         if not _test_type_ids:
             logger.warning("No valid test type IDs initialized.")
@@ -86,9 +83,3 @@ def all_counts():
         "completed": count_completed(),
         "rejected": count_rejected(),
     }
-
-# Test the counts
-if __name__ == "__main__":
-    with app.app_context():
-        # example usage
-        print("Registered Tests Count:", count_registered())

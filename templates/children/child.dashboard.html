@@ -16,6 +16,14 @@
 {% endblock %}
 
 
+<!-- side bar summary -->
+{% set side_bar_data_registered = side_bar_data.registered %}
+{% set side_bar_data_received = side_bar_data.received %}
+{% set side_bar_data_in_progress = side_bar_data.in_progress %}
+{% set side_bar_data_pending_auth = side_bar_data.pending_auth %}
+{% set side_bar_data_completed = side_bar_data.completed %}
+{% set side_bar_data_rejected = side_bar_data.rejected %}
+
 {% block board_row %}
     <div class="test t1">
         <span class ="header .green">
