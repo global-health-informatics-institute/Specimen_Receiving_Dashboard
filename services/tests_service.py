@@ -34,10 +34,12 @@ def all_test_type_ids(key):
 # get todays tests based on the passed test_type_id
 # test_state
 
-app = app.create_app()
-if __name__ == "__main__":
-    with app.app_context():
-        logger.info(all_test_type_ids("1"))
-        logger.info(all_test_type_ids("2"))
-        logger.info(all_test_type_ids("3"))
-        logger.info(all_test_type_ids("4"))
+
+# example usage:
+# app = app.create_app()
+# if __name__ == "__main__":
+#     with app.app_context():
+#         logger.info(all_test_type_ids("1"))
+#         logger.info(all_test_type_ids("2"))
+#         logger.info(all_test_type_ids("3"))
+#         logger.info(type(all_test_type_ids("4"))) : str
