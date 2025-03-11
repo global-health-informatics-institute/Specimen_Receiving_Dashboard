@@ -74,7 +74,7 @@ def count_completed():
 def count_rejected():
     return _count_tests("0")
 
-def all_counts():
+def all_summary_counts():
     return {
         "registered": count_registered(),
         "received": count_received(),
