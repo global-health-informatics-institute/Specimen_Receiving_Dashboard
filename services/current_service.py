@@ -5,7 +5,7 @@ import app
 
 
 days = application_config["days"]
-hours = application_config["hours"]
+hours = application_config["clear_time"]
 department_id = application_config["department_id"]
 
 
@@ -68,8 +68,17 @@ def tat_current(test_type):
     except Exception as e:
         logger.error(f"Failed to get current TAT for {test_type}: {e}")
         return None
-     
-app = app.create_app()
-if __name__ == "__main__":
-    with app.app_context():
-        print(type(tat_current("1"))) #pass index as key to access the test type shortname
+    
+def all_current():
+    return {
+        "test_type_1": tat_current('1'),
+        "test_type_2": tat_current('2'),
+        "test_type_3": tat_current('3'),
+        "test_type_4": tat_current('4'),
+    }
+
+# example usage
+# app = app.create_app()
+# if __name__ == "__main__":
+#     with app.app_context():
+#         print((tat_current("1"))) #pass index as key to access the test type shortname
