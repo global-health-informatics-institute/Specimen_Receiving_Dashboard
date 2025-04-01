@@ -83,8 +83,8 @@ def all_tat_average():
         "test_type_4": tat_average('4'),
     }
 
-if __name__ == "__main__":
-    app = app.create_app()
-    with app.app_context():
-        print(all_tat_average())
+# if __name__ == "__main__":
+#     app = app.create_app()
+#     with app.app_context():
+#         print(all_tat_average())
 
