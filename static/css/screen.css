@@ -196,17 +196,51 @@ body{
     display: none;
 }
 
-.slideShowContainer{
-    display: none;
-}
-.slideShowContainer.active {
-    padding: 0;
-    margin-left: 220px;
-    /* margin-top: 5px; */
+.slideShowContainer {
+    position: absolute;
+    left: 220px;
+    width: calc(100% - 220px);
+    transition: none; /* animations will handle transitions */
+    opacity: 0;
+    pointer-events: none;
     display: flex;
-    flex-wrap: wrap;
-    min-height: 200px;
-    max-height: 200px;
+}
+
+/* The active slide will be visible */
+.slideShowContainer.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+/* Slide in animation (from right) */
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Slide out animation (to left) */
+@keyframes slideOut {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+}
+
+/* When adding these classes, the animations will play */
+.slide-in {
+    animation: slideIn 0.5s forwards;
+}
+.slide-out {
+    animation: slideOut 0.5s forwards;
 }
 .slideShow {
     flex-direction: column;
