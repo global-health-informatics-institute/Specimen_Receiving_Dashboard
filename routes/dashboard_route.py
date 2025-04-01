@@ -1,5 +1,6 @@
 from flask import jsonify, render_template, Blueprint
 from scripts.serve_static_script import serve_static
+from services.average_service import all_tat_average
 from services.current_service import all_current
 from services.summary_service import  all_summary_counts
 from services.target_tat_service import all_tat
@@ -13,6 +14,7 @@ def render_dashboard():
     all_test_count_data = all_test_counts() or {}
     all_tat_data = all_tat() or {}
     all_current_data = all_current()
+    all_tat_average_data = all_tat_average()
 
 
     def ensure_dictionary(data):
@@ -24,6 +26,7 @@ def render_dashboard():
     all_test_count_data = ensure_dictionary(all_test_count_data)
     all_tat_data = ensure_dictionary(all_tat_data)
     all_current_data = ensure_dictionary(all_current_data)
+    all_tat_average_data = ensure_dictionary(all_tat_average_data)
 
     return render_template(
         'children/child.dashboard.html',
@@ -31,7 +34,8 @@ def render_dashboard():
         side_bar_data = side_bar_data,
         all_test_count_data = all_test_count_data,
         all_tat_data = all_tat_data,
-        all_current_data = all_current_data
+        all_current_data = all_current_data,
+        all_tat_average_data = all_tat_average_data
     )
 
 
