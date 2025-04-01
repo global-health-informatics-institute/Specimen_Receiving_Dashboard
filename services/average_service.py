@@ -71,12 +71,20 @@ def tat_average(test_type):
     except Exception as e:
         logger.error(f"Failed to calculate TAT for test_type {test_type}: {e}")
         return 0
+    
+def all_tat_average():
+    """
+    Retrieve the average Turnaround Time (TAT) for all test types.
+    """
+    return {
+        "test_type_1": tat_average('1'),
+        "test_type_2": tat_average('2'),
+        "test_type_3": tat_average('3'),
+        "test_type_4": tat_average('4'),
+    }
 
 if __name__ == "__main__":
     app = app.create_app()
     with app.app_context():
-        for test_type in ["1", "2", "3", "4"]:
-            tat_result = tat_average(test_type)
-            print(f"TAT for test type {test_type}: {tat_result}")
-        print(type(tat_average("1"))) #pass index as key to access the test type shortname
+        print(all_tat_average())
 
