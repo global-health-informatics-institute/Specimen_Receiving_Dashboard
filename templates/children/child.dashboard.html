@@ -77,6 +77,15 @@
 {% set average_4 = all_tat_average_data.test_type_4 %}
 
 {% block dashboard_scripts %}
-    <script src="{{ url_for('static', filename=static_data.JS_BASE_URL ~ 'side_bar_data.js') }}"></script>
+<script src="{{ url_for('static', filename=static_data.JS_BASE_URL ~ 'slide_show.js') }}"></script>
+<script src="{{ url_for('static', filename=static_data.JS_BASE_URL ~ 'clear_cache.js') }}"></script>
+<script src="{{ url_for('static', filename=static_data.JS_BASE_URL ~ 'load_all_entries.js') }}"></script>
+<script src="{{ url_for('static', filename=static_data.JS_BASE_URL ~ 'side_bar_data.js') }}"></script>
+<script src="{{ url_for('static', filename=static_data.JS_BASE_URL ~ 'summary.js') }}"></script>
+
+
+<!-- <script src="{{ url_for('static', filename=static_data.JS_BASE_URL ~ 'content.js') }}"></script>
+<script src="{{ url_for('static', filename=static_data.JS_BASE_URL ~ 'clear_cache.js') }}"></script> -->
+
 
 {% endblock %}
