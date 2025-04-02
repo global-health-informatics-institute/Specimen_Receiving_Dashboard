@@ -70,7 +70,7 @@ def _counter_value(action, column=None):
         logger.error(f"Error during {action}: {e}")
 
 
-def get_counter_values(column_id=None):
+def get_monthly_counter_values(column_id=None):
     """
     Fetch counter values for the department.
     Args:
@@ -85,18 +85,18 @@ def update_counter(action, column_id):
     _counter_value(action, column_id)
 
 
-if __name__ == "__main__":
-    app = create_app()
-    with app.app_context():
+# if __name__ == "__main__":
+    # app = create_app()
+    # with app.app_context():
 
 
         # example usage
-        # Fetch all counter values
-        logger.info(get_counter_values())
+        # # Fetch all counter values
+        # logger.info(get_monthly_counter_values())
         
-        # Increment a specific counter
-        update_counter("increment", 2)
+        # # Increment a specific counter
+        # update_counter("increment", 2)
         
-        # Fetch a specific counter value
-        monthly_count_received = get_counter_values(2)
-        logger.info(f"Monthly Count Received: {monthly_count_received}")
+        # # Fetch a specific counter value
+        # monthly_count_received = get_monthly_counter_values(2)
+        # logger.info(f"Monthly Count Received: {monthly_count_received}")

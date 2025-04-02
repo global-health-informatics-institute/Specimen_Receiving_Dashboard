@@ -71,7 +71,7 @@ def update_counter(action, column_id):
     _counter_value(action, column_id)
 
 
-def get_counter_values():
+def get_weekly_counter_values():
     """Fetch all counters for the department."""
     return _counter_value("fetch")
 
@@ -80,7 +80,7 @@ def log_specific_counter(column_id):
     """Log a specific counter value."""
     column_name = COLUMN_MAPPING.get(column_id)
     if column_name:
-        values = get_counter_values()
+        values = get_weekly_counter_values()
         if values:
             logger.info(f"{column_name}: {values.get(column_name)}")
     else:
@@ -96,13 +96,16 @@ def decrement(column_id):
     update_counter("decrement", column_id)
 
 
+def all_weekly_counts():
+    """Fetch all weekly counts."""
+    return db.session.query(Weekly_Count).all()
 if __name__ == "__main__":
     app = create_app()
 
-    with app.app_context():
-        # Example usage
-        logger.info(get_counter_values())  # Log all values
-        increment(2)  # Increment registered
-        decrement(0)  # Increment received
-        log_specific_counter(0)  # Log weekly_count_received
-        logger.info(get_counter_values())  # Log updated values
+    # with app.app_context():
+    #     # Example usage
+    #     logger.info(get_weekly_counter_values())  # Log all values
+        # increment(2)  # Increment registered
+        # decrement(0)  # Increment received
+        # log_specific_counter(0)  # Log weekly_count_received
+        # logger.info(get_counter_values())  # Log updated values
