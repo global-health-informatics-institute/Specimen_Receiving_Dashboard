@@ -7,15 +7,12 @@ from models.weekly_count_model import Weekly_Count
 department_id = application_config["department_id"]
 
 COLUMN_MAPPING = {
-    2: "weekly_count_registered",
-    0: "weekly_count_received",
+    1: "weekly_count_registered",
+    2: "weekly_count_received",
     3: "weekly_count_progress",
     4: "weekly_count_pending",
     5: "weekly_count_complete",
-    6: "weekly_count_rejected",
-    7: "weekly_count_rejected",
-    8: "weekly_count_rejected",
-    9: "weekly_count_rejected",
+    0: "weekly_count_rejected",
 }
 
 
