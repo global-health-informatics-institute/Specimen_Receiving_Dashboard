@@ -85,11 +85,11 @@ def log_specific_counter(column_id):
 
 
 # Increment/Decrement helpers
-def increment(column_id):
+def weekly_increment(column_id):
     update_counter("increment", column_id)
 
 
-def decrement(column_id):
+def weekly_decrement(column_id):
     update_counter("decrement", column_id)
 
 
