@@ -1,13 +1,10 @@
 import logging
 from app import create_app
-from extensions.extensions import db, application_config
+from extensions.extensions import db, application_config, logger
 from models.monthly_count_model import Monthly_Count
 
-# Set up logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
-
-department_id = application_config['department_id']
+# Set up department ID and column mappings
+department_id = application_config["department_id"]
 
 COLUMN_MAPPING = {
     1: "monthly_count_registered",
@@ -24,12 +21,9 @@ def _counter_value(action, column=None):
     Handles fetching or updating monthly counter values.
     Args:
         action (str): "fetch", "increment", or "decrement".
-        column (int, optional): The column identifier for updating or fetching.
+        column (int, optional): Column identifier for updating. Not required for fetching all.
     Returns:
-        dict, int, or None: 
-        - Returns all counters as a dictionary for "fetch" without a column.
-        - Returns a specific counter value as an int for "fetch" with a column.
-        - Returns None for update actions.
+        dict or None: Counter values as a dictionary for "fetch", None for update actions.
     """
     table = Monthly_Count
     column_name = COLUMN_MAPPING.get(column)
@@ -38,17 +32,16 @@ def _counter_value(action, column=None):
         if action == "fetch":
             count = db.session.query(table).filter_by(department_id=department_id).first()
             if count:
-                if column_name:  # Fetch a specific column value
-                    return getattr(count, column_name, 0)
-                # Fetch all counter values
                 return {col: getattr(count, col) for col in COLUMN_MAPPING.values()}
-            logger.warning(f"No counters found for department_id {department_id}.")
-            return {} if not column_name else 0
+            logger.warning(f"No counts found for department_id {department_id}.")
+            return {}
 
         if action in ["increment", "decrement"] and column_name:
             adjustment = 1 if action == "increment" else -1
             current_value = getattr(
-                db.session.query(table).filter_by(department_id=department_id).first(), column_name, 0
+                db.session.query(table).filter_by(department_id=department_id).first(),
+                column_name,
+                0
             )
             if current_value is None or current_value + adjustment < 0:
                 logger.warning(f"Cannot {action} {column_name} below 0 for department_id {department_id}.")
@@ -70,33 +63,46 @@ def _counter_value(action, column=None):
         logger.error(f"Error during {action}: {e}")
 
 
-def get_monthly_counter_values(column_id=None):
-    """
-    Fetch counter values for the department.
-    Args:
-        column_id (int, optional): If provided, fetches the value of the specific column.
-    Returns:
-        dict or int: Returns all counters as a dictionary or a specific counter value as an int.
-    """
-    return _counter_value("fetch", column=column_id)
-
 def update_counter(action, column_id):
     """Update a specific counter."""
     _counter_value(action, column_id)
 
 
-# if __name__ == "__main__":
-    # app = create_app()
+def get_monthly_counter_values():
+    """Fetch all counters for the department."""
+    return _counter_value("fetch")
+
+
+def log_specific_counter(column_id):
+    """Log a specific counter value."""
+    column_name = COLUMN_MAPPING.get(column_id)
+    if column_name:
+        values = get_monthly_counter_values()
+        if values:
+            logger.info(f"{column_name}: {values.get(column_name)}")
+    else:
+        logger.error(f"Invalid column_id: {column_id}")
+
+
+# Increment/Decrement helpers
+def monthly_increment(column_id):
+    update_counter("increment", column_id)
+
+
+def monthly_decrement(column_id):
+    update_counter("decrement", column_id)
+
+
+def all_monthly_counts():
+    """Fetch all monthly counts."""
+    return db.session.query(Monthly_Count).all()
+if __name__ == "__main__":
+    app = create_app()
+
     # with app.app_context():
-
-
-        # example usage
-        # # Fetch all counter values
-        # logger.info(get_monthly_counter_values())
-        
-        # # Increment a specific counter
-        # update_counter("increment", 2)
-        
-        # # Fetch a specific counter value
-        # monthly_count_received = get_monthly_counter_values(2)
-        # logger.info(f"Monthly Count Received: {monthly_count_received}")
+    #     # Example usage
+    #     logger.info(get_monthly_counter_values())  # Log all values
+        # increment(2)  # Increment registered
+        # decrement(0)  # Increment received
+        # log_specific_counter(0)  # Log monthly_count_received
+        # logger.info(get_counter_values())  # Log updated values
