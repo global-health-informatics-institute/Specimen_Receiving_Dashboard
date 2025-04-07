@@ -125,7 +125,6 @@ def test_data_4():
 
 @dashboard_bp.route('/weekly_summary_data', methods=['GET'])
 def weekly_summary_data():
-    print(get_weekly_counter_values())
     return get_weekly_counter_values()
 
 
