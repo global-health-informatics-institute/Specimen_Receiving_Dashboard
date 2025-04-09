@@ -99,10 +99,5 @@ def all_monthly_counts():
 if __name__ == "__main__":
     app = create_app()
 
-    # with app.app_context():
-    #     # Example usage
-    #     logger.info(get_monthly_counter_values())  # Log all values
-        # increment(2)  # Increment registered
-        # decrement(0)  # Increment received
-        # log_specific_counter(0)  # Log monthly_count_received
-        # logger.info(get_counter_values())  # Log updated values
+    with app.app_context():
+        logger.info(get_monthly_counter_values())  # Log updated values
