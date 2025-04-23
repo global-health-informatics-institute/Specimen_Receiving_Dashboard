@@ -14,4 +14,4 @@ class Test(db.Model):
     updated_at = db.Column(db.TIMESTAMP, nullable=False, default=dt.now, onupdate=dt.now, index=True, info={'Description': 'used inplace of write_time'})
     
     def __repr__(self) -> str:
-        return f'<test (id={self.id}) - (accession_id={self.tests_accession_id})>'
+        return f'<test (id={self.id}) - (accession_id={self.test_accession_id})>'
