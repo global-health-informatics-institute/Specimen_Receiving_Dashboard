@@ -1,5 +1,4 @@
 from flask import Flask
-from apis.unload_entries import  remove_entries_bp
 from apis.load_entries import load_entries_bp
 from extensions.extensions import dashboard_uri, db
 
