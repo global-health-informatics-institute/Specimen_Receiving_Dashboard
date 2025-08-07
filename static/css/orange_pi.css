@@ -48,8 +48,8 @@ body{
     width: 250px;
     display: flex;
     flex-flow: column;
-    gap: 20px;
-    border-right: 1px #c5c6c7 solid ;
+    gap: 30px;
+    /* border-right: 1px #c5c6c7 solid ; */
     /* font-size: 40px; */
 }
 .sideNav .card .value{
@@ -113,8 +113,8 @@ body{
     display: flex;
     flex-wrap: wrap;
     gap: 30px 20px;
-    margin-left: 260px;
-    margin-top: 60px;
+    margin-left: 250px;
+    margin-top: 50px;
     padding: 3px 0px;
 }
 .main .test{
@@ -213,7 +213,7 @@ body{
     margin-left: 30px;
     min-height: 180px;
     max-height: 180px;
-    margin-top: 20px;
+    margin-top: 10px;
     border: #b2b2b2 2px solid;
     border-radius: 10px;
     background-color: #b2d6ca;
