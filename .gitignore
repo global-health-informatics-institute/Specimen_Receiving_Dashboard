@@ -24,3 +24,4 @@ todo
 data
 functions
 playground
+!config/*.example
