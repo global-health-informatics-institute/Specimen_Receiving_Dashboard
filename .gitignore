@@ -25,3 +25,4 @@ data
 functions
 playground
 !config/*.example
+!data
