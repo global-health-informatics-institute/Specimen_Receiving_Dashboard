@@ -6,7 +6,6 @@ from extensions.extensions import dashboard_uri, db
 app = Flask(__name__)
 
 app.register_blueprint(load_entries_bp)
-app.register_blueprint(remove_entries_bp)
 
 
 app.config['SQLALCHEMY_DATABASE_URI'] = dashboard_uri
