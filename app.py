@@ -1,6 +1,8 @@
 from flask import Flask
 from extensions.extensions import db
 from flask_migrate import Migrate
+from models import status_definitions_model, department_model, oerr_status_model
+
 
 def create_app():
     app = Flask(__name__, template_folder="templates", static_folder="static")
