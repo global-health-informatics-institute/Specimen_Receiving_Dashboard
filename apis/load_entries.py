@@ -16,7 +16,7 @@ STATUS_NEW = 1
 # extract required fields from the payload
 def process_payload(payload):
     def actual_status(specimen_status, test_status):
-        return TEST_STATUSES.get(test_status, SPECIMEN_STATUSES.get(specimen_status, "Unknown"))
+        return TEST_STATUSES.get(test_status, SPECIMEN_STATUSES.get(specimen_status, "Unknown")) # BUG: logic in correctly updating the dashboard status 
 
     def get_status_info():
         return actual_status(payload.get("order_status"), payload.get("status"))

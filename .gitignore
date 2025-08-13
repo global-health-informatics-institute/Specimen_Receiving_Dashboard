@@ -26,3 +26,4 @@ functions
 playground
 !config/*.example
 !data
+*.todo
