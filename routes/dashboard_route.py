@@ -139,7 +139,6 @@ def current_data():
         return data if isinstance(data, dict) else {}
 
     current_data = ensure_dictionary(all_current())
-    print(current_data)
 
     all_current_values = {
         'current_1': current_data['test_type_1'],
@@ -155,7 +154,6 @@ def tat_average():
         return data if isinstance(data, dict) else {}
 
     average_data = ensure_dictionary(all_tat_average())
-    print(average_data)
 
     all_average_values = {
         'average_1': average_data['test_type_1'],
@@ -163,6 +161,5 @@ def tat_average():
         'average_3': average_data['test_type_3'],
         'average_4': average_data['test_type_4']
     }
-    print(all_average_values)
 
     return all_average_values
