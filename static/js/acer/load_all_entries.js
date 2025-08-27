@@ -1,10 +1,32 @@
-// test 1
+$(document).ready(function() {
+    function fetchSummaryData() {
+        $.ajax({
+            url: "/side_bar_data",
+            method: "GET",
+            success: function(data) {
+                $("#summaryRegisteredTotal").text(data.registered);
+                $("#summaryReceivedTotal").text(data.received);
+                $("#summaryInProgressTotal").text(data.in_progress);
+                $("#summaryPendingAuthTotal").text(data.pending_auth);
+                $("#summaryCompleteTotal").text(data.completed);
+                $("#summaryRejectedTotal").text(data.rejected);
+            }
+        });
+    }
+
+    fetchSummaryData();
+    setInterval(fetchSummaryData, 1300);
+});
+
+
+
 $(document).ready(function() {
     function fetchTestContent1() {
         $.ajax({
             url: "/test_data_1",
             method: "GET",
             success: function(data) {
+                console.log("Fetched:", data);
                 $("#received1").text(data.received_1);
                 $("#inProgress1").text(data.in_progress_1);
                 $("#pendingAuth1").text(data.pending_auth_1);
@@ -17,7 +39,7 @@ $(document).ready(function() {
     setInterval(fetchTestContent1, 1300); 
 });
 
-// test 2
+
 $(document).ready(function() {
     function fetchTestContent2() {
         $.ajax({
@@ -31,12 +53,11 @@ $(document).ready(function() {
             }
         });
     }
-
     fetchTestContent2();
     setInterval(fetchTestContent2, 1300); 
 });
 
-// test 3
+
 $(document).ready(function() {
     function fetchTestContent3() {
         $.ajax({
@@ -56,7 +77,6 @@ $(document).ready(function() {
 });
 
 
-// test 4
 $(document).ready(function() {
     function fetchTestContent4() {
         $.ajax({
@@ -70,7 +90,99 @@ $(document).ready(function() {
             }
         });
     }
-
     fetchTestContent4();
     setInterval(fetchTestContent4, 1300); 
 });
+
+
+
+
+// weekly
+$(document).ready(function() {
+    function fetchWeeklySummaryContent() {
+        $.ajax({
+            url: "/weekly_summary_data",
+            method: "GET",
+            success: function(data) {
+                $("#weeklyRegistered").text(data.weekly_count_registered);
+                $("#weeklyRecieved").text(data.weekly_count_received);
+                
+                $("#weeklyProgress").text(data.weekly_count_progress);
+
+                $("#weeklyPending").text(data.weekly_count_pending);
+
+                $("#weeklyComplete").text(data.weekly_count_complete);
+
+                $("#weeklyRejected").text(data.weekly_count_rejected);
+            }
+        });
+    }
+
+    fetchWeeklySummaryContent();
+    setInterval(fetchWeeklySummaryContent, 1300); 
+});
+
+// monthly
+$(document).ready(function() {
+    function fetchMonthlySummaryContent() {
+        $.ajax({
+            url: "/monthly_summary_data",
+            method: "GET",
+            success: function(data) {
+                $("#monthlyRegistered").text(data.monthly_count_registered);
+                $("#monthlyRecieved").text(data.monthly_count_received);
+                
+                $("#monthlyProgress").text(data.monthly_count_progress);
+
+                $("#monthlyPending").text(data.monthly_count_pending);
+
+                $("#monthlyComplete").text(data.monthly_count_complete);
+
+                $("#monthlyRejected").text(data.monthly_count_rejected);
+            }
+        });
+    }
+
+    fetchMonthlySummaryContent();
+    setInterval(fetchMonthlySummaryContent, 1300); 
+});
+
+
+$(document).ready(function() {
+    function fetchTatCurrent() {
+        $.ajax({
+            url: "/tat_current",
+            method: "GET",
+            success: function(data) {
+                $("#current1").text(data.current_1);
+                $("#current2").text(data.current_2);
+                $("#current3").text(data.current_3);
+                $("#current4").text(data.current_4);
+            }
+        });
+    }
+
+    fetchTatCurrent();
+    setInterval(fetchTatCurrent, 1300); 
+});
+
+
+$(document).ready(function() {
+    function fetchTatAverage() {
+        $.ajax({
+            url: "/tat_average",
+            method: "GET",
+            success: function(data) {
+                $("#average1").text(data.average_1);
+                $("#average2").text(data.average_2);
+                $("#average3").text(data.average_3);
+                $("#average4").text(data.average_4);
+            }
+        });
+    }
+
+    fetchTatAverage();
+    setInterval(fetchTatAverage, 1300); 
+});
+
+
