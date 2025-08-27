@@ -132,4 +132,37 @@ def weekly_summary_data():
 @dashboard_bp.route('/monthly_summary_data', methods=['GET'])
 def monthly_summary_data():
     return get_monthly_counter_values()
-    
+
+@dashboard_bp.route('/tat_current', methods=['GET'])
+def current_data():
+    def ensure_dictionary(data):
+        return data if isinstance(data, dict) else {}
+
+    current_data = ensure_dictionary(all_current())
+    print(current_data)
+
+    all_current_values = {
+        'current_1': current_data['test_type_1'],
+        'current_2': current_data['test_type_2'],
+        'current_3': current_data['test_type_3'],
+        'current_4': current_data['test_type_4']
+    }
+    return all_current_values
+
+@dashboard_bp.route('/tat_average', methods=['GET'])
+def tat_average():
+    def ensure_dictionary(data):
+        return data if isinstance(data, dict) else {}
+
+    average_data = ensure_dictionary(all_tat_average())
+    print(average_data)
+
+    all_average_values = {
+        'average_1': average_data['test_type_1'],
+        'average_2': average_data['test_type_2'],
+        'average_3': average_data['test_type_3'],
+        'average_4': average_data['test_type_4']
+    }
+    print(all_average_values)
+
+    return all_average_values
