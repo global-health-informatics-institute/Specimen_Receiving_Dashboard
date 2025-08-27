@@ -1,0 +1,13 @@
+TODO
+// git branch -m master kch/micro_dashboard_3
+// git update-index --skip-worktree config/
+// git fetch
+// git pull origin kch/micro_dashboard --rebase=False
+
+// checkout extensions 
+
+// [] flask db init
+
+// [] flask db migrate
+
+// [] flask db upgrade

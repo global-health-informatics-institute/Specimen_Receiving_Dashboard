@@ -1,0 +1,14 @@
+TODO
+// [] push lsc/shared_dashboard api to remote: kch
+
+// [] drop db
+
+// [] create correct db
+
+// [] checkout extensions 
+
+// [] flask db init
+
+// [] flask db migrate
+
+// [] flask db upgrade
