@@ -1,188 +1,236 @@
-$(document).ready(function() {
-    function fetchSummaryData() {
-        $.ajax({
-            url: "/side_bar_data",
-            method: "GET",
-            success: function(data) {
-                $("#summaryRegisteredTotal").text(data.registered);
-                $("#summaryReceivedTotal").text(data.received);
-                $("#summaryInProgressTotal").text(data.in_progress);
-                $("#summaryPendingAuthTotal").text(data.pending_auth);
-                $("#summaryCompleteTotal").text(data.completed);
-                $("#summaryRejectedTotal").text(data.rejected);
-            }
-        });
+document.addEventListener("DOMContentLoaded", () => {
+    async function fetchSummaryData() {
+        try {
+            const response = await fetch("/side_bar_data");
+            if (!response.ok) throw new Error("Network response was not ok");
+
+            const data = await response.json();
+
+            document.getElementById("summaryRegisteredTotal").textContent = data.registered;
+            document.getElementById("summaryReceivedTotal").textContent = data.received;
+            document.getElementById("summaryInProgressTotal").textContent = data.in_progress;
+            document.getElementById("summaryPendingAuthTotal").textContent = data.pending_auth;
+            document.getElementById("summaryCompleteTotal").textContent = data.completed;
+            document.getElementById("summaryRejectedTotal").textContent = data.rejected;
+
+        } catch (err) {
+            console.error("Error fetching summary data:", err);
+        }
     }
 
+    // run immediately
     fetchSummaryData();
+    // refresh every 1.3s
     setInterval(fetchSummaryData, 1300);
 });
 
 
 
-$(document).ready(function() {
-    function fetchTestContent1() {
-        $.ajax({
-            url: "/test_data_1",
-            method: "GET",
-            success: function(data) {
-                console.log("Fetched:", data);
-                $("#received1").text(data.received_1);
-                $("#inProgress1").text(data.in_progress_1);
-                $("#pendingAuth1").text(data.pending_auth_1);
-                $("#complete1").text(data.completed_1);
-            }
-        });
+document.addEventListener("DOMContentLoaded", () => {
+    async function fetchTestContent1() {
+        try {
+            const response = await fetch("/test_data_1");
+            if (!response.ok) throw new Error("Network response was not ok");
+
+            const data = await response.json();
+            console.log("Fetched:", data);
+
+            document.getElementById("received1").textContent = data.received_1;
+            document.getElementById("inProgress1").textContent = data.in_progress_1;
+            document.getElementById("pendingAuth1").textContent = data.pending_auth_1;
+            document.getElementById("complete1").textContent = data.completed_1;
+
+        } catch (err) {
+            console.error("Error fetching test content 1:", err);
+        }
     }
 
+    // Run immediately
     fetchTestContent1();
-    setInterval(fetchTestContent1, 1300); 
+    // Refresh every 1.3s
+    setInterval(fetchTestContent1, 1300);
 });
 
 
-$(document).ready(function() {
-    function fetchTestContent2() {
-        $.ajax({
-            url: "/test_data_2",
-            method: "GET",
-            success: function(data) {
-                $("#received2").text(data.received_2);
-                $("#inProgress2").text(data.in_progress_2);
-                $("#pendingAuth2").text(data.pending_auth_2);
-                $("#complete2").text(data.completed_2);
-            }
-        });
+document.addEventListener("DOMContentLoaded", () => {
+    async function fetchTestContent2() {
+        try {
+            const response = await fetch("/test_data_2");
+            if (!response.ok) throw new Error("Network response was not ok");
+
+            const data = await response.json();
+
+            document.getElementById("received2").textContent = data.received_2;
+            document.getElementById("inProgress2").textContent = data.in_progress_2;
+            document.getElementById("pendingAuth2").textContent = data.pending_auth_2;
+            document.getElementById("complete2").textContent = data.completed_2;
+
+        } catch (err) {
+            console.error("Error fetching test content 2:", err);
+        }
     }
+
+    // Run immediately
     fetchTestContent2();
-    setInterval(fetchTestContent2, 1300); 
+    // Refresh every 1.3s
+    setInterval(fetchTestContent2, 1300);
 });
 
 
-$(document).ready(function() {
-    function fetchTestContent3() {
-        $.ajax({
-            url: "/test_data_3",
-            method: "GET",
-            success: function(data) {
-                $("#received3").text(data.received_3);
-                $("#inProgress3").text(data.in_progress_3);
-                $("#pendingAuth3").text(data.pending_auth_3);
-                $("#complete3").text(data.completed_3);
-            }
-        });
+
+document.addEventListener("DOMContentLoaded", () => {
+    async function fetchTestContent3() {
+        try {
+            const response = await fetch("/test_data_3");
+            if (!response.ok) throw new Error("Network response was not ok");
+
+            const data = await response.json();
+
+            document.getElementById("received3").textContent = data.received_3;
+            document.getElementById("inProgress3").textContent = data.in_progress_3;
+            document.getElementById("pendingAuth3").textContent = data.pending_auth_3;
+            document.getElementById("complete3").textContent = data.completed_3;
+
+        } catch (err) {
+            console.error("Error fetching test content 3:", err);
+        }
     }
 
+    // Run immediately
     fetchTestContent3();
-    setInterval(fetchTestContent3, 1300); 
+    // Refresh every 1.3s
+    setInterval(fetchTestContent3, 1300);
 });
 
 
-$(document).ready(function() {
-    function fetchTestContent4() {
-        $.ajax({
-            url: "/test_data_4",
-            method: "GET",
-            success: function(data) {
-                $("#received4").text(data.received_4);
-                $("#inProgress4").text(data.in_progress_4);
-                $("#pendingAuth4").text(data.pending_auth_4);
-                $("#complete4").text(data.completed_4);
-            }
-        });
+
+document.addEventListener("DOMContentLoaded", () => {
+    async function fetchTestContent4() {
+        try {
+            const response = await fetch("/test_data_4");
+            if (!response.ok) throw new Error("Network response was not ok");
+
+            const data = await response.json();
+
+            document.getElementById("received4").textContent = data.received_4;
+            document.getElementById("inProgress4").textContent = data.in_progress_4;
+            document.getElementById("pendingAuth4").textContent = data.pending_auth_4;
+            document.getElementById("complete4").textContent = data.completed_4;
+
+        } catch (err) {
+            console.error("Error fetching test content 4:", err);
+        }
     }
-    fetchTestContent4();
-    setInterval(fetchTestContent4, 1300); 
-});
 
+    // Run immediately
+    fetchTestContent4();
+    // Refresh every 1.3s
+    setInterval(fetchTestContent4, 1300);
+});
 
 
 
 // weekly
-$(document).ready(function() {
-    function fetchWeeklySummaryContent() {
-        $.ajax({
-            url: "/weekly_summary_data",
-            method: "GET",
-            success: function(data) {
-                $("#weeklyRegistered").text(data.weekly_count_registered);
-                $("#weeklyRecieved").text(data.weekly_count_received);
-                
-                $("#weeklyProgress").text(data.weekly_count_progress);
+document.addEventListener("DOMContentLoaded", () => {
+    async function fetchWeeklySummaryContent() {
+        try {
+            const response = await fetch("/weekly_summary_data");
+            if (!response.ok) throw new Error("Network response was not ok");
 
-                $("#weeklyPending").text(data.weekly_count_pending);
+            const data = await response.json();
 
-                $("#weeklyComplete").text(data.weekly_count_complete);
+            document.getElementById("weeklyRegistered").textContent = data.weekly_count_registered;
+            document.getElementById("weeklyRecieved").textContent = data.weekly_count_received;
+            document.getElementById("weeklyProgress").textContent = data.weekly_count_progress;
+            document.getElementById("weeklyPending").textContent = data.weekly_count_pending;
+            document.getElementById("weeklyComplete").textContent = data.weekly_count_complete;
+            document.getElementById("weeklyRejected").textContent = data.weekly_count_rejected;
 
-                $("#weeklyRejected").text(data.weekly_count_rejected);
-            }
-        });
+        } catch (err) {
+            console.error("Error fetching weekly summary data:", err);
+        }
     }
 
+    // Run immediately
     fetchWeeklySummaryContent();
-    setInterval(fetchWeeklySummaryContent, 1300); 
+    // Refresh every 1.3s
+    setInterval(fetchWeeklySummaryContent, 1300);
 });
+
 
 // monthly
-$(document).ready(function() {
-    function fetchMonthlySummaryContent() {
-        $.ajax({
-            url: "/monthly_summary_data",
-            method: "GET",
-            success: function(data) {
-                $("#monthlyRegistered").text(data.monthly_count_registered);
-                $("#monthlyRecieved").text(data.monthly_count_received);
-                
-                $("#monthlyProgress").text(data.monthly_count_progress);
+document.addEventListener("DOMContentLoaded", () => {
+    async function fetchMonthlySummaryContent() {
+        try {
+            const response = await fetch("/monthly_summary_data");
+            if (!response.ok) throw new Error("Network response was not ok");
 
-                $("#monthlyPending").text(data.monthly_count_pending);
+            const data = await response.json();
 
-                $("#monthlyComplete").text(data.monthly_count_complete);
+            document.getElementById("monthlyRegistered").textContent = data.monthly_count_registered;
+            document.getElementById("monthlyRecieved").textContent = data.monthly_count_received;
+            document.getElementById("monthlyProgress").textContent = data.monthly_count_progress;
+            document.getElementById("monthlyPending").textContent = data.monthly_count_pending;
+            document.getElementById("monthlyComplete").textContent = data.monthly_count_complete;
+            document.getElementById("monthlyRejected").textContent = data.monthly_count_rejected;
 
-                $("#monthlyRejected").text(data.monthly_count_rejected);
-            }
-        });
+        } catch (err) {
+            console.error("Error fetching monthly summary data:", err);
+        }
     }
 
+    // Run immediately
     fetchMonthlySummaryContent();
-    setInterval(fetchMonthlySummaryContent, 1300); 
+    // Refresh every 1.3s
+    setInterval(fetchMonthlySummaryContent, 1300);
 });
 
 
-$(document).ready(function() {
-    function fetchTatCurrent() {
-        $.ajax({
-            url: "/tat_current",
-            method: "GET",
-            success: function(data) {
-                $("#current1").text(data.current_1);
-                $("#current2").text(data.current_2);
-                $("#current3").text(data.current_3);
-                $("#current4").text(data.current_4);
-            }
-        });
+document.addEventListener("DOMContentLoaded", () => {
+    async function fetchTatCurrent() {
+        try {
+            const response = await fetch("/tat_current");
+            if (!response.ok) throw new Error("Network response was not ok");
+
+            const data = await response.json();
+
+            document.getElementById("current1").textContent = data.current_1;
+            document.getElementById("current2").textContent = data.current_2;
+            document.getElementById("current3").textContent = data.current_3;
+            document.getElementById("current4").textContent = data.current_4;
+
+        } catch (err) {
+            console.error("Error fetching TAT current data:", err);
+        }
     }
 
+    // Run immediately
     fetchTatCurrent();
-    setInterval(fetchTatCurrent, 1300); 
+    // Refresh every 1.3s
+    setInterval(fetchTatCurrent, 1300);
 });
 
 
-$(document).ready(function() {
-    function fetchTatAverage() {
-        $.ajax({
-            url: "/tat_average",
-            method: "GET",
-            success: function(data) {
-                $("#average1").text(data.average_1);
-                $("#average2").text(data.average_2);
-                $("#average3").text(data.average_3);
-                $("#average4").text(data.average_4);
-            }
-        });
+document.addEventListener("DOMContentLoaded", () => {
+    async function fetchTatAverage() {
+        try {
+            const response = await fetch("/tat_average");
+            if (!response.ok) throw new Error("Network response was not ok");
+
+            const data = await response.json();
+
+            document.getElementById("average1").textContent = data.average_1;
+            document.getElementById("average2").textContent = data.average_2;
+            document.getElementById("average3").textContent = data.average_3;
+            document.getElementById("average4").textContent = data.average_4;
+
+        } catch (err) {
+            console.error("Error fetching TAT average data:", err);
+        }
     }
 
+    // Run immediately
     fetchTatAverage();
-    setInterval(fetchTatAverage, 1300); 
+    // Refresh every 1.3s
+    setInterval(fetchTatAverage, 1300);
 });
-
-
