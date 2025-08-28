@@ -1,6 +1,6 @@
 
 from flask import Blueprint, json, request, jsonify
-from apis.misc import SPECIMEN_STATUSES, TEST_STATUSES
+from apis.misc import map_lims_to_oerr_dashboard_status
 from apis.weekly_count_api import weekly_increment as weekly_increment_api
 from apis.monthly_count_api import monthly_increment as monthly_increment_api
 from extensions.extensions import logger, db
@@ -16,8 +16,8 @@ STATUS_NEW = 1
 # extract required fields from the payload
 def process_payload(payload):
     def actual_status(specimen_status, test_status):
-        return TEST_STATUSES.get(test_status, SPECIMEN_STATUSES.get(specimen_status, "Unknown")) # BUG: logic in correctly updating the dashboard status 
-
+        return map_lims_to_oerr_dashboard_status(test_status, specimen_status)
+    
     def get_status_info():
         return actual_status(payload.get("order_status"), payload.get("status"))
     

@@ -1,4 +1,22 @@
-TEST_STATUSES = {
+LIMS_TEST_STATUS_REFERENCE = {
+  # from the iblis json, root key 'status'
+  "pending": "Specimen Received",
+  "started": "Being Analyzed",
+  "completed": "Pending Verification",
+  "verified": "Analysis Complete",
+  "voided": "Not Done",
+  "not-done": "Not Done",
+  "rejected": "Rejected"
+}
+
+LIMS_SPECIMEN_STATUS_REFERENCE = {
+  # from the lims json, root key 'order_status'
+  "specimen-not-collected" :"Specimen Received",
+  "specimen-accepted" : "Specimen Received",
+  "specimen-rejected" : "Rejected"
+}
+
+OERR_DASHBOARD_TEST_STATUSES = {
   "pending": 1,
   "started": 3,
   "completed": 4,
@@ -8,13 +26,15 @@ TEST_STATUSES = {
   "rejected": 0
 }
 
-SPECIMEN_STATUSES = {
+OERR_DASHBOARD_SPECIMEN_STATUSES = {
   "specimen-not-collected" : 1,
-  "specimen-accepted" : 2,
+  "specimen-accepted" : 1,
+  # "specimen-accepted - 1" -> "specimen-accepted - 2": 
+  # this was initially 2, but was changed to 1 because it does not fulfil 'received in the lab' rather 'registered on the reception'
   "specimen-rejected" : 0
 }
 
-label_reference= {
+OERR_DASHBOARD_STATUSES_REFERENCE= {
     "received": 2,
     "registered": 1,
     "in_progress": 3,
@@ -52,5 +72,16 @@ DEPARTMENT_REFERENCE = {
   }
 
 
-def map_label_to_status(label):
-    return label_reference.get(label)
+def map_lims_to_oerr_dashboard_status(lims_test_status, lims_specimen_status):
+    # map the test status first
+    if lims_test_status in OERR_DASHBOARD_TEST_STATUSES:
+        return OERR_DASHBOARD_TEST_STATUSES[lims_test_status]
+
+    if lims_specimen_status in OERR_DASHBOARD_SPECIMEN_STATUSES:
+        return OERR_DASHBOARD_SPECIMEN_STATUSES[lims_specimen_status]
+    
+    # return request status code for incorrect parameters and error message
+    return {
+        "status_code": 400,
+        "error": "Invalid LIMS status"
+    }
