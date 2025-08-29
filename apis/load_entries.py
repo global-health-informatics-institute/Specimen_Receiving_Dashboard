@@ -62,7 +62,7 @@ def save_entry():
             logger.error("Missing required field: accession_number")
             return jsonify({"message": "Missing required field: accession_number"}), 400
         
-        if not test_status:
+        if test_status is None:
             logger.error("Missing required field: test_status")
             return jsonify({"message": "Missing required field: test_status"}), 400
         
@@ -76,22 +76,29 @@ def save_entry():
 
         
         # query the database to check if the test already exists
-        existing_test = db.session.query(Test).filter_by(test_accession_id=accession_number).first()
-        unchanged_test = db.session.query(Test).filter_by(test_test_status=test_status, test_accession_id=accession_number).first()
-        # TODO: -CHORE unchange should include a test_type checks
-            # one accession number can have multiple test types, so we need to account for that changes in each
-            # TODO: check with egpaf, how multiple tests are tied to a single accession number
-                # consider checking through an array, or continue handling it as a single json
-        unchanged_test = bool(unchanged_test and unchanged_test.test_test_type == test_type)
+        existing_test = db.session.query(Test).filter_by(
+            test_accession_id=accession_number,
+            test_test_type=test_type
+        ).first()
 
+
+        # TODO: check with egpaf, how multiple tests are tied to a single accession number
+            # consider checking through an array, or continue handling it as a single json
+        unchanged_test = db.session.query(Test).filter_by(
+            test_test_status=test_status,
+            test_accession_id=accession_number,
+            test_test_type=test_type
+        ).first()
+        
         if existing_test:
+            logger.info(f"Existing test found: {accession_number}, {test_type}, {test_status}")
             if unchanged_test:
-                logger.warning("Test with this accession number and same test type already exists with the same status")
+                logger.warning(f"Test already exists: {accession_number}, {test_type}, {test_status}")
                 return jsonify({"message": "Test with this accession number and same test type already exists with the same status"}), 304
             else:
                 logger.error("Existing test found, updating status")
+
                 # check if the current status, and the update status are next to each other(have a difference of 1, i.e no status was skipped)
-                
                 if int(existing_test.test_test_status) +1 == int(test_status) or int(test_status) == 0:
                     db.session.query(Test).filter_by(test_accession_id=accession_number).update({"test_test_status": str(test_status)})
                     weekly_increment_api(department_id, test_status)
@@ -108,6 +115,7 @@ def save_entry():
 
                     
         else: #its a new test
+            logger.info(f"Creating new test: {accession_number}, {test_type}, {test_status}, {department_id}")
             new_test = Test(
                 test_test_status = test_status,
                 test_accession_id = accession_number,
