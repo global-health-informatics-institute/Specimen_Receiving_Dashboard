@@ -92,6 +92,11 @@ def save_entry():
         
         if existing_test:
             logger.info(f"Existing test found: {accession_number}, {test_type}, {test_status}")
+            if existing_test.test_test_status in (0,9):
+                logger.warning(f"Test is voided or cancelled, no updates allowed: {accession_number}, {test_type}, {test_status}")
+                logger.info(f"Test state: {existing_test.test_test_status}")
+                return jsonify({"message": "Test is voided or cancelled, no updates allowed"}), 403
+
             if unchanged_test:
                 logger.warning(f"Test already exists: {accession_number}, {test_type}, {test_status}")
                 return jsonify({"message": "Test with this accession number and same test type already exists with the same status"}), 304
