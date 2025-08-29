@@ -21,6 +21,7 @@ OERR_DASHBOARD_TEST_STATUSES = {
   "started": 3,
   "completed": 4,
   "verified": 5,
+  "missing": 9,
   "voided": 0,
   "not-done": 0,
   "rejected": 0
@@ -80,8 +81,6 @@ def map_lims_to_oerr_dashboard_status(lims_test_status, lims_specimen_status):
     if lims_specimen_status in OERR_DASHBOARD_SPECIMEN_STATUSES:
         return OERR_DASHBOARD_SPECIMEN_STATUSES[lims_specimen_status]
     
-    # return request status code for incorrect parameters and error message
-    return {
-        "status_code": 400,
-        "error": "Invalid LIMS status"
-    }
+    # return missing
+    return 9
+   
