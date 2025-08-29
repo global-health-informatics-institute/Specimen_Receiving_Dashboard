@@ -78,14 +78,16 @@ def save_entry():
         # query the database to check if the test already exists
         existing_test = db.session.query(Test).filter_by(test_accession_id=accession_number).first()
         unchanged_test = db.session.query(Test).filter_by(test_test_status=test_status, test_accession_id=accession_number).first()
-
+        # TODO: -CHORE unchange should include a test_type checks
+            # one accession number can have multiple test types, so we need to account for that changes in each
+            # TODO: check with egpaf, how multiple tests are tied to a single accession number
+                # consider checking through an array, or continue handling it as a single json
+        unchanged_test = bool(unchanged_test and unchanged_test.test_test_type == test_type)
 
         if existing_test:
             if unchanged_test:
-                logger.error("Test with this accession number already exists with the same status")
-                return jsonify({"error": "Test with this accession number already exists with the same status"}), 304
-            
-
+                logger.warning("Test with this accession number and same test type already exists with the same status")
+                return jsonify({"message": "Test with this accession number and same test type already exists with the same status"}), 304
             else:
                 logger.error("Existing test found, updating status")
                 # check if the current status, and the update status are next to each other(have a difference of 1, i.e no status was skipped)
