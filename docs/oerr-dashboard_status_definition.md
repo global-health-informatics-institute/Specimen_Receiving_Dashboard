@@ -8,6 +8,7 @@
   | Being Analyzed            | in progress        | 3                    |
   | Pending Verification      | pending auth       | 4                    |
   | Analysis Complete         | completed          | 5                    |
+  | Missing                   | missing            | 9                    |
   | Not Done                  | rejected           | 0                    |
   | Rejected                  | rejected           | 0                    |
 
