@@ -82,8 +82,7 @@ def save_entry():
         ).first()
 
 
-        # TODO: check with egpaf, how multiple tests are tied to a single accession number
-            # consider checking through an array, or continue handling it as a single json
+        # egpaf handles test differentiation by creating new orders with same accession number but different test type
         unchanged_test = db.session.query(Test).filter_by(
             test_test_status=test_status,
             test_accession_id=accession_number,
