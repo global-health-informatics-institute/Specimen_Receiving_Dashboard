@@ -27,6 +27,15 @@ def process_payload(payload):
     def get_accession_number():
         return  payload.get("accession_number")
     
+    # TODO: change department_id logic
+    # so what happens is specimen_id is not actually department_id
+    # specimen id is the specimen type id
+    # ie bloods specimen id = 3
+    # on the other hand, we can filter department_test by providing the department_id param to the lims api
+        # api/v1/tests?department_id=<department_id>
+        # all tests in the response will belong to that department
+        # including the ones sitting on the reception
+        # TODO: implement micro apis daemons to fetch department level tests
     def get_department_id():
         return payload.get("specimen_id")
     
