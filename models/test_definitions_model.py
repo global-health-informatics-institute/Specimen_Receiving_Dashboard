@@ -1,5 +1,5 @@
 from sqlalchemy import func
-from extensions.extensions import db, dt
+from extensions.extensions import db
 
 
 class Test_Definition(db.Model):

@@ -1,5 +1,5 @@
-from extensions.extensions import db, dt
-from sqlalchemy.sql import func
+from extensions.extensions import db
+from sqlalchemy import func
 
 class Test(db.Model):
     """"instance of every running test"""

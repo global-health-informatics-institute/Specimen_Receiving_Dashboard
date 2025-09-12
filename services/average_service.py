@@ -1,7 +1,6 @@
 from sqlalchemy import text
 from extensions.extensions import db, logger, application_config
 from models.test_definitions_model import Test_Definition
-import app
 
 
 department_id = application_config["department_id"]
