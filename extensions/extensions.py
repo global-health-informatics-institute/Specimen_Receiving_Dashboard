@@ -30,18 +30,6 @@ logger = logging.getLogger(__name__)
 application_config = config['application_config']
 dashboard_uri = f'mysql+pymysql://{application_config["dashboard"]["user"]}:{application_config["dashboard"]["password"]}@{application_config["dashboard"]["host"]}/{application_config["dashboard"]["database"]}'
 
-def iblis_db():
-    """Create a database connection using the configuration."""
-    db_config = config['application_config']['iblis']
-    return mysql.connector.connect(
-        host=db_config['host'],
-        port=db_config['port'],
-        user=db_config['user'],
-        password=db_config['password'],
-        database=db_config['database'],
-        auth_plugin=db_config.get('auth_plugin', 'mysql_native_password')
-    )
-
 
 def start_time():
     from datetime import datetime, timedelta
