@@ -15,8 +15,13 @@ with open('data/departments.yml', 'r') as file:
 with open('data/test_types.yml', 'r') as file:
     test_type_data = yaml.safe_load(file)
 
+with open('data/lab_locations.yml', 'r') as file:
+    lab_location_data = yaml.safe_load(file)
+
+
 department_data = department_data
 test_type_data = test_type_data
+lab_location_data = lab_location_data
 
 
 application_config = config 
