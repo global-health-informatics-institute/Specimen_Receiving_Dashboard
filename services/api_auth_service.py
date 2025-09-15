@@ -1,6 +1,6 @@
 import datetime
 import requests
-from extensions.extensions import application_config, logger, db
+from extensions.extensions import application_config, logger, db, refresh_token_url, auth_url
 from models.authtoken_model import AuthToken
  
 
@@ -8,7 +8,6 @@ department_id = application_config["department_id"]
 token_life_margin = application_config["lims"]["authentication"]["refresh_threshhold"]
 
 def _get_jwt_token() -> dict | None:
-    auth_url = application_config["lims"]["base_url"] + application_config["lims"]["authentication"]["auth_endpoint"]
     params = {
         "username": application_config["lims"]["authentication"]["username"],
         "password": application_config["lims"]["authentication"]["password"]
@@ -32,7 +31,7 @@ def _get_jwt_token() -> dict | None:
         logger.error("error: %s", e)
         return None
 
-def _summon_token()-> dict | None:
+def _summon_token()-> dict | None: # create a new tokken
     new_token = _get_jwt_token()
     try:
         db.session.query(AuthToken).filter(
@@ -51,8 +50,7 @@ def _summon_token()-> dict | None:
         logger.error("error: %s", e)
 
 def _revive_token() -> dict | None:
-    api_key = application_config["lims"]["authentication"]["refresh_token_endpoint"]
-    refresh_token_url = application_config["lims"]["base_url"] + api_key
+    
     local_token = db.session.query(AuthToken).filter(
         AuthToken.department_id == department_id
     ).first()
@@ -108,7 +106,7 @@ def validate_token_life() -> bool:
     return True
 
 
-def release_token() -> str | None:
+def release_the_token() -> str | None:
     local_token = db.session.query(AuthToken).filter(
             AuthToken.department_id == department_id
         ).first()

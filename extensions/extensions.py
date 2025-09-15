@@ -47,3 +47,14 @@ def start_time():
     else: 
         result = (now - timedelta(days=1)).replace(hour=7, minute=0, second=0, microsecond=0)
     return result
+
+base_url = application_config["lims"]["base_url"]
+auth_url = base_url + application_config["lims"]["authentication"]["auth_endpoint"]
+refresh_token_url = base_url + application_config["lims"]["authentication"]["refresh_token_endpoint"]
+
+TEST_LIST_URL = base_url + application_config["lims"]["tests"]["test_list_endpoint"]
+FETCH_START_DATE = datetime.now().strftime("%Y-%m-%d")
+FETCH_END_DATE = datetime.now().strftime("%Y-%m-%d")
+DEPARTMENT_ID = application_config["department_id"]
+LAB_LOCATION_ID = application_config["lab_location_id"]
+MINIMAL = application_config["lims"]["tests"]["minimal"]
