@@ -49,11 +49,12 @@ def start_time():
     return result
 
 base_url = application_config["lims"]["base_url"]
-auth_url = base_url + application_config["lims"]["authentication"]["auth_endpoint"]
-refresh_token_url = base_url + application_config["lims"]["authentication"]["refresh_token_endpoint"]
+api_version = application_config["lims"]["authentication"]["api_version"]
+auth_url = base_url + api_version + application_config["lims"]["authentication"]["auth_endpoint"]
+refresh_token_url = base_url + api_version + application_config["lims"]["authentication"]["refresh_token_endpoint"]
 
-TEST_LIST_URL = base_url + application_config["lims"]["tests"]["test_list_endpoint"]
-FETCH_START_DATE = datetime.now().strftime("%Y-%m-%d")
+TEST_LIST_URL = base_url + api_version + application_config["lims"]["tests"]["test_list_endpoint"]
+FETCH_START_DATE = datetime.now().strftime("%Y-%m-%d") 
 FETCH_END_DATE = datetime.now().strftime("%Y-%m-%d")
 DEPARTMENT_ID = application_config["department_id"]
 LAB_LOCATION_ID = application_config["lab_location_id"]
