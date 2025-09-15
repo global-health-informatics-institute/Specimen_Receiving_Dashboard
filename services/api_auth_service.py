@@ -127,8 +127,6 @@ def validate_token_life() -> bool:
         _revive_token() is not None
         return True
 
-        
-
     # Token is valid and not near expiry
     return True
 
