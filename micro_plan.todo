@@ -1,4 +1,6 @@
 TODO
+// cp application_config ../application_config_<dashboard_number> 
+// cp run ../run_<dashboard_number> 
 // git branch -m master kch/micro_dashboard_3
 // git update-index --skip-worktree config/
 // git fetch
@@ -6,8 +8,3 @@ TODO
 
 // checkout extensions 
 
-// [] flask db init
-
-// [] flask db migrate
-
-// [] flask db upgrade
