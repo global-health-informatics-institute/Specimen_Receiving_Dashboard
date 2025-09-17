@@ -22,7 +22,7 @@ config/application.py
 config/*
 todo
 data
-functions
 playground
 !config/*.example
 !data
+*.todo

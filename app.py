@@ -1,7 +1,8 @@
 from flask import Flask
 from extensions.extensions import db
 from flask_migrate import Migrate
-from models import status_definitions_model, department_model, oerr_status_model
+from models import status_definitions_model, department_model,\
+    oerr_status_model, lab_location_model, authtoken_model
 
 
 def create_app():

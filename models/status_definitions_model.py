@@ -1,4 +1,5 @@
-from extensions.extensions import db, dt
+from extensions.extensions import db
+from sqlalchemy import func
 
 
 class Test_Status_Definition(db.Model):
@@ -13,8 +14,19 @@ class Test_Status_Definition(db.Model):
     test_status_meaning = db.Column(db.String(100), nullable = False, index = True, info={'Description':'Definition of each test status, its not enough infomation but the combination of logic, and these basics can help'})
     specimen_status_id = db.Column(db.Integer, nullable = False, index=True, default=2, info={'Description' : 'In each of the test statuses the specimen is on received status. 2'})
     specimen_status_meaning = db.Column(db.String(100), nullable = False, index=True)
-    created_at = db.Column(db.TIMESTAMP, nullable=False, default=dt.now, index=True)
-    updated_at = db.Column(db.TIMESTAMP, nullable=False, default=dt.now, onupdate=dt.now, index=True)
+    created_at = db.Column(
+        db.DateTime,
+        nullable=False,
+        server_default=func.now(),
+        index=True
+    )
+    updated_at = db.Column(
+        db.DateTime,
+        nullable=False,
+        server_default=func.now(),
+        onupdate=func.now(),
+        index=True
+    )
     
     def __repr__(self) -> str:
         return f'<test_status_definitions (id={self.id})>'

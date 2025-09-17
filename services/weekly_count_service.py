@@ -32,7 +32,11 @@ def _counter_value(action, column=None):
         if action == "fetch":
             count = db.session.query(table).filter_by(department_id=department_id).first()
             if count:
-                return {col: getattr(count, col) for col in COLUMN_MAPPING.values()}
+                return {
+                    col: max(0, getattr(count, col) or 0)
+                    for col in COLUMN_MAPPING.values()
+                }
+
             logger.warning(f"No counts found for department_id {department_id}.")
             return {}
 

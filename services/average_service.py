@@ -1,7 +1,6 @@
 from sqlalchemy import text
 from extensions.extensions import db, logger, application_config
 from models.test_definitions_model import Test_Definition
-import app
 
 
 department_id = application_config["department_id"]
@@ -77,10 +76,11 @@ def all_tat_average():
     Retrieve the average Turnaround Time (TAT) for all test types.
     """
     return {
-        "test_type_1": tat_average('1'),
-        "test_type_2": tat_average('2'),
-        "test_type_3": tat_average('3'),
-        "test_type_4": tat_average('4'),
+        # change from minutes to hours. 2 decimal points
+        "test_type_1": round(tat_average('1') / 60, 2),
+        "test_type_2": round(tat_average('2') / 60, 2),
+        "test_type_3": round(tat_average('3') / 60, 2),
+        "test_type_4": round(tat_average('4') / 60, 2),
     }
 
 # if __name__ == "__main__":

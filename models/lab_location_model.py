@@ -2,13 +2,13 @@ from extensions.extensions import db, dt
 from sqlalchemy import func
 
 
-class Department(db.Model):
-    __tablename__ = 'departments'
+class Lab_Location(db.Model):
+    __tablename__ = 'lab_locations'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    department_id = db.Column(db.String(10), nullable=False, unique=True, index=True)
-    department_name = db.Column(db.String(100), nullable=True, index=True)
-    department_status = db.Column(db.Integer, nullable = False, index=True, default=1)
+    lab_location_id = db.Column(db.String(10), nullable=False, unique=True, index=True)
+    lab_location_name = db.Column(db.String(100), nullable=True, index=True)
+    lab_location_status = db.Column(db.Integer, nullable = False, index=True, default=1)
     created_at = db.Column(
         db.DateTime,
         nullable=False,
@@ -24,4 +24,4 @@ class Department(db.Model):
     )
     
     def __repr__(self) -> str:
-        return f'<department (id={self.id}, brand={self.department_name})>'
+        return f'<lab_location (id={self.id}, name={self.lab_location_name})>'
