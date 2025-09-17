@@ -1,4 +1,3 @@
-import mysql.connector
 import logging
 import yaml
 from flask_sqlalchemy import SQLAlchemy

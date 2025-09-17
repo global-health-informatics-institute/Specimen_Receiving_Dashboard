@@ -8,6 +8,7 @@ to be run with a systemd service:
 """
 from extensions.extensions import db, department_data, logger
 from models.weekly_count_model import Weekly_Count
+from app import app
 
 def reset_weekly():
     """Reset the weekly counts for all departments."""

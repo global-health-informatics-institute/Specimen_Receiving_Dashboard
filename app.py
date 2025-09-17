@@ -1,27 +1,27 @@
 from flask import Flask
-from extensions.extensions import db
 from flask_migrate import Migrate
-from models import status_definitions_model, department_model,\
-    oerr_status_model, lab_location_model, authtoken_model
+from extensions.extensions import dashboard_uri, db
+from models import (
+    authtoken_model, department_model, lab_location_model, monthly_count_model,
+    oerr_status_model, status_definitions_model, test_definitions_model, tests_model,
+    weekly_count_model
+)
 
 
-def create_app():
-    app = Flask(__name__, template_folder="templates", static_folder="static")
-    from extensions.extensions import dashboard_uri
-    # Database configuration
-    app.config['SQLALCHEMY_DATABASE_URI'] = dashboard_uri
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+app = Flask(__name__)
 
-    # Initialize the extensions
-    db.init_app(app)
 
-    # Set up Flask-Migrate
-    Migrate(app, db)
 
-    # Import and register Blueprints with prefixes
-    from routes.dashboard_route import dashboard_bp
+app.config['SQLALCHEMY_DATABASE_URI'] = dashboard_uri
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
-    # Register each Blueprint with its respective prefix
-    app.register_blueprint(dashboard_bp)
+db.init_app(app)
+Migrate(app, db)
 
-    return app
+
+
+settings = {}
+
+if __name__ == "__main__":
+    app_port = settings.get("app", {}).get("port", 8001)
+    app.run(host="0.0.0.0", port=app_port, debug=True)

@@ -1,4 +1,4 @@
-from run import flask_app # Make sure this imports the app object from app.py (or whatever your app module is)
+from app import app
 
 from seeds.departmet_seeder import run_department_seeder
 from seeds.monthly_summary_seeder import run_monthly_count_seeder
@@ -10,7 +10,7 @@ from seeds.lab_locations_seeder import run_lab_location_seeder
 
 
 if __name__ == "__main__":
-    with flask_app.app_context(): 
+    with app.app_context(): 
         (run_department_seeder())
         (run_test_type_seeder())
         (run_monthly_count_seeder())
