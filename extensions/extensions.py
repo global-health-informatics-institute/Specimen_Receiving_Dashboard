@@ -59,3 +59,7 @@ FETCH_END_DATE = datetime.now().strftime("%Y-%m-%d")
 DEPARTMENT_ID = application_config["department_id"]
 LAB_LOCATION_ID = application_config["lab_location_id"]
 MINIMAL = application_config["lims"]["tests"]["minimal"]
+
+# apis services
+STATUS_VOIDED = 0
+STATUS_NEW = 1
