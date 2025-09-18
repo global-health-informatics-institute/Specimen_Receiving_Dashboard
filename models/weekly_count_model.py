@@ -18,7 +18,7 @@ class Weekly_Count(db.Model):
     created_at = db.Column(
         db.DateTime,
         nullable=False,
-        server_default=func.now(),
+        server_default=db.text('CURRENT_TIMESTAMP'),
         index=True
     )
 
