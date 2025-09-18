@@ -18,15 +18,15 @@ class Monthly_Count(db.Model):
     created_at = db.Column(
         db.DateTime,
         nullable=False,
-        server_default=func.now(),
+        server_default=db.text('CURRENT_TIMESTAMP'),
         index=True
     )
 
     updated_at = db.Column(
         db.DateTime,
         nullable=False,
-        server_default=func.now(),
-        onupdate=func.now(),
+        server_default=db.text('CURRENT_TIMESTAMP'),
+        onupdate=db.text('CURRENT_TIMESTAMP'),
         index=True
     )
     

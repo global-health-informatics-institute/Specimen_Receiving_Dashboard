@@ -12,14 +12,13 @@ class Department(db.Model):
     created_at = db.Column(
         db.DateTime,
         nullable=False,
-        server_default=func.now(),
-        index=True
+        server_default=db.text('CURRENT_TIMESTAMP'),
     )
     updated_at = db.Column(
         db.DateTime,
         nullable=False,
-        server_default=func.now(),
-        onupdate=func.now(),
+        server_default=db.text('CURRENT_TIMESTAMP'),
+        onupdate=db.text('CURRENT_TIMESTAMP'),
         index=True
     )
     
