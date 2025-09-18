@@ -23,14 +23,12 @@ class AuthToken(db.Model):
         nullable=False,
         default=application_config["department_id"],
         unique=False,
-        index=True
     )
     status = db.Column(db.Integer, nullable=False, index=True, default=1)
     created_at = db.Column(
         db.DateTime,
         nullable=False,
         server_default=func.now(),
-        index=True
     )
 
     updated_at = db.Column(
