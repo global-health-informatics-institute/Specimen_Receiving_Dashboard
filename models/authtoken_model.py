@@ -10,7 +10,7 @@ class AuthToken(db.Model):
     issued_at = db.Column(
         db.DateTime,
         nullable=False,
-        server_default=func.now(),
+        server_default=db.text('CURRENT_TIMESTAMP'),
         info={"description": "Timestamp when the token was issued"}
     )
     expires_at = db.Column(
