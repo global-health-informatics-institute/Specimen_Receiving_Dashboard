@@ -11,13 +11,11 @@ class AuthToken(db.Model):
         db.DateTime,
         nullable=False,
         server_default=func.now(),
-        index=True,
         info={"description": "Timestamp when the token was issued"}
     )
     expires_at = db.Column(
         db.DateTime,
         nullable=False,
-        index=True,
         info={"description": "Timestamp when the token expires"}
     )
     department_id = db.Column(
@@ -40,7 +38,6 @@ class AuthToken(db.Model):
         nullable=False,
         server_default=func.now(),
         onupdate=func.now(),
-        index=True
     )
 
     def __repr__(self) -> str:
