@@ -6,7 +6,7 @@ class AuthToken(db.Model):
     __tablename__ = 'auth_tokens'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    auth_token = db.Column(db.Text, nullable=False, unique=True, index=True, info={"description": "Authentication token for API access"})
+    auth_token = db.Column(db.String(255), nullable=False, info={"description": "Authentication token for API access"})
     issued_at = db.Column(
         db.DateTime,
         nullable=False,
