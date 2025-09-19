@@ -9,8 +9,7 @@ def fetch_test_batch():
         "lab_location": LAB_LOCATION_ID,
         "department_id": DEPARTMENT_ID, 
         "minimal": MINIMAL,
-        # TODO: change to prod value
-        "start_date": '2025-01-01',  #FETCH_START_DATE,
+        "start_date": FETCH_START_DATE,
         "end_date": FETCH_END_DATE
     }
 
