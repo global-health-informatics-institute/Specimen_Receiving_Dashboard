@@ -1,4 +1,4 @@
-from flask import jsonify, render_template, Blueprint
+from flask import Response, jsonify, render_template, Blueprint
 from scripts.serve_static_script import serve_static
 from services.average_service import all_tat_average
 from services.current_service import all_current
@@ -163,3 +163,9 @@ def tat_average():
     }
 
     return all_average_values
+
+@dashboard_bp.route('/dashboard_status', methods=['GET'])
+def dashboard_status():
+    r = Response("ok", status=200, mimetype="text/plain")
+    r.headers["Access-Control-Allow-Origin"] = "*"
+    return r

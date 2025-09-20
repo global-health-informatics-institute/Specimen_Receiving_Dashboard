@@ -24,4 +24,10 @@ def create_app():
     # Register each Blueprint with its respective prefix
     app.register_blueprint(dashboard_bp)
 
+    @app.after_request
+    def allow_iframe(response):
+        # Remove or override X-Frame-Options so the page can load in an iframe
+        response.headers["X-Frame-Options"] = "ALLOWALL"
+        return response
+
     return app
