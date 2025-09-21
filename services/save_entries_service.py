@@ -143,7 +143,6 @@ def save_entries(payload):
                 json.dumps(
                     {
                         "processed_count": count,
-                        "save_count": idx,
                         "results": results
                     }, indent=2
                 )
