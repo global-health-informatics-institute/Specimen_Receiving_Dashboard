@@ -22,5 +22,5 @@ class Department(db.Model):
         index=True
     )
     
-    def __repr__(self) -> str:
+    def __repr__(self):
         return f'<department (id={self.id}, brand={self.department_name})>'

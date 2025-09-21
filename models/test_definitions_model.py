@@ -28,5 +28,5 @@ class Test_Definition(db.Model):
         index=True
     )
     
-    def __repr__(self) -> str:
+    def __repr__(self):
         return f'<Test difinition (id={self.id})>'

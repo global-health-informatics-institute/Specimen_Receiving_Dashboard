@@ -23,5 +23,5 @@ class Lab_Location(db.Model):
         index=True
     )
     
-    def __repr__(self) -> str:
+    def __repr__(self):
         return f'<lab_location (id={self.id}, name={self.lab_location_name})>'

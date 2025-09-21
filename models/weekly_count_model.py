@@ -30,5 +30,5 @@ class Weekly_Count(db.Model):
         index=True
     )
 
-    def __repr__(self) -> str:
+    def __repr__(self):
         return f'<weekly_count (id={self.id}) - (active_status={self.Weekly_Count_status})>'

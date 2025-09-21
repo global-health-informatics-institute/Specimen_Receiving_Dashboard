@@ -26,5 +26,5 @@ class Test(db.Model):
         index=True
     )
 
-    def __repr__(self) -> str:
+    def __repr__(self):
         return f'<Test (id={self.id}) - (accession_id={self.test_accession_id})>'

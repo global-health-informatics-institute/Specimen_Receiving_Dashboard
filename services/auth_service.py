@@ -7,7 +7,7 @@ from models.authtoken_model import AuthToken
 department_id = application_config["department_id"]
 token_life_margin = application_config["lims"]["authentication"]["refresh_threshold"]
 
-def _get_jwt_token() -> dict | None:
+def _get_jwt_token():
     params = {
         "username": application_config["lims"]["authentication"]["username"],
         "password": application_config["lims"]["authentication"]["password"]
@@ -31,7 +31,7 @@ def _get_jwt_token() -> dict | None:
         logger.error("error: %s", e)
         return None
 
-def _summon_token()-> dict | None: # create a new token
+def _summon_token(): # create a new token
     new_token = _get_jwt_token()
     logger.info(f"Token: {new_token}")
     try:
@@ -63,7 +63,7 @@ def _summon_token()-> dict | None: # create a new token
     except Exception as e:
         logger.error("error: %s", e)
 
-def _revive_token() -> dict | None:
+def _revive_token():
     
     local_token = db.session.query(AuthToken).filter(
         AuthToken.department_id == department_id
@@ -104,7 +104,7 @@ def _revive_token() -> dict | None:
     
 
 
-def validate_token_life() -> bool:
+def validate_token_life() :
     local_token = db.session.query(AuthToken).filter(
         AuthToken.department_id == department_id
     ).first()
@@ -131,7 +131,7 @@ def validate_token_life() -> bool:
     return True
 
 
-def release_the_token() -> str | None:
+def release_the_token():
     local_token = db.session.query(AuthToken).filter(
             AuthToken.department_id == department_id
         ).first()

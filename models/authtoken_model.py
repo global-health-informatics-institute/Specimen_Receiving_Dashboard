@@ -38,5 +38,5 @@ class AuthToken(db.Model):
         onupdate=db.text('CURRENT_TIMESTAMP'),
     )
 
-    def __repr__(self) -> str:
+    def __repr__(self) :
         return f'<Token lifetime (issued={self.issued_at}, expires={self.expires_at}) >'

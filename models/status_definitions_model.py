@@ -28,5 +28,5 @@ class Test_Status_Definition(db.Model):
         index=True
     )
     
-    def __repr__(self) -> str:
+    def __repr__(self) :
         return f'<test_status_definitions (id={self.id})>'

@@ -29,6 +29,6 @@ class Monthly_Count(db.Model):
         onupdate=db.text('CURRENT_TIMESTAMP'),
         index=True
     )
-    
-    def __repr__(self) -> str:
+
+    def __repr__(self):
         return f'<monthly_count (id={self.id}) - (active_status={self.monthly_Count_status})>'
