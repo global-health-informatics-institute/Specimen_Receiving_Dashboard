@@ -11,9 +11,11 @@ if __name__ == '__main__':
             # get batch
             payload = fetch_test_batch()
 
+
             # Extract the data items
             data = payload.get("data")
             payload = { "data" : data }
+
 
 
             # push batch
@@ -21,11 +23,10 @@ if __name__ == '__main__':
                 builder = EnvironBuilder(method='POST', json=payload)
                 env = builder.get_environ()
                 req = Request(env)
-                # logger.info()
                 if save_entries(req):
                     logger.info("daemon to fetch and push tests run succeffuly")
-
-            logger.warning("No data to load.")
+            else:
+                logger.warning("No data to load.")
             
         except Exception as e:
             logger.error(f"error occured while feeding data: {e}")
