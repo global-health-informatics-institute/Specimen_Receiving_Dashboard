@@ -4,6 +4,10 @@ from flask_migrate import Migrate
 from models import status_definitions_model, department_model,\
     oerr_status_model, lab_location_model, authtoken_model
 
+#define LED pins
+redLED = 3
+greenLED = 5
+blueLED = 19
 
 def create_app():
     app = Flask(__name__, template_folder="templates", static_folder="static")
