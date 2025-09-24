@@ -1,65 +1,33 @@
-### Deployement
-- activate environment,
-  - python3 -m venv pwd/.venv
-  - source pwd/.venv/bin/activate
-  
-- Grant Preveledges to the station_dashboard
-  - ```sql
-    Grant all privileges on the '{db_name}' schema -- heamatology
-    GRANT ALL PRIVILEGES ON haematology.* TO 'ghii'@'{ip_address}'; -- 192.168.1.156
-    ```
+# Dashboard
 
-  - ```sql
-    Grant all privileges except DELETE on the '{iBliss_db_name}' schema -- tests
-    GRANT SELECT, INSERT, UPDATE, CREATE, DROP, INDEX, ALTER, CREATE TEMPORARY TABLES, 
-    LOCK TABLES, EXECUTE, CREATE VIEW, SHOW VIEW, CREATE ROUTINE, ALTER ROUTINE, 
-    EVENT, TRIGGER
-    ON tests.* TO 'ghii'@'{ip_address}'; -- 192.168.1.156
-    ```
-- Modify url in the station_scanner to point to the station_dashboard
-  - 
--- Apply the changes
-FLUSH PRIVILEGES;
+1. virtual environment
+ ```bash
+ python3 venv .venv
+ source .venv/bin/activate
 
-- install dependencies
-  - pip install -r requirements.txt
+ pip install -r requirements.txt
+ ```
 
-**config.py**:
-- Stand alone to app.py
-- Contains app configurations and should be redefined manually
+1. configure database
+  get data YAML files from OERR API for referencing, setup
+  add configurations in config for  'application.config.yml'
+  run migration
+  ```bash
+  python -m flask db init
+  python -m flask db migrate
+  python -m flask db upgrade
+  ```
 
-**dbsetup**:
-- first to be run... defines the schema for the sqlite and SQL
-- every data functions is defined in a nameCorresponding model file
+1. seed initial data data
+  ```bash
+  python -m seeds.run_seeder
+  ```
 
-**tatCurrent
-### UpdateEntries
-- **iblis_connection**: from line 15-20, need external configurations
-- **srs_connection**: from line 25 - 29, need further configarations
-- will be called using `curl` 
-- configure the authentication method used by the iBlis LIMS systems 
+1. configure dashboard
+  reference the data folder for test short names
 
+1. set up a systemd service for the api
+  to execute `python -m dashboard_api`
 
-### INSTRUCTIONS
-- config the database end points in `models/config`
-- config test type as short names for that screen`models/config`
-- load the file (alone) `models/setUp`
-- set up two cron jobs that log into `logs/clearTables.log`
-    - one that clears weeklySummary and another monthlySummary
-______________
-
-
-### monthlyEraser run every first day of the month at the very beginning of the day 00:01
-- 1 0 1 * * /home/kumbu/Desktop/8/manda.branch/manda.srs/Specimen_Receive_Station-/venv/bin/python /home/kumbu/Desktop/8/manda.branch/manda.srs/Specimen_Receive_Station-/models/monthlyEraser.py >> /home/kumbu/Desktop/8/manda.branch/manda.srs/Specimen_Receive_Station-/logs/monthlyEraser.log 2>&1
-
-### weeklyEraser run every first day of the week at the very beginning of the day 00:01
-- 1 0 * * 0 /home/kumbu/Desktop/8/manda.branch/manda.srs/Specimen_Receive_Station-/venv/bin/python /home/kumbu/Desktop/8/manda.branch/manda.srs/Specimen_Receive_Station-/models/weeklyEraser.py >> /home/kumbu/Desktop/8/manda.branch/manda.srs/Specimen_Receive_Station-/logs/weeklyEraser.log 2>&1
-
-
-### Other materials
-  - [iBliss Laravel](https://drive.google.com/drive/folders/1v6X3Vw4KLlLtFhedVKyseUY8jli7y5Rg?usp=drive_link)
-  - [iBlis Reception](https://drive.google.com/drive/folders/1v6X3Vw4KLlLtFhedVKyseUY8jli7y5Rg?usp=drive_link)
-  - [Station feedback. Developer Edition](https://drive.google.com/drive/folders/1v6X3Vw4KLlLtFhedVKyseUY8jli7y5Rg?usp=drive_link)
-  - [Station feedback. Distrubuted](https://drive.google.com/drive/folders/1v6X3Vw4KLlLtFhedVKyseUY8jli7y5Rg?usp=drive_link)
-  - [Static Config](https://drive.google.com/drive/folders/1v6X3Vw4KLlLtFhedVKyseUY8jli7y5Rg?usp=drive_link)
-  - [iBliss Docs](https://drive.google.com/drive/folders/1v6X3Vw4KLlLtFhedVKyseUY8jli7y5Rg?usp=drive_link)
+1. set up a systemd service for the dashboard
+  to execute `python -m run`

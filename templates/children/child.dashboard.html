@@ -1,0 +1,89 @@
+{% extends 'base.dashboard.html' %}
+
+{% block title %}
+    {{ static_data.department_name }}
+{% endblock %}
+
+{% block dashboard_styles %}
+    <link
+        rel="stylesheet" 
+        href="{{ url_for('static', filename=static_data.CSS_FILE) }}"
+    >
+{% endblock %}
+
+{% block department_name %}
+    {{ static_data["department_name"] }}
+{% endblock %}
+
+
+<!-- side bar summary -->
+{% set side_bar_data_registered = side_bar_data.registered %}
+{% set side_bar_data_received = side_bar_data.received %}
+{% set side_bar_data_in_progress = side_bar_data.in_progress %}
+{% set side_bar_data_pending_auth = side_bar_data.pending_auth %}
+{% set side_bar_data_completed = side_bar_data.completed %}
+{% set side_bar_data_rejected = side_bar_data.rejected %}
+
+
+<!-- title for each cards -->
+ {% set test_type_1 = static_data.test_type_1 %}
+ {% set test_type_2 = static_data.test_type_2 %}
+ {% set test_type_3 = static_data.test_type_3 %}
+ {% set test_type_4 = static_data.test_type_4 %}
+
+
+
+<!-- actual tests -->
+<!-- working version -->
+{% set received_1 = all_test_count_data.received.received_test_type_1 %}
+{% set received_2 = all_test_count_data.received.received_test_type_2 %}
+{% set received_3 = all_test_count_data.received.received_test_type_3 %}
+{% set received_4 = all_test_count_data.received.received_test_type_4 %}
+
+{% set in_progress_1 = all_test_count_data.in_progress.in_progress_test_type_1 %}
+{% set in_progress_2 = all_test_count_data.in_progress.in_progress_test_type_2 %}
+{% set in_progress_3 = all_test_count_data.in_progress.in_progress_test_type_3 %}
+{% set in_progress_4 = all_test_count_data.in_progress.in_progress_test_type_4 %}
+
+{% set pending_auth_1 = all_test_count_data.pending_auth.pending_auth_test_type_1 %}
+{% set pending_auth_2 = all_test_count_data.pending_auth.pending_auth_test_type_2 %}
+{% set pending_auth_3 = all_test_count_data.pending_auth.pending_auth_test_type_3 %}
+{% set pending_auth_4 = all_test_count_data.pending_auth.pending_auth_test_type_4 %}
+
+{% set completed_1 = all_test_count_data.completed.completed_test_type_1 %}
+{% set completed_2 = all_test_count_data.completed.completed_test_type_2 %}
+{% set completed_3 = all_test_count_data.completed.completed_test_type_3 %}
+{% set completed_4 = all_test_count_data.completed.completed_test_type_4 %}
+
+{% set rejected_1 = all_test_count_data.rejected.rejected_test_type_1 %}
+{% set rejected_2 = all_test_count_data.rejected.rejected_test_type_2 %}
+{% set rejected_3 = all_test_count_data.rejected.rejected_test_type_3 %}
+{% set rejected_4 = all_test_count_data.rejected.rejected_test_type_4 %}
+
+
+{% set target_1 = all_tat_data.test_type_1 %}
+{% set target_2 = all_tat_data.test_type_2 %}
+{% set target_3 = all_tat_data.test_type_3 %}
+{% set target_4 = all_tat_data.test_type_4 %}
+
+{% set current_1 = all_current_data.test_type_1 %}
+{% set current_2 = all_current_data.test_type_2 %}
+{% set current_3 = all_current_data.test_type_3 %}
+{% set current_4 = all_current_data.test_type_4 %}
+
+{% set average_1 = all_tat_average_data.test_type_1 %}
+{% set average_2 = all_tat_average_data.test_type_2 %}
+{% set average_3 = all_tat_average_data.test_type_3 %}
+{% set average_4 = all_tat_average_data.test_type_4 %}
+
+{% block dashboard_scripts %}
+<script src="{{ url_for('static', filename=static_data.JS_BASE_URL ~ 'slide_show.js') }}"></script>
+<script src="{{ url_for('static', filename=static_data.JS_BASE_URL ~ 'clear_cache.js') }}"></script>
+<script src="{{ url_for('static', filename=static_data.JS_BASE_URL ~ 'load_all_entries.js') }}"></script>
+
+
+<!-- <script src="{{ url_for('static', filename=static_data.JS_BASE_URL ~ 'content.js') }}"></script>
+<script src="{{ url_for('static', filename=static_data.JS_BASE_URL ~ 'clear_cache.js') }}"></script> -->
+
+
+{% endblock %}
